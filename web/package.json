@@ -1,0 +1,10 @@
+{
+    "name": "brother-express",
+    "version": "0.0.1",
+    "description": "express",
+    "dependencies": {
+		"grunt": "~0.4.2",
+		"grunt-contrib-uglify": "*",
+		"grunt-contrib-copy": "*"
+    }
+}

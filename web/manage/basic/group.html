@@ -1,0 +1,174 @@
+<section class="content-header">
+    <h4><b>分组管理</b></h4>
+    <h6>该功能用于查看当前已有分组信息及维护分组关系</h6>
+    <div class="sp-line"></div>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="panel panel-info panel-right">
+            <div class="input-group input-group-sm">
+                <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+                <input type="text" ng-model="_search" class="form-control"/>
+            </div>
+            <table class="table table-hover fsize-12">
+                <tr>
+                    <th class="info" style="width:25%;">分组名称</th>
+                    <th class="info" style="width:35%;">分组描述</th>
+                    <th class="info" style="width:40%;">权限</th>
+                </tr>
+                <tbody ng-repeat="item in GroupList | filter:_search " style="border:0;">
+                    <tr ng-click="selectGroup(item, $index)" class="cursor">
+                        <td>{{item.name}}</td>
+                        <td>{{item.description}}</td>
+                        <td><span ng-repeat="menu in item.menu">{{menu.name}}<span ng-if="!$last">,</span></span></td>
+                    </tr>
+                    <tr ng-if="selectedGroup && $index == selectedGroup.index" class="bg-warning">
+                        <td colspan="4" >
+                            <button class="btn btn-primary btn-sm" ng-click="detailGroup()">详情</button>
+                            <button class="btn btn-danger btn-sm" ng-click="deleteGroup()">删除</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row text-center">
+        <div class="col-lg-4 col-lg-offset-4">
+            <button type="button" class="btn btn-primary btn-block" ng-click="newModal()">新&nbsp;建</button>
+        </div>
+    </div>
+
+    <script type="text/ng-template" id="addGroup">
+        <form name="addGroupForm" class="my-form" novalidate>
+            <div class="padding-modal">
+                <h4>
+                    <span class="label label-warning"><span class="glyphicon glyphicon-tags padding-width-space-sm"></span>新建分组</span>
+                    <div class="sp-line"></div>
+                </h4>
+                <div class="box">
+                    <div class="box-heading">
+                        <h5><span class="glyphicon glyphicon-book padding-width-space-sm"></span><b>基本信息</b></h5>
+                    </div>
+                    <div class="box-body" >
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group form-group-sm">
+                                    <label for="GroupName">分组名称</label>
+                                    <div class="input-group">
+                                        <input type="text" name="GroupName" ng-model="GroupName" class="form-control" placeholder="请输入分组名称" required />
+                                        <span class="input-group-addon tipInvalid" ng-show="addGroupForm.GroupName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                        <span class="input-group-addon tipValid" ng-show="addGroupForm.GroupName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group form-group-sm">
+                                    <label for="GroupDescription">分组描述</label>
+                                    <textarea name="GroupDescription" ng-model="GroupDescription" class="form-control" rows="3" placeholder="请输入分组描述"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-info">
+                    <div class="box-heading">
+                        <h5><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>权限信息</b></h5>
+                    </div>
+                    <div class="box-body" >
+                        <table class="table table-hover">
+                            <tr>
+                                <th class="info" style="width:10%;">权限</th>
+                                <th class="info" style="width:15%;">功能名称</th>
+                                <th class="info" style="width:35%;">功能描述</th>
+                                <th class="info" style="width:40%;">子功能</th>
+                            </tr>
+                            <tr ng-repeat="item in Menu" >
+                                <td><input type="checkbox" ng-icheck="item"></td>
+                                <td>{{item.name}}</td>
+                                <td>{{item.description}}</td>
+                                <td>
+                                    <span ng-repeat="menu in item.subMenu" class="fsize-12">
+                                        <input type="checkbox" ng-icheck="menu"> - {{menu.name}}<br>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row row-line">
+                    <div class="col-lg-12">
+                        <div class="btn-group pull-right">
+                            <button class="btn btn-sm btn-success" ng-click="newGroup()">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </script>
+
+    <script type="text/ng-template" id="editGroup">
+        <div class="padding-modal">
+            <h4>
+                <span class="label label-warning"><span class="glyphicon glyphicon-tags padding-width-space-sm"></span>分组详情</span>
+                <div class="sp-line"></div>
+            </h4>
+            <div class="box">
+                <div class="box-heading">
+                    <h5><b>基本信息</b></h5>
+                </div>
+                <div class="box-body" >
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group form-group-sm">
+                                <label for="GroupName">分组名称</label>
+                                <input type="text" id="GroupName" name="GroupName" ng-model="Group.name" class="form-control" placeholder="请输入分组名称" ng-check="require"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group form-group-sm">
+                                <label for="GroupDescription">分组描述</label>
+                                <textarea id="GroupDescription" name="GroupDescription" ng-model="Group.description" class="form-control" rows="3" placeholder="请输入分组描述"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box box-info">
+                <div class="box-heading">
+                    <h5><b>权限信息</b></h5>
+                </div>
+                <div class="box-body" >
+                    <table class="table table-hover">
+                        <tr>
+                            <th class="info" style="width:10%;">权限</th>
+                            <th class="info" style="width:15%;">功能名称</th>
+                            <th class="info" style="width:35%;">功能描述</th>
+                            <th class="info" style="width:40%;">子功能</th>
+                        </tr>
+                        <tr ng-repeat="item in EditMenu" >
+                            <td><input type="checkbox" ng-icheck="item" ></td>
+                            <td>{{item.name}}</td>
+                            <td>{{item.description}}</td>
+                            <td>
+                                <span ng-repeat="menu in item.subMenu" class="fsize-12">
+                                    <input type="checkbox" ng-icheck="menu"> - {{menu.name}}<br>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="row row-line">
+                <div class="col-lg-12">
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-sm btn-success" ng-click="editGroup()">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+</section>

@@ -1,0 +1,203 @@
+<section class="content-header">
+    <h4><b>新闻/公告管理</b></h4>
+    <h6>该功能用于统一管理新闻/公告</h6>
+    <div class="sp-line"></div>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="panel panel-info panel-right">
+            <div class="input-group input-group-sm">
+                <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+                <input type="text" ng-model="_search" class="form-control"/>
+            </div>
+            <table class="table table-hover fsize-12">
+                <tr>
+                    <th class="info" style="width:12%;">类型</th>
+                    <th class="info" style="width:24%;">标题</th>
+                    <th class="info" style="width:14%;">创建时间</th>
+                    <th class="info" style="width:12%;">展示类型</th>
+                    <th class="info" style="width:14%;">起始时间</th>
+                    <th class="info" style="width:14%;">结束时间</th>
+                    <th class="info" style="width:10%;">状态</th>
+                </tr>
+                <tbody ng-repeat="item in NewList | filter:_search" style="border:0;">
+                <tr ng-click="selectNew(item, $index)" class="cursor">
+                    <td>{{item.type|dict:'NewType'}}</td>
+                    <td>{{item.title}}</td>
+                    <td>{{item.createTime|date:'yyyy-MM-dd hh:mm:ss'}}</td>
+                    <td>{{item.displayType|dict:'NewDisplayType'}}</td>
+                    <td>{{item.beginDate|date:'yyyy-MM-dd'}}</td>
+                    <td>{{item.endDate|date:'yyyy-MM-dd'}}</td>
+                    <td>{{item.status|dict:'NewStatus'}}</td>
+                </tr>
+                <tr ng-if="selectedNew && $index == selectedNew.index" class="bg-warning">
+                    <td colspan="7" >
+                        <button class="btn btn-primary btn-sm" ng-click="detailNew()">详情</button>
+                        <button class="btn btn-danger btn-sm" ng-click="deleteNew()">删除</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row text-center">
+        <div class="col-lg-4 col-lg-offset-4">
+            <button type="button" class="btn btn-primary btn-block" ng-click="newModal()">新&nbsp;建</button>
+        </div>
+    </div>
+
+    <script type="text/ng-template" id="addNew">
+        <form name="addNewForm" class="my-form" novalidate>
+            <div class="padding-modal">
+                <h4>
+                    <span class="label label-warning"><span class="glyphicon glyphicon-tags padding-width-space-sm"></span>新建新闻/公告</span>
+                    <div class="sp-line"></div>
+                </h4>
+                <div class="box">
+                    <div class="box-heading">
+                        <h5><span class="glyphicon glyphicon-book padding-width-space-sm"></span><b>基本信息</b></h5>
+                    </div>
+                    <div class="box-body" >
+                        <div class="row row-line">
+                            <div class="col-lg-3">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>类型</b></span>
+                                    <select class="form-control" ng-model="NewType" ng-options="type.value for type in NewTypeList"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>展示类型</b></span>
+                                    <select class="form-control" ng-model="NewDisplayType" ng-options="display.value for display in NewDisplayTypeList"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>标题</b></span>
+                                    <input name="NewTitle" type="input" ng-model="NewTitle" class="form-control" placeholder="请输入标题" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="addNewForm.NewTitle.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addNewForm.NewTitle.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>内容</b></span>
+                                    <textarea name="NewContent" type="text" ng-model="NewContent" class="form-control" placeholder="请输入内容" required style="height:160px;resize:none;"></textarea>
+                                    <span class="input-group-addon tipInvalid" ng-show="addNewForm.NewContent.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addNewForm.NewContent.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>起始日期</b></span>
+                                    <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="NewBeginDate" is-open="openedBeginDate" min-date="minDate" max-date="'2020-01-01'" show-weeks="false" show-button-bar="false" readonly/>
+                                    <div class="input-group-addon cursor" ng-click="openBeginDate($event)">
+                                        <i class="glyphicon glyphicon-calendar" ></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>结束日期</b></span>
+                                    <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="NewEndDate" is-open="openedEndDate" min-date="minDate" max-date="'2020-01-01'" show-weeks="false" show-button-bar="false" readonly/>
+                                    <div class="input-group-addon cursor" ng-click="openEndDate($event)">
+                                        <i class="glyphicon glyphicon-calendar" ></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-line">
+                    <div class="col-lg-12">
+                        <div class="btn-group pull-right">
+                            <button class="btn btn-sm btn-success" ng-click="addNew()">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </script>
+
+    <script type="text/ng-template" id="editNew">
+        <form name="editNewForm" class="my-form" novalidate>
+            <div class="padding-modal">
+                <h4>
+                    <span class="label label-warning"><span class="glyphicon glyphicon-tags padding-width-space-sm"></span>新建新闻/公告</span>
+                    <div class="sp-line"></div>
+                </h4>
+                <div class="box">
+                    <div class="box-heading">
+                        <h5><span class="glyphicon glyphicon-book padding-width-space-sm"></span><b>基本信息</b></h5>
+                    </div>
+                    <div class="box-body" >
+                        <div class="row row-line">
+                            <div class="col-lg-3">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>类型</b></span>
+                                    <select class="form-control" ng-model="New.type" ng-options="type.value for type in NewTypeList"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>展示类型</b></span>
+                                    <select class="form-control" ng-model="New.displayType" ng-options="display.value for display in NewDisplayTypeList"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>标题</b></span>
+                                    <input name="EditNewTitle" type="input" ng-model="New.title" class="form-control" placeholder="请输入标题" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="editNewForm.EditNewTitle.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editNewForm.EditNewTitle.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>内容</b></span>
+                                    <textarea name="EditNewContent" type="text" ng-model="New.content" class="form-control" placeholder="请输入内容" required style="height:160px;resize:none;"></textarea>
+                                    <span class="input-group-addon tipInvalid" ng-show="editNewForm.EditNewContent.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editNewForm.EditNewContent.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>起始日期</b></span>
+                                    <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="New.beginDate" is-open="openedBeginDate" min-date="minDate" max-date="'2020-01-01'" show-weeks="false" show-button-bar="false" readonly/>
+                                    <div class="input-group-addon cursor" ng-click="openBeginDate($event)">
+                                        <i class="glyphicon glyphicon-calendar" ></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>结束日期</b></span>
+                                    <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="New.endDate" is-open="openedEndDate" min-date="minDate" max-date="'2020-01-01'" show-weeks="false" show-button-bar="false" readonly/>
+                                    <div class="input-group-addon cursor" ng-click="openEndDate($event)">
+                                        <i class="glyphicon glyphicon-calendar" ></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-line">
+                    <div class="col-lg-12">
+                        <div class="btn-group pull-right">
+                            <button class="btn btn-sm btn-success" ng-click="editNew()">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </script>
+
+</section>

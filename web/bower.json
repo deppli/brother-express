@@ -1,0 +1,40 @@
+{
+    "name": "brother-express",
+    "version": "0.0.0",
+    "homepage": "http://www.annlover.com",
+    "authors": [
+        "zhangh"
+    ],
+    "description": "brother-express",
+    "main": "index.html",
+    "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "js/dev/lib",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "jquery": "https://github.com/jquery/jquery.git",
+        "jquery-ui": "https://github.com/components/jqueryui.git",
+        "angular": "https://github.com/angular/bower-angular.git#1.3",
+        "angular-route": "https://github.com/angular/bower-angular-route.git#1.3",
+        "angular-cookies": "https://github.com/angular/bower-angular-cookies.git#1.3",
+        "angular-bootstrap": "https://github.com/angular-ui/bootstrap.git#gh-pages",
+        "angular-dragdrop": "https://github.com/codef0rmer/angular-dragdrop.git#1.0.8",
+        "angular-file-upload": "https://github.com/danialfarid/angular-file-upload.git#2.1.1",
+        "spin": "https://github.com/fgnass/spin.js.git",
+        "es5": "https://github.com/es-shims/es5-shim.git",
+        "json3": "https://github.com/bestiejs/json3.git",
+        "crypto": "https://github.com/evanvosberg/crypto-js.git",
+        "xlsx": "https://github.com/syhmosh/js-xlsx.git",
+        "excel-builder": "https://github.com/stephenliberty/excel-builder.js.git",
+        "bootstrap": "https://github.com/twbs/bootstrap.git",
+        "bootstrap-icheck": "https://github.com/fronteed/iCheck.git",
+        "thenjs": "https://github.com/teambition/then.js.git",
+        "iscroll": "https://github.com/cubiq/iscroll.git",
+        "jquery-qrcode": "https://github.com/jeromeetienne/jquery-qrcode.git"
+    }
+}

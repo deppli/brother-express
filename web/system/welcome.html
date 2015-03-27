@@ -1,0 +1,192 @@
+<div class="float-panel login-panel">
+    <div class="tab-group">
+        <div ng-click="changeMode(0)" class="float-tab" ng-class="{'float-tab-active': displayMode==0}">
+            <i class="glyphicon glyphicon-time mr10"></i>订单查询
+        </div>
+        <div ng-click="changeMode(1)" class="float-tab" ng-class="{'float-tab-active': displayMode==1}">
+            <i class="glyphicon glyphicon-plane mr10"></i>开始下单
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div id="queryOrder" ng-show="displayMode == 0" class="float-inner hspace20">
+        <div class="input-group input-group-lg" ng-show="Error">
+            <p><span class="label label-danger">{{Error}}</span></p>
+        </div>
+        <div>
+            <div class="input-group input-group">
+                <input type="text" class="form-control" ng-model="OrderId" placeholder="请输入订单编号查询">
+                <span class="input-group-btn">
+                    <button class="btn btn-success" type="button" ng-click="queryOrder()">查询</button>
+                </span>
+            </div>
+            <div class="pull-right"><a href="#/"><span class="fs12 text-tip">遇到问题?</span></a></div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="tip-group">
+            <div class="tip-line">
+                <div class="tip-img"><img src="themes/default/img/icon-bag.png"></div>
+                <div class="tip-content">
+                    <div class="tip-header">如何进行国际购物？</div>
+                    <div class="tip-text"><a href="#/">海外出口申报</a><a href="#/">中国入境申报</a><a href="#/">进出口岸政策信息</a></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="tip-line">
+                <div class="tip-img"><img src="themes/default/img/icon-clock.png"></div>
+                <div class="tip-content">
+                    <div class="tip-header">国际物流中转环节及周期？</div>
+                    <div class="tip-text"><a href="#/">订单生成</a><a href="#/">入仓与出货</a><a href="#/">国际物流及清关</a></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="tip-line">
+                <div class="tip-img"><img src="themes/default/img/icon-light.png"></div>
+                <div class="tip-content">
+                    <div class="tip-header">使用中可能存在的问题？</div>
+                    <div class="tip-text"><a href="#/">海外出口申报</a><a href="#/">中国入境申报</a><a href="#/">进出口岸政策信息</a></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="createOrder" ng-show="displayMode == 1">
+        <div><img src="themes/default/img/order.jpg" class="go-order" ng-click="goOrder()"></div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="banner">
+            <img src="themes/default/img/banner.jpg">
+        </div>
+    </div>
+</div>
+<script type="text/ng-template" id="orderModal">
+        <div class="panel panel-info sys-panel">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-align-justify padding-width-space-sm"></span><span>订单详情</span>
+            </div>
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row row-line">
+                        <span class="label label-warning">订单信息</span>
+                    </div>
+                    <div class="row row-line">
+                        <div class="col-md-2 data-name">订单编号：</div>
+                        <div class="col-md-4 data-value">{{Order.id}}</div>
+                        <div class="col-md-2 data-name">订单名称：</div>
+                        <div class="col-md-4 data-value">{{Order.name}}</div>
+                    </div>
+                    <div class="row row-line">
+                        <div class="col-md-2 data-name">订单类型：</div>
+                        <div class="col-md-4 data-value">{{Order.type|dict:'OrderType'}}</div>
+                        <div class="col-md-2 data-name">订单状态：</div>
+                        <div class="col-md-4 data-value">{{Order.status|dict:'OrderStatus'}}</div>
+                    </div>
+                    <div class="row row-line">
+                        <div class="col-md-2 data-name">创建人：</div>
+                        <div class="col-md-4 data-value">{{Order.creater}}</div>
+                        <div class="col-md-2 data-name">创建时间：</div>
+                        <div class="col-md-4 data-value">{{Order.createTime|date:"yyyy-MM-dd hh:mm:ss"}}</div>
+                    </div>
+                    <div class="row row-line">
+                        <div class="col-md-2 data-name">描述信息：</div>
+                        <div class="col-md-10 data-value">{{Order.description}}</div>
+                    </div>
+                    <div class="row row-line">
+                        <div class="col-md-2 data-name">产品统称：</div>
+                        <div class="col-md-4 data-value">{{Order.productName}}</div>
+                        <div class="col-md-2 data-name">产品总数量：</div>
+                        <div class="col-md-4 data-value">{{Order.productNum}}</div>
+                    </div>
+                    <div class="row row-line">
+                        <div class="col-md-2 data-name">产品总价值(元)：</div>
+                        <div class="col-md-4 data-value">{{Order.productAmount}}</div>
+                        <div class="col-md-2 data-name">产品总重量：</div>
+                        <div class="col-md-4 data-value">{{Order.productWeight}}</div>
+                    </div>
+                    <div class="row row-line">
+                        <div class="col-md-2 data-name">国际物流商：</div>
+                        <div class="col-md-4 data-value">{{Order.worldTransName}}</div>
+                        <div class="col-md-2 data-name">国际物流单号：</div>
+                        <div class="col-md-4 data-value">{{Order.worldTransId}}</div>
+                    </div>
+                    <div class="row row-line">
+                        <div class="col-md-2 data-name">国内物流商：</div>
+                        <div class="col-md-4 data-value">{{Order.chinaTransName}}</div>
+                        <div class="col-md-2 data-name">国内物流单号：</div>
+                        <div class="col-md-4 data-value">{{Order.chinaTransId}}
+                            <span ng-show="Order.chinaTransId" class="btn btn-info btn-sm" ng-click="queryExpress()">查询</span>
+                        </div>
+                    </div>
+                    <div class="row row-line">
+                        <span class="label label-warning">收件人信息</span>
+                    </div>
+                    <div class="row row-line">
+                        <div class="col-md-2 data-name">收件人名称：</div>
+                        <div class="col-md-4 data-value">{{Order.receiveName}}</div>
+                        <div class="col-md-2 data-name">收件人电话：</div>
+                        <div class="col-md-4 data-value">{{Order.receivePhone}}</div>
+                    </div>
+                    <div class="row row-line">
+                        <div class="col-md-2 data-name">收货人省份：</div>
+                        <div class="col-md-4 data-value">{{Order.receiveProvinceName}}</div>
+                        <div class="col-md-2 data-name">收货人城市：</div>
+                        <div class="col-md-4 data-value">{{Order.receiveCityName}}</div>
+                    </div>
+                    <div class="row row-line">
+                        <div class="col-md-2 data-name">收货人邮编：</div>
+                        <div class="col-md-4 data-value">{{Order.receiveZipCode}}</div>
+                        <div class="col-md-2 data-name">收件人地址：</div>
+                        <div class="col-md-4 data-value">{{Order.receiveAddress}}</div>
+                    </div>
+                    <div class="row row-line">
+                        <span class="label label-warning">订单轨迹</span>
+                    </div>
+                    <div class="row row-line">
+                        <table class="table table-hover">
+                            <tr>
+                                <th class="info" style="width:15%;">更新人</th>
+                                <th class="info" style="width:20%;">更新时间</th>
+                                <th class="info" style="width:15%;">地点</th>
+                                <th class="info" style="width:10%;">状态</th>
+                                <th class="info" style="width:40%;">备注</th>
+                            </tr>
+                            <tr ng-repeat="item in Order.updateInfo">
+                                <td>{{item.updater}}</td>
+                                <td>{{item.time|date:'yyyy-MM-dd hh:mm:ss'}}</td>
+                                <td>{{item.gisText}}</td>
+                                <td>{{item.status|dict:'OrderStatus'}}</td>
+                                <td>{{item.remark}}</td>
+                            </tr>
+                            <tr ng-show="pathError">
+                                <td colspan="5"><b class="text-danger" ng-bind="pathError"></b></td>
+                            </tr>
+                            <tr ng-repeat="path in Order.orderPaths">
+                                <td>-</td>
+                                <td>{{path.date}}</td>
+                                <td>{{path.place}}</td>
+                                <td>转运</td>
+                                <td>{{path.details}}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+</script>
+<script type="text/ng-template" id="expressModal">
+    <div class="modal-header">
+        <div class="form-group">
+            <p><button class="btn btn-default">国内物流查询</button></p>
+        </div>
+        <div class="form-group">
+            <span class="label label-success">快递公司：{{Order.chinaTransName}}</span>
+            <span class="label label-success">快递单号：{{Order.chinaTransId}}</span>
+        </div>
+    </div>
+    <div class="modal-body">
+        <iframe name="kuaidi100" src="http://www.kuaidi100.com/frame/app/index2.html" width="800" height="400" marginwidth="0" marginheight="0" hspace="0" vspace="0" frameborder="0" scrolling="no"></iframe>
+    </div>
+</script>

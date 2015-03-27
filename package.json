@@ -1,0 +1,23 @@
+{
+    "name": "logistics_server",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "start": "node app.js"
+    },
+    "dependencies": {
+        "express": "~4.10.1",
+        "body-parser": "*",
+        "mongoose": "*",
+        "thenjs": "*",
+        "express-session": "~1.9.*",
+        "log4js": "~0.6.*",
+        "node-xlsx": "*",
+        "formidable": "*",
+        "nodemailer": "*",
+        "nodemailer-smtp-transport": "*",
+        "wechat": "*",
+        "bower": "*",
+        "async": "*"
+    }
+}

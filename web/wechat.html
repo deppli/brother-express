@@ -1,0 +1,109 @@
+<!doctype html>
+<html id="ng-app">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="themes/default/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="themes/default/css/styles.css"/>
+    <title>微信扫码</title>
+</head>
+
+<body ng-controller="BaseCtrl">
+<div class="container-fluid">
+    <div class="navbar-fixed-top topestH">
+        <div class="col-xs-1"><!--<ul></ul>--></div>
+        <div class="col-xs-2"></div>
+        <div class="col-xs-6 tac">
+            <img src="themes/default/img/logo.jpg" class="maintopbarimg">
+        </div>
+        <div class="col-xs-2"><!--<ul></ul>--></div>
+        <div class="col-xs-1"></div>
+    </div>
+
+    <div class="row screen">
+
+        <!--<div  class="banner"><a href=""><img src="images/mainbanner.jpg" class="img-responsive center-block"></a></div>-->
+
+        <div class="row margin10">
+            <div class="sbox pr col-xs-12 mainadv6bg">
+                <img src="images/maingoodtitle2.png" class="maingoodtitle">
+                <div class="col-xs-6">
+                    <p class="text-left">
+                        <qrcode version="6" data="{{_WechatEntry}}{{Order.id}}" download ng-show="Order.id"></qrcode><br>
+                        <span class="data1-1" ng-bind="Order.id"></span>
+                    </p>
+                </div>
+                <div class="col-xs-6">
+                    <p class="text-left">
+                        <span>创建时间<br></span><span class="data1-1">{{Order.createTime|date:'yyyy-MM-dd hh:mm:ss'}}</span><br>
+                        <span>当前状态<br></span><span class="data1-1">{{Order.status|dict:"OrderStatus"}}</span><br>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!--产品第二行-->
+        <div class="row margin10">
+            <div class="sbox pr col-xs-12 mainadv7bg">
+                <img src="images/maingoodtitle1.png" class="maingoodtitle">
+                <div class="col-xs-6">
+                    <p class="text-left">
+                        <span>订单名称<br></span><span class="data1-1">{{Order.name}}</span><br>
+                        <span>货物统称<br></span><span class="data1-1">{{Order.productName}}</span><br>
+                        <span>产品总数<br></span><span class="data1-1">{{Order.productNum}}</span>
+                    </p>
+                </div>
+                <div class="col-xs-6">
+                    <p class="text-left">
+                        <span>收件人<br></span><span class="data1-1">{{Order.receiveName}}</span><br>
+                        <span>电话<br></span><span class="data1-1">{{Order.receivePhone}}</span><br>
+                        <span>地址<br></span><span class="data1-1">{{Order.receiveAddress}}</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row margin10">
+            <div class="sbox pr col-xs-12 mainadv2bg cursor" ng-click="openModal()">
+                <span class="mobile-btn">订单更新</span>
+            </div>
+        </div>
+    </div><!--screen end-->
+</div>
+</body>
+<script data-main="js/wechat.js" src="js/require.min.js"></script>
+<script type="text/ng-template" id="updateOrderModal">
+    <div class="modal-body modal-sm" ng-submit="updateOrder()">
+        <form name="updateOrderForm" class="sys-form-modal form-login" >
+            <div class="row row-line">
+                <div class="col-xs-12">
+                    <label>登录名</label>
+                    <input type="text" name="loginId" class="form-control" ng-model="loginId" required placeholder="请输入登录名"/>
+                </div>
+            </div>
+            <div class="row row-line">
+                <div class="col-xs-12">
+                    <label>订单状态</label>
+                    <select class="form-control" ng-model="status" ng-options="status.value for status in OrderStatusList"></select>
+                </div>
+            </div>
+            <div class="row row-line">
+                <div class="col-xs-12">
+                    <label>地点</label>
+                    <input type="text" name="gisText" class="form-control" ng-model="gisText" required placeholder="请输入地点"/>
+                </div>
+            </div>
+            <div class="row row-line">
+                <div class="col-xs-12">
+                    <label>备注说明</label>
+                    <input type="text" name="remark" class="form-control" ng-model="remark" placeholder="请输入备注说明"/>
+                </div>
+            </div>
+            <div class="login-btn">
+                <button type="submit" class="btn btn-success btn-block">更新</button>
+            </div>
+        </form>
+    </div>
+</script>
+</html>

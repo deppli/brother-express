@@ -1,0 +1,44 @@
+<html ng-app='app'>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="bootstrap.min.css"/>
+</head>
+<body>
+    <div ng-controller="controller" class="container">
+        <img src="prospect.jpg" class="img-rounded" style="width: 100%;" ng-click="print()"/>
+        <iframe name='hidden_frame' id="hidden_frame" ng-show="show" src="../../iframe.html"></iframe>
+        <div class="form-group">
+            <label>One</label>
+            <input type="text" class="form-control" ng-model="One" placeholder="Please Enter One" required/>
+        </div>
+        <div class="form-group">
+            <label>Two</label>
+            <input type="text" class="form-control" ng-model="Two" placeholder="Please Enter TWo" required/>
+        </div>
+        <div class="form-group">
+            <label>Three</label>
+            <input type="text" class="form-control" ng-model="Three" placeholder="Please Enter Three" required/>
+        </div>
+    </div>
+</body>
+
+<script src="../javascripts/lib/angular/angular.js"></script>
+
+<script>
+    var appModule = angular.module('app', []);
+    appModule.controller("controller",function($scope){
+        $scope.show=false;
+        $scope.print=function(){
+            var iframe=document.getElementById("hidden_frame");
+            var table = iframe.contentWindow.document.getElementById("printTable");
+            var cells=table.tBodies[0].rows[0].cells;
+            cells[0].innerHTML=$scope.One;
+            cells[1].innerHTML=$scope.Two;
+            cells[2].innerHTML=$scope.Three;
+            iframe.contentWindow.focus();
+            iframe.contentWindow.print();
+        }
+
+    });
+</script>
+</html>

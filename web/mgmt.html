@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html id="ng-app">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta name="viewport" content="width=device-width,minimum-scale=0.1,maximum-scale=1.0"/>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <title>管理端</title>
+    <link rel="shortcut icon" href="themes/default/img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="themes/default/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="themes/default/bootstrap-icheck/skins/flat/green.css"/>
+    <link rel="stylesheet" type="text/css" href="themes/default/css/base.css"/>
+    <!--<link rel="stylesheet" type="text/css" href="themes/default/css/file-upload.css"/>-->
+</head>
+<body ng-controller="BaseCtrl">
+    <header class="navbar navbar-static-top sys-navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand sys-navlogo">
+                    <img src="themes/default/img/logo.spdb" height="40">
+                </a>
+            </div>
+            <nav>
+                <ul class="nav navbar-nav navbar-right fs12">
+                    <li ng-show="$root.backInfo.isLogin" ng-click="logout()"><a ng-bind="'注销'"></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="container" ng-hide="$root.backInfo.isLogin">
+        <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <form class="login-panel form-login" ng-submit="login()">
+                    <div class="input-group" ng-show="Error">
+                        <p><span class="label label-danger" ng-bind="Error"></span></p>
+                    </div>
+                    <div class="input-group">
+                        <span class="glyphicon glyphicon-user input-group-addon"></span>
+                        <input type="text" class="form-control" name="loginId" ng-model="loginId" placeholder="用户名"/>
+                    </div>
+                    <div class="input-group"><h4></h4></div>
+                    <div class="input-group">
+                        <span class="glyphicon glyphicon-link input-group-addon"></span>
+                        <input type="password" class="form-control" name="password" ng-model="password" placeholder="密码"/>
+                    </div>
+                    <div class="login-btn">
+                        <button type="submit" class="btn btn-success btn-block">登录</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-sm-4"></div>
+        </div>
+    </div>
+    <div class="wrapper" style="min-height: 529px;" ng-show="$root.backInfo.isLogin">
+        <aside class="left-side">
+            <section class="sidebar">
+                <!-- Sidebar user panel -->
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="themes/default/img/user.png" class="element-circle" alt="用户头像">
+                    </div>
+                    <div class="pull-left info">
+                        <p class="text-nowrap">你好, <span ng-bind="backInfo.name"></span></p>
+                        <a href="#">控制台</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <!-- search form -->
+                <div class="input-group sidebar-form">
+                    <input type="text" ng-model="_search" class="form-control input-sm" placeholder="搜索..." />
+                    <span class="input-group-btn">
+                        <button type="button" name="search" id="search-btn" class="btn btn-success btn-sm">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </span>
+                </div>
+                <!-- sidebar menu -->
+                <ul class="sidebar-menu">
+                    <li ng-repeat="item in menuList | filter: _search" ng-class="{'active': item.active}">
+                        <a href="{{item.link}}" ng-click="selectMenu(item)" ng-hide="menuShow(item.subMenu)||!item.checked">
+                            <span ng-bind="item.name"></span>
+                        </a>
+                        <a ng-click="selectMenu(item)" ng-show="menuShow(item.subMenu) && item.checked">
+                            <span ng-bind="item.name"></span>
+                            <small class="pull-right sub-tip glyphicon glyphicon-chevron-down"></small>
+                        </a>
+                        <ul class="treeview-menu" ng-show="item.open">
+                            <li ng-repeat="subItem in item.subMenu" ng-class="{'active': subItem.active}">
+                                <a href="{{subItem.link}}" ng-click="selectMenu(subItem)" ng-show="subItem.checked">
+                                    <span class="glyphicon glyphicon-link padding-width-space-sm"></span>
+                                    <span ng-bind="subItem.name"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+        <aside class="right-side" ng-view></aside>
+    </div>
+ </body>
+
+<script data-main="js/manage.js" src="js/require.min.js"></script>
+<script type="text/ng-template" id="message">
+    <div class="modal-body">
+        <form class="sys-form-modal form-login" >
+            <div class="input-group">
+                <p><span ng-bind="msg.text"></span></p>
+            </div>
+            <div class="login-btn text-center">
+                <button class="btn btn-danger" ng-click="confirm()" ng-show="msg.type == 1">确认</button>
+                <button class="btn btn-primary" ng-click="close()">关闭</button>
+            </div>
+        </form>
+    </div>
+</script>
+<script type="text/ng-template" id="loading">
+    <div class="modal-body">
+        <div class="text-center">
+            <progressbar class="progress-striped active" value="100" type="primary"><b>处理中</b></progressbar>
+        </div>
+        <div class="sp-line"></div>
+    </div>
+</script>
+
+</html>

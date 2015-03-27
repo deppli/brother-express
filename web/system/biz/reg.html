@@ -1,0 +1,173 @@
+<div class="container">
+    <div class="row">
+        <ul class="reg-steps">
+            <li class="reg-steps-item" ng-class="{'reg-steps-item-focus': STEP==1}">
+                <span class="label label-default padding-width-space-sm" ng-class="{'label-success': STEP==1}">1</span>
+                <span>填写注册信息</span>
+            </li>
+            <li class="reg-steps-item" ng-class="{'reg-steps-item-focus': STEP==2}">
+                <span class="label label-default padding-width-space-sm" ng-class="{'label-success': STEP==2}">2</span>
+                <span>验证注册邮箱</span>
+            </li>
+            <li class="reg-steps-item" ng-class="{'reg-steps-item-focus': STEP==3}">
+                <span class="label label-default padding-width-space-sm" ng-class="{'label-success': STEP==3}">3</span>
+                <span>证件上传</span>
+            </li>
+            <li class="reg-steps-item" ng-class="{'reg-steps-item-focus': STEP==4}">
+                <span class="label label-default padding-width-space-sm" ng-class="{'label-success': STEP==4}">4</span>
+                <span>完成注册</span>
+            </li>
+            <li class="clearfix"></li>
+        </ul>
+    </div>
+    <div class="row" ng-show="STEP == 1">
+        <div class="col-lg-10 col-lg-offset-1 reg-panel">
+            <div class="padding30">
+                <form name="customerBasic" novalidate>
+                    <div class="reg-input-group">
+                        <div class="input-title">
+                            <span class="mr10">登录名(邮箱)</span>
+                            <span class="label label-danger mr10" ng-show="customerBasic.loginId.$error.required">必输</span>
+                            <span class="label label-danger" ng-show="customerBasic.loginId.$error.email">格式错误</span>
+                            <span class="label label-danger" ng-show="exist">用户名已存在</span>
+                        </div>
+                        <input name="loginId" type="email" class="input-element" ng-model="loginId" required ng-blur="checkLoginId()"/>
+                    </div>
+                    <div class="col-lg-6 reg-input-group">
+                        <div class="input-title">
+                            <span class="mr10">密码</span>
+                            <span class="label label-danger mr10" ng-show="customerBasic.password.$error.required">必输</span>
+                            <span class="label label-danger mr10" ng-show="customerBasic.password.$error.minlength">最少6位</span>
+                            <span class="label label-danger" ng-show="customerBasic.password.$error.maxlength">最长20位</span>
+                        </div>
+                        <input name="password" type="password" class="input-element" ng-model="password" required minlength="6" maxlength="20"/>
+                    </div>
+                    <div class="reg-input-group">
+                        <div class="input-title">
+                            <span class="mr10">确认密码</span>
+                            <span class="label label-danger mr10" ng-show="customerBasic.confPassword.$error.required">必输</span>
+                            <span class="label label-danger" ng-hide="password==confPassword">两次密码不匹配</span>
+                        </div>
+                        <input type="password" class="input-element" ng-model="confPassword" required/>
+                    </div>
+                    <div class="col-lg-6 reg-input-group">
+                        <div class="input-title">
+                            <span class="mr10">昵称</span>
+                            <span class="label label-danger mr10" ng-show="customerBasic.nickname.$error.required">必输</span>
+                        </div>
+                        <input name="nickname" type="text" class="input-element" ng-model="nickname" required/>
+                    </div>
+                    <div class="reg-input-group">
+                        <div class="input-title">
+                            <span class="mr10">姓名</span>
+                            <span class="label label-danger mr10" ng-show="customerBasic.name.$error.required">必输</span>
+                        </div>
+                        <input name="name" type="text" class="input-element" ng-model="name" required/>
+                    </div>
+                    <div class="col-lg-6 reg-input-group">
+                        <div class="input-title">性别</div>
+                        <select class="select-element" ng-model="sex" ng-options="sex.value for sex in SexList"></select>
+                    </div>
+                    <div class="reg-input-group">
+                        <div class="input-title">
+                            <span class="mr10">身份证</span>
+                            <span class="label label-danger mr10" ng-show="customerBasic.idNo.$error.required">必输</span>
+                        </div>
+                        <input name="idNo" type="text" class="input-element" ng-model="idNo" required/>
+                    </div>
+                    <div class="col-lg-6 reg-input-group">
+                        <div class="input-title">
+                            <span class="mr10">手机号码</span>
+                            <span class="label label-danger mr10" ng-show="customerBasic.phone.$error.required">必输</span>
+                        </div>
+                        <input name="phone" type="tel" class="input-element" ng-model="phone" required/>
+                    </div>
+                    <div class="reg-input-group">
+                        <div class="input-title">
+                            <span class="mr10">电子邮箱</span>
+                            <span class="label label-danger mr10" ng-show="customerBasic.email.$error.required">必输</span>
+                            <span class="label label-danger mr10" ng-show="customerBasic.email.$error.email">格式不正确</span>
+                        </div>
+                        <input name="email" type="email" class="input-element" ng-model="email" required/>
+                    </div>
+                    <div class="reg-input-group">
+                        <div class="input-title">
+                            <span class="mr10">地址</span>
+                            <span class="label label-danger mr10" ng-show="customerBasic.address.$error.required">必输</span>
+                        </div>
+                        <input name="address" type="text" class="input-element" ng-model="address" required/>
+                    </div>
+                    <div class="sp-line margin-height-space-sm"></div>
+                    <div class="reg-input-group">
+                        <!--ng-disabled="customerBasic.$invalid"-->
+                        <button class="btn btn-success pull-right" ng-click="nextStep(1)">下一步</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row" ng-show="STEP == 2">
+        <div class="col-lg-10 col-lg-offset-1 reg-panel">
+            <div class="padding30">
+                <form>
+                    <div>确认邮件已经发往您的注册邮箱：</div>
+                    <div><b class="text-danger">{{loginId}}</b></div>
+                    <div>请于30分钟内登录邮箱并通过激活链接进行注册信息激活操作.</div>
+                    <div class="sp-line margin-height-space-sm"></div>
+                    <div class="reg-input-group">
+                        <button class="btn btn-warning" ng-click="preStep()">上一步</button>
+                        <button class="btn btn-success pull-right" ng-click="nextStep(2)">下一步</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-show="STEP == 3">
+        <div class="col-lg-10 col-lg-offset-1 reg-panel">
+            <div class="padding30">
+                <form>
+                    <div>
+                        <label class="label label-success mr10">证件上传</label>
+                    </div>
+                    <div class="row-line sp-line"></div>
+                    <div class="row row-line">
+                        <div class="col-lg-4">
+                            <div class="input-title">身份证正面</div>
+                            <div class="img-select cursor" ng-file-select ng-model="idImgA" accept=".jpg">
+                                <img ng-src="{{idAUrl}}" />
+                            </div>
+                            <progressbar class="progress-striped active" value="ProgressA.dynamic" type="success"><i>{{ProgressA.dynamic}} %</i></progressbar>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-title">身份证背面</div>
+                            <div class="img-select cursor" ng-file-select ng-model="idImgB" accept=".jpg">
+                                <img ng-src="{{idBUrl}}" />
+                            </div>
+                            <progressbar class="progress-striped active" value="ProgressB.dynamic" type="success"><i>{{ProgressB.dynamic}} %</i></progressbar>
+                        </div>
+                    </div>
+                    <div class="row-line"><b class="fs12">备注：<span>单张图片大小限制200K</span></b></div>
+                    <div class="sp-line"></div>
+                    <div class="reg-input-group">
+                        <button class="btn btn-success pull-right" ng-click="nextStep(3)">下一步</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-show="STEP == 4">
+        <div class="col-lg-10 col-lg-offset-1 reg-panel">
+            <div class="padding30">
+                <form>
+                    <div>注册步骤-注册成功</div>
+                    <div class="sp-line margin-height-space-sm"></div>
+                    <div class="reg-input-group">
+                        <button class="btn btn-success pull-right" ng-click="nextStep(4)">开始使用</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

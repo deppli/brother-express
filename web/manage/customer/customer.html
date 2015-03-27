@@ -1,0 +1,255 @@
+<section class="content-header">
+    <h4><b>客户管理</b></h4>
+    <h6>该功能用于查看/维护门户系统客户信息</h6>
+    <div class="sp-line"></div>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="panel panel-info panel-right">
+            <div class="input-group input-group-sm">
+                <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
+                <input type="text" ng-model="_search" class="form-control"/>
+            </div>
+            <table class="table table-hover fsize-12">
+                <tr>
+                    <th class="info" style="width:25%;">用户名</th>
+                    <th class="info" style="width:20%;">昵称</th>
+                    <th class="info" style="width:10%;">性别</th>
+                    <th class="info" style="width:23%;">姓名</th>
+                    <th class="info" style="width:12%;">手机号码</th>
+                    <th class="info" style="width:10%;">状态</th>
+                </tr>
+                <tbody ng-repeat="item in CustomerList | filter:_search" style="border:0;">
+                <tr ng-click="selectCustomer(item, $index)" class="cursor">
+                    <td>{{item.loginId}}</td>
+                    <td>{{item.nickname}}</td>
+                    <td>{{item.sex}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.phone}}</td>
+                    <td>{{item.status|dict:'CustomerStatus'}}</td>
+                </tr>
+                <tr ng-if="selectedCustomer && $index == selectedCustomer.index" class="bg-warning">
+                    <td colspan="6" >
+                        <button class="btn btn-primary btn-sm" ng-click="detailCustomer()">详情</button>
+                        <button class="btn btn-warning btn-sm" ng-click="lockCustomer()">冻结</button>
+                        <button class="btn btn-success btn-sm" ng-click="unlockCustomer()">解冻</button>
+                        <button class="btn btn-danger btn-sm" ng-click="deleteCustomer()">删除</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row text-center">
+        <div class="col-lg-4 col-lg-offset-4">
+            <button type="button" class="btn btn-primary btn-block" ng-click="newModal()">新&nbsp;建</button>
+        </div>
+    </div>
+
+    <script type="text/ng-template" id="addCustomer">
+        <form name="addCustomerForm" class="my-form" novalidate>
+            <div class="padding-modal">
+                <h4>
+                    <span class="label label-warning"><span class="glyphicon glyphicon-tags padding-width-space-sm"></span>新建客户</span>
+                    <div class="sp-line"></div>
+                </h4>
+                <div class="box">
+                    <div class="box-heading">
+                        <h5><span class="glyphicon glyphicon-book padding-width-space-sm"></span><b>基本信息</b></h5>
+                    </div>
+                    <div class="box-body" >
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>用户名</b></span>
+                                    <input name="CustomerLoginid" type="text" ng-model="CustomerLoginId" class="form-control" placeholder="请输入用户名" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="addCustomerForm.CustomerLoginid.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addCustomerForm.CustomerLoginid.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>密码</b></span>
+                                    <input name="CustomerPassword" type="password" ng-model="CustomerPassword" class="form-control" placeholder="请输入密码" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="addCustomerForm.CustomerPassword.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addCustomerForm.CustomerPassword.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>昵称</b></span>
+                                    <input name="CustomerNickname" type="text" ng-model="CustomerNickname" class="form-control" placeholder="请输入昵称" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="addCustomerForm.CustomerNickname.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addCustomerForm.CustomerNickname.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>姓名</b></span>
+                                    <input name="CustomerName" type="text" ng-model="CustomerName" class="form-control" placeholder="请输入姓名"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>性别</b></span>
+                                    <select class="form-control" ng-model="CustomerSex" ng-options="sex.value for sex in SexList"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>身份证</b></span>
+                                    <input ng-model="CustomerIdNo" class="form-control" placeholder="请输入身份证" maxlength="20" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>生日</b></span>
+                                    <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="CustomerBirthday" is-open="opened" min-date="minDate" max-date="'2020-01-01'" show-weeks="false" show-button-bar="false" readonly required/>
+                                    <div class="input-group-addon cursor" ng-click="open($event)">
+                                        <i class="glyphicon glyphicon-calendar" ></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>手机号码</b></span>
+                                    <input type="tel" name="CustomerPhone" type="tel" ng-model="CustomerPhone" class="form-control" placeholder="请输入手机号码" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="addCustomerForm.CustomerPhone.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addCustomerForm.CustomerPhone.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>电子邮箱</b></span>
+                                    <input type="email" ng-model="CustomerEmail" class="form-control" placeholder="请输入电子邮箱" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>地址</b></span>
+                                    <input ng-model="CustomerAddress" class="form-control" placeholder="请输入地址" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-line">
+                    <div class="col-lg-12">
+                        <div class="btn-group pull-right">
+                            <button class="btn btn-sm btn-success" ng-click="newCustomer()">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </script>
+
+    <script type="text/ng-template" id="editCustomer">
+        <div class="padding-modal">
+            <h4>
+                <span class="label label-warning"><span class="glyphicon glyphicon-tags padding-width-space-sm"></span>用户详情</span>
+                <div class="sp-line"></div>
+            </h4>
+            <div class="box">
+                <div class="box-heading">
+                    <h5><span class="glyphicon glyphicon-book padding-width-space-sm"></span><b>基本信息</b></h5>
+                </div>
+                <div class="box-body" >
+                    <div class="row row-line">
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><b>用户名</b></span>
+                                <input type="text" ng-model="Customer.loginId" class="form-control" placeholder="请输入用户名" readonly/>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <button class="btn btn-danger btn-block" ng-hide="CheckPassword" ng-click="checkPassword()">重置密码</button>
+                                <span class="input-group-addon" ng-show="CheckPassword"><b>密码</b></span>
+                                <input type="password" ng-model="EditPassword" class="form-control" placeholder="请输入密码" ng-show="CheckPassword"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-line">
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><b>昵称</b></span>
+                                <input name="EditCustomerNickname" type="text" ng-model="Customer.nickname" class="form-control" placeholder="请输入昵称" required/>
+                                <span class="input-group-addon tipInvalid" ng-show="editCustomerForm.EditCustomerNickname.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-addon tipValid" ng-show="editCustomerForm.EditCustomerNickname.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><b>姓名</b></span>
+                                <input type="text" ng-model="Customer.name" class="form-control" placeholder="请输入姓名" />
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><b>性别</b></span>
+                                <select class="form-control" ng-model="Customer.sex" ng-options="sex.value for sex in SexList"></select>
+                                <!--<input ng-model="Customer.sex" class="form-control" placeholder="请选择性别" />-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-line">
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><b>身份证</b></span>
+                                <input ng-model="Customer.idNo" class="form-control" placeholder="请输入身份证" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><b>生日</b></span>
+                                <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="Customer.birthday" is-open="opened" min-date="minDate" max-date="'2020-01-01'" show-weeks="false" show-button-bar="false" readonly required/>
+                                <div class="input-group-addon cursor" ng-click="open($event)">
+                                    <i class="glyphicon glyphicon-calendar" ></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-line">
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><b>手机号码</b></span>
+                                <input type="tel" ng-model="Customer.phone" class="form-control" placeholder="请输入手机号码" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><b>电子邮箱</b></span>
+                                <input type="email" ng-model="Customer.email" class="form-control" placeholder="请输入电子邮箱" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-line">
+                        <div class="col-lg-12">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><b>地址</b></span>
+                                <input ng-model="Customer.address" class="form-control" placeholder="请输入地址" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row row-line">
+                <div class="col-lg-12">
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-sm btn-success" ng-click="editCustomer()">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+</section>

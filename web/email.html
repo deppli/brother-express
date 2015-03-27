@@ -1,0 +1,125 @@
+<!doctype html>
+<html id="ng-app">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="themes/default/img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="themes/default/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="themes/default/css/base.css"/>
+    <script src="js/dev/lib/jquery/dist/jquery.min.js"></script>
+    <title>成功</title>
+    <script>
+        var ss = 10;
+        function timer()
+        {
+            if(ss <= 0){
+                var href = window.location.href;
+                window.open(href,"_self","");
+                window.close();
+            }
+            var time = ss--;
+            document.getElementById("timer").innerHTML = time + " 秒内页面将自动关闭";
+        }
+
+        $(document).ready(function(){
+            setInterval("timer()",1000);
+        });
+    </script>
+</head>
+
+<body>
+    <header class="navbar navbar-static-top sys-navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand sys-navlogo">
+                    <img src="themes/default/img/logo.spdb" height="40">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="jumbotron">
+        <h3 class="col-lg-offset-3">恭喜您！您已经完成了邮箱的验证，请继续操作已完成注册！</h3>
+        <div class="sp-line"></div>
+        <div class="jumbotron-step col-lg-offset-3">
+            <div>STEP 1 - 补充用户详细信息</div>
+            <div>STEP 2 - 上传证件信息</div>
+            <div>STEP 3 - 完成注册</div>
+            <div>STEP 4 - 通过主页直接开启速递之旅</div>
+        </div>
+        <div class="text-center margin-height-space-sm">
+            <button class="btn btn-warning"><div id = "timer">10 秒内页面将自动关闭</div></button>
+        </div>
+    </div>
+
+    <footer class="footer" coor="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1 partner">
+                    <article class="col-lg-3 partner-item">
+                        <h6 class="title">
+                            <a class="more" target="_blank" title="详细网点"><i class="glyphicon glyphicon-tag padding-width-space-sm"></i>详细网点</a><br>
+                            <b>138 处全球网点支持</b>
+                        </h6>
+                        <div class="partner-img">
+                            <a target="_blank" class="icon-partner-bank">
+                                <img src="themes/default/img/partner1.jpg"/>
+                            </a>
+                        </div>
+                    </article>
+                    <article class="col-lg-3 partner-item">
+                        <h6 class="title">
+                            <a class="more" target="_blank" title="时间故事"><i class="glyphicon glyphicon-tag padding-width-space-sm"></i>时间故事</a><br>
+                            <b>10 年安全稳定零失误的传递</b>
+                        </h6>
+                        <div class="partner-img">
+                            <a target="_blank" class="icon-partner-bank">
+                                <img src="themes/default/img/partner2.jpg"/>
+                            </a>
+                        </div>
+                    </article>
+                    <article class="col-lg-3 partner-item">
+                        <h6 class="title">
+                            <a class="more" target="_blank" title="业务详情"><i class="glyphicon glyphicon-tag padding-width-space-sm"></i>业务详情</a><br>
+                            <b>2,000,000 笔订单处理</b>
+                        </h6>
+                        <div class="partner-img">
+                            <a target="_blank" class="icon-partner-bank">
+                                <img src="themes/default/img/partner3.jpg"/>
+                            </a>
+                        </div>
+                    </article>
+                    <article class="col-lg-3 partner-item">
+                        <h6 class="title">
+                            <a href="http://www.annlover.com" class="more" target="_blank" title="系统信息"><i class="glyphicon glyphicon-tag padding-width-space-sm"></i>系统信息</a><br>
+                            <b>2015.03.01 全新互联网系统</b>
+                        </h6>
+                        <div class="partner-img">
+                            <a href="http://www.annlover.com" target="_blank" class="icon-partner-bank">
+                                <img src="themes/default/img/partner4.jpg"/>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="row">
+                <ul class="link">
+                    <li class="link-item"><a target="_blank" title="关于仲良">关于仲良</a></li>
+                    <li class="link-item"><a target="_blank" title="官方博客">官方博客</a></li>
+                    <li class="link-item"><a target="_blank" title="诚征英才">诚征英才</a></li>
+                    <li class="link-item"><a target="_blank" title="开放平台">开放平台</a></li>
+                    <li class="link-item"><a target="_blank" title="联系我们">联系我们</a></li>
+                    <li class="link-item"><a target="_blank" title="网站地图">网站地图</a></li>
+                    <li class="link-item"><a href="http://www.annlover.com" target="_blank" title="技术支持">技术支持</a></li>
+                    <li class="link-item">仲良物流版权所有 2015-2017 <a href="http://www.brother-express.com" target="_blank">沪ICP备15007970号-1</a></li>
+                    <div class="clearfix"></div>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

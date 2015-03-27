@@ -1,0 +1,877 @@
+<section class="content-header">
+    <h4><b>订单管理</b></h4>
+    <h6>该功能用于新增/查看/维护订单信息</h6>
+    <div class="sp-line"></div>
+</section>
+<section class="content">
+    <iframe name='printPage' id="printPage" width="100%" src="iframe/templateOrder.html" class="hidden"></iframe>
+    <div class="row">
+        <div class="panel panel-info panel-right">
+            <tabset class="fs12">
+                <tab heading="订单编号">
+                    <div class="form-group form-group-sm">
+                        <input type="text" ng-model="Query.id" class="form-control"/>
+                    </div>
+                </tab>
+                <tab heading="订单类型">
+                    <span class="item-query" ng-click="setQuery('type', null)">全部</span>
+                    <span class="item-query" ng-repeat="type in QueryOrderType" ng-click="setQuery('type', type)">{{type.value}}</span>
+                </tab>
+                <tab heading="订单状态">
+                    <span class="item-query" ng-click="setQuery('status', null)">全部</span>
+                    <span class="item-query" ng-repeat="status in QueryOrderStatus" ng-click="setQuery('status', status)">{{status.value}}</span>
+                </tab>
+                <tab heading="创建时间">
+                    <span class="item-query" ng-click="setQuery('time', null)">全部</span>
+                    <span class="item-query" ng-repeat="item in TimeList" ng-click="setQuery('time', item)">{{item.value}}</span>
+                </tab>
+            </tabset>
+            <div class="sp-line"></div>
+            <div class="row row-line fs12">
+                <div class="col-lg-12">
+                    <span class="mr10"></span>
+                    <label class="label label-success mr10" ng-show="Query.id">订单编号：{{Query.id}}</label>
+                    <label class="label label-success mr10" ng-show="Query.type">订单类型：{{Query.type.value}}</label>
+                    <label class="label label-success mr10" ng-show="Query.status">订单状态：{{Query.status.value}}</label>
+                    <label class="label label-success mr10" ng-show="Query.time">创建时间：{{Query.time.value}}</label>
+                    <button class="btn btn-sm btn-primary pull-right" ng-click="listOrder(true)">查询</button>
+                </div>
+            </div>
+            <table class="table table-hover">
+                <tr>
+                    <th class="info" style="width:15%;">订单编号</th>
+                    <th class="info" style="width:20%;">订单名称</th>
+                    <th class="info" style="width:12%;">付款人</th>
+                    <th class="info" style="width:18%;">付款人证件</th>
+                    <th class="info" style="width:10%;">重量(kg)</th>
+                    <th class="info" style="width:15%;">生成时间</th>
+                    <th class="info" style="width:10%;">订单状态</th>
+                </tr>
+                <tbody ng-repeat="item in OrderList | filter:_search" style="border:0;">
+                <tr ng-click="selectOrder(item, $index)" class="cursor">
+                    <td>{{item.id}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.payerName}}</td>
+                    <td>{{item.payerIdNo}}</td>
+                    <td>{{item.productWeight}}</td>
+                    <td>{{item.createTime|date:"yyyy-MM-dd hh:mm:ss"}}</td>
+                    <td>{{item.status|dict:"OrderStatus"}}</td>
+                </tr>
+                <tr ng-if="selectedOrder && $index == selectedOrder.index" class="bg-warning">
+                    <td colspan="7" >
+                        <button class="btn btn-primary btn-sm" ng-click="detailOrder()">详情</button>
+                        <button class="btn btn-success btn-sm" ng-click="printOrder()">打印面单</button>
+                        <button class="btn btn-danger btn-sm" ng-click="deleteOrder()">删除</button>
+                    </td>
+                </tr>
+                </tbody>
+                <tr>
+                    <td colspan="7">
+                        <label class="label label-primary">{{currentPage}}/{{numPages}}</label>
+                    </td>
+                </tr>
+            </table>
+            <pagination class="pull-right" boundary-links="true" ng-change="pageChanged()" total-items="totalItems" ng-model="currentPage" max-size="maxSize" class="pagination-sm" items-per-page="pageSize" num-pages="numPages" previous-text="上页" next-text="下页" first-text="首页" last-text="末页"></pagination>
+        </div>
+    </div>
+    <div class="row text-center">
+        <div class="col-lg-4 col-lg-offset-4">
+            <button type="button" class="btn btn-primary btn-block" ng-click="newModal()">新&nbsp;建</button>
+            <button type="button" class="btn btn-success btn-block" ng-click="exportExcel()">批量导出[行邮]</button>
+            <button type="button" class="btn btn-success btn-block" ng-click="exportExcelBS()">批量导出[包税]</button>
+        </div>
+        <div class="col-lg-1"><div id="downloader"></div></div>
+    </div>
+
+    <script type="text/ng-template" id="addOrder">
+        <form name="addOrderForm" class="my-form" novalidate>
+            <div class="padding-modal">
+                <h4>
+                    <span class="label label-warning"><span class="glyphicon glyphicon-tags padding-width-space-sm"></span>新建订单</span>
+                    <div class="sp-line"></div>
+                </h4>
+                <div class="box">
+                    <div class="box-heading">
+                        <h5><span class="glyphicon glyphicon-book padding-width-space-sm"></span><b>基本信息</b></h5>
+                    </div>
+                    <div class="box-body" >
+                        <div class="row">
+                            <div class="col-lg-2 text-center">
+                                <qrcode version="7" data="{{_WechatEntry}}{{orderId}}" download ng-show="orderId"></qrcode>
+                            </div>
+                            <div class="col-lg-10">
+                                <div class="input-group input-group-sm input-inner-margin">
+                                    <span class="input-group-addon"><b>订单编号</b></span>
+                                    <input type="text" name="orderId" ng-model="orderId" class="form-control" placeholder="订单编号" maxlength="30" />
+                                    <!--<span class="input-group-addon tipInvalid" ng-show="addOrderForm.orderId.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.orderId.$valid"><span class="glyphicon glyphicon-ok"></span></span>-->
+                                </div>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>订单名称</b></span>
+                                    <input type="text" name="orderName" ng-model="orderName" class="form-control" placeholder="订单名称" maxlength="40" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.orderName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.orderName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="label label-success mr10"><b>币种 - </b>CNY</span>
+                                    <span class="label label-primary"><b>汇率(美元) - </b>{{_exchange}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>订单描述</b></span>
+                                    <input type="text" name="orderDescription" ng-model="orderDescription" class="form-control" placeholder="订单描述" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>产品统称</b></span>
+                                    <input type="text" name="productName" ng-model="productName" class="form-control" placeholder="产品统称" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.productName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.productName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>产品总数量</b></span>
+                                    <input type="number" name="productNum" ng-model="productNum" class="form-control" placeholder="产品总数量" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.productNum.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.productNum.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>产品总价值(元)</b></span>
+                                    <input type="number" name="productAmount" ng-model="productAmount" class="form-control" placeholder="产品总价值" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.productAmount.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.productAmount.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>产品总重量(kg)</b></span>
+                                    <input type="number" name="productWeight" ng-model="productWeight" class="form-control" placeholder="产品总重量" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.productWeight.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.productWeight.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>是否加固</b></span>
+                                    <select class="form-control" ng-model="isFixed" ng-options="choice.value for choice in isOrNot"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>是否加急</b></span>
+                                    <select class="form-control" ng-model="isFast" ng-options="choice.value for choice in isOrNot"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>是否保价</b></span>
+                                    <select class="form-control" ng-model="isProtected" ng-options="choice.value for choice in isOrNot"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>运费(元)</b></span>
+                                    <input type="number" name="transportAmount" ng-model="transportAmount" class="form-control" placeholder="运费" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.transportAmount.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.transportAmount.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>税费(元)</b></span>
+                                    <input type="number" name="taxAmount" ng-model="taxAmount" class="form-control" placeholder="税费" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.taxAmount.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.taxAmount.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>保险费用(元)</b></span>
+                                    <input type="number" name="safeAmount" ng-model="safeAmount" class="form-control" placeholder="保险费用"/>
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.safeAmount.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.safeAmount.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>其他费用(元)</b></span>
+                                    <input type="number" name="otherAmount" ng-model="otherAmount" class="form-control" placeholder="其他费用" />
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.otherAmount.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.otherAmount.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>订单总金额(元)</b></span>
+                                    <input type="number" name="amount" ng-model="amount" class="form-control" placeholder="订单总金额" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.amount.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.amount.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <label class="label label-primary fs12">总金额(美元)</label>
+                                <label class="control-label text-success fs12">{{amount * _exchange||0}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-info">
+                    <div class="box-heading">
+                        <h5><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>产品详情</b><span class="glyphicon glyphicon-plus pull-right text-white cursor" ng-click="addProduct()"></span></h5>
+                    </div>
+                    <div class="box-body" >
+                        <div ng-hide="products.length > 0"><span class="label label-danger">产品详情至少需要存在一条记录</span></div>
+                        <table class="table table-hover">
+                            <tr>
+                                <th class="info" style="width:12%;">名称</th>
+                                <th class="info" style="width:12%;">品牌</th>
+                                <th class="info" style="width:14%;">单价(元)</th>
+                                <th class="info" style="width:11%;">数量</th>
+                                <th class="info" style="width:6%;">单位</th>
+                                <th class="info" style="width:11%;">重量(kg)</th>
+                                <th class="info" style="width:18%;">总价(元)</th>
+                                <th class="info" style="width:6%;"><span class="glyphicon glyphicon-trash"></span></th>
+                            </tr>
+                            <tr ng-repeat="product in products track by $index" >
+                                <td><input name="pName" type="text" name="pName" ng-model="product.pName" class="form-control" required/></td>
+                                <td><input name="pBrand" type="text" name="pBrand" ng-model="product.pBrand" class="form-control" required/></td>
+                                <td><input name="pAmount" type="number" name="pAmount" ng-model="product.pAmount" class="form-control" required/></td>
+                                <td><input name="pNum" type="number" name="pNum" ng-model="product.pNum" class="form-control" required/></td>
+                                <td><input name="pUnit" type="text" name="pUnit" ng-model="product.pUnit" class="form-control" required/></td>
+                                <td><input name="pWeight" type="number" name="pWeight" ng-model="product.pWeight" class="form-control" required/></td>
+                                <td ng-bind="product.pTotalAmount = product.pNum * product.pAmount"></td>
+                                <td><span class="glyphicon glyphicon-remove text-danger cursor" ng-click="removeProduct($index)"></span></td>
+                            </tr>
+                        </table>
+                        <div class="font-size-12" ng-show="addOrderForm.pName.$invalid || addOrderForm.pBrand.$invalid || addOrderForm.pAmount.$invalid || addOrderForm.pNum.$invalid || addOrderForm.pUnit.$invalid || editOrderForm.pWeight.$invalid">
+                            <span class="label label-danger" ng-show="addOrderForm.pName.$invalid">名称</span>
+                            <span class="label label-danger" ng-show="addOrderForm.pBrand.$invalid">品牌</span>
+                            <span class="label label-danger" ng-show="addOrderForm.pAmount.$invalid">单价</span>
+                            <span class="label label-danger" ng-show="addOrderForm.pNum.$invalid">数量</span>
+                            <span class="label label-danger" ng-show="addOrderForm.pUnit.$invalid">单位</span>
+                            <span class="label label-danger" ng-show="addOrderForm.pWeight.$invalid">重量</span>
+                            <span class="label label-success">不能为空/格式错误</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-info">
+                    <div class="box-heading">
+                        <h5><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>付款人信息</b></h5>
+                    </div>
+                    <div class="box-body" >
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>姓名</b></span>
+                                    <input type="text" name="payerName" ng-model="payerName" class="form-control" placeholder="付款人姓名" maxlength="20" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.payerName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.payerName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>联系方式</b></span>
+                                    <input type="tel" name="payerPhone" ng-model="payerPhone" class="form-control" placeholder="付款人联系方式" maxlength="20" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.payerPhone.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.payerPhone.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>证件类型</b></span>
+                                    <input type="text" name="payerIdType" ng-model="payerIdType" class="form-control" placeholder="付款人证件类型" maxlength="10" readonly/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>证件号码</b></span>
+                                    <input type="text" name="payerIdNo" ng-model="payerIdNo" class="form-control" placeholder="付款人证件号码" maxlength="20" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.payerIdNo.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.payerIdNo.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>邮编</b></span>
+                                    <input type="text" ng-model="payerZipCode" class="form-control" placeholder="付款人邮编" maxlength="10"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>地址</b></span>
+                                    <input type="text" name="payerAddress" ng-model="payerAddress" class="form-control" placeholder="付款人地址" maxlength="60" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.payerAddress.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.payerAddress.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-info">
+                    <div class="box-heading">
+                        <h5><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>收寄件人信息</b></h5>
+                    </div>
+                    <div class="box-body" >
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>寄件人姓名</b></span>
+                                    <input type="text" name="sendName" ng-model="sendName" class="form-control" placeholder="寄件人姓名" maxlength="20" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.sendName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.sendName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>寄件人联系方式</b></span>
+                                    <input type="tel" name="sendPhone" ng-model="sendPhone" class="form-control" placeholder="寄件人联系方式" maxlength="20" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.sendPhone.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.sendPhone.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>寄件人地址</b></span>
+                                    <input type="text" name="sendAddress" ng-model="sendAddress" class="form-control" placeholder="寄件人地址" maxlength="60" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.sendAddress.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.sendAddress.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>收件人姓名</b></span>
+                                    <input type="text" name="receiveName" ng-model="receiveName" class="form-control" placeholder="收件人姓名" maxlength="20" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.receiveName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.receiveName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>收件人邮编</b></span>
+                                    <input type="text" name="receiveZipCode" ng-model="receiveZipCode" class="form-control" placeholder="收件人邮编" maxlength="20" />
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>收件人联系方式</b></span>
+                                    <input type="tel" name="receivePhone" ng-model="receivePhone" class="form-control" placeholder="收件人联系方式" maxlength="20" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.receivePhone.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.receivePhone.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>收件人省份</b></span>
+                                    <select class="form-control" ng-model="receiveProvince" ng-options="status.value for status in ProvinceList" ng-change="initCitys()"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>收件人城市</b></span>
+                                    <select class="form-control" ng-model="receiveCity" ng-options="status.value for status in CityList"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>收件人地址</b></span>
+                                    <input type="text" name="receiveAddress" ng-model="receiveAddress" class="form-control" placeholder="收件人地址" maxlength="60" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.receiveAddress.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.receiveAddress.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-info">
+                    <div class="box-heading">
+                        <h5><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>其他信息</b></h5>
+                    </div>
+                    <div class="box-body">
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>国际物流商</b></span>
+                                    <input type="text" ng-model="worldTransName" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>国际物流编号</b></span>
+                                    <input type="text" ng-model="worldTransId" class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>国内物流商</b></span>
+                                    <input type="text" ng-model="chinaTransName" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>国内物流编号</b></span>
+                                    <input type="text" ng-model="chinaTransId" class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-line">
+                    <div class="col-lg-12">
+                        <div class="btn-group pull-right">
+                            <button class="btn btn-sm btn-success" ng-click="newOrder()">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </script>
+
+    <script type="text/ng-template" id="editOrder">
+        <form name="editOrderForm" class="my-form" novalidate>
+            <div class="padding-modal">
+                <h4>
+                    <span class="label label-warning"><span class="glyphicon glyphicon-tags padding-width-space-sm"></span>订单详情</span>
+                    <div class="sp-line"></div>
+                </h4>
+                <div class="box">
+                    <div class="box-heading">
+                        <h5><span class="glyphicon glyphicon-book padding-width-space-sm"></span><b>基本信息</b></h5>
+                    </div>
+                    <div class="box-body" >
+                        <div class="row row-line">
+                            <div class="col-lg-2 text-center">
+                                <qrcode version="7" data="{{_WechatEntry}}{{Order.id}}" download ng-show="Order.id"></qrcode>
+                            </div>
+                            <div class="col-lg-10">
+                                <div class="input-group input-group-sm input-inner-margin">
+                                    <span class="input-group-addon"><b>订单编号</b></span>
+                                    <input type="text" ng-model="Order.id" class="form-control" readonly/>
+                                </div>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>订单名称</b></span>
+                                    <input type="text" name="editOrderName" ng-model="Order.name" class="form-control" placeholder="订单名称" maxlength="40" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editOrderName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editOrderName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="label label-success mr10"><b>币种 - </b>{{Order.currency}}</span>
+                                    <span class="label label-primary"><b>汇率(美元) - </b>{{_exchange}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>订单状态</b></span>
+                                    <select class="form-control" ng-model="Order.status" ng-options="status.value for status in OrderStatusList"></select>
+                                    <!--<input type="text" ng-model="Order.status" class="form-control" placeholder="订单状态" readonly />-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>订单描述</b></span>
+                                    <input type="text" ng-model="Order.description" class="form-control" placeholder="订单描述" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>产品统称</b></span>
+                                    <input type="text" name="editProductName" ng-model="Order.productName" class="form-control" placeholder="产品统称" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editProductName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editProductName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>产品总数量</b></span>
+                                    <input type="number" name="editProductNum" ng-model="Order.productNum" class="form-control" placeholder="产品总数量" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editProductNum.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editProductNum.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>产品总价值(元)</b></span>
+                                    <input type="number" name="editProductAmount" ng-model="Order.productAmount" class="form-control" placeholder="产品总价值" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editProductAmount.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editProductAmount.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>产品总重量(kg)</b></span>
+                                    <input type="number" name="editProductWeight" ng-model="Order.productWeight" class="form-control" placeholder="产品总重量" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editProductWeight.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editProductWeight.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>是否加固</b></span>
+                                    <select class="form-control" ng-model="Order.isFixed" ng-options="choice.value for choice in isOrNot"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>是否加急</b></span>
+                                    <select class="form-control" ng-model="Order.isFast" ng-options="choice.value for choice in isOrNot"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>是否保价</b></span>
+                                    <select class="form-control" ng-model="Order.isProtected" ng-options="choice.value for choice in isOrNot"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>运费(元)</b></span>
+                                    <input type="number" name="editTransportAmount" ng-model="Order.transportAmount" class="form-control" placeholder="运费" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editTransportAmount.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editTransportAmount.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>税费(元)</b></span>
+                                    <input type="number" name="editTaxAmount" ng-model="Order.taxAmount" class="form-control" placeholder="税费" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editTaxAmount.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editTaxAmount.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>保险费用(元)</b></span>
+                                    <input type="number" name="editSafeAmount" ng-model="Order.safeAmount" class="form-control" placeholder="保险费用" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>其他费用(元)</b></span>
+                                    <input type="number" name="editOtherAmount" ng-model="Order.otherAmount" class="form-control" placeholder="其他费用" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>订单总金额(元)</b></span>
+                                    <input type="number" name="editAmount" ng-model="Order.amount" class="form-control" placeholder="订单总金额" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editAmount.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editAmount.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <label class="label label-primary">总金额(美元)</label>
+                                <label class="control-label text-success fs12">{{Order.amount * _exchange||0}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-info">
+                    <div class="box-heading">
+                        <h5>
+                            <span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>产品详情</b>
+                            <span class="glyphicon glyphicon-plus pull-right text-white cursor" ng-click="addProduct()"></span>
+                        </h5>
+                    </div>
+                    <div class="box-body" >
+                        <div ng-hide="Order.products.length  > 0"><span class="label label-danger">产品详情至少需要存在一条记录</span></div>
+                        <table class="table table-hover">
+                            <tr>
+                                <th class="info" style="width:12%;">名称</th>
+                                <th class="info" style="width:12%;">品牌</th>
+                                <th class="info" style="width:14%;">单价(元)</th>
+                                <th class="info" style="width:11%;">数量</th>
+                                <th class="info" style="width:6%;">单位</th>
+                                <th class="info" style="width:11%;">重量(kg)</th>
+                                <th class="info" style="width:18%;">总价(元)</th>
+                                <th class="info" style="width:6%;"><span class="glyphicon glyphicon-trash"></span></th>
+                            </tr>
+                            <tr ng-repeat="product in Order.products track by $index" >
+                                <td><input type="text" name="pName" ng-model="product.pName" class="form-control" required/></td>
+                                <td><input type="text" name="pBrand" ng-model="product.pBrand" class="form-control" required/></td>
+                                <td><input type="number" name="pAmount" ng-model="product.pAmount" class="form-control" required/></td>
+                                <td><input type="number" name="pNum" ng-model="product.pNum" class="form-control" required/></td>
+                                <td><input type="text" name="pUnit" ng-model="product.pUnit" class="form-control" required/></td>
+                                <td><input type="number" name="pWeight" ng-model="product.pWeight" class="form-control" required/></td>
+                                <td ng-bind="product.pTotalAmount = product.pNum * product.pAmount"></td>
+                                <td><span class="glyphicon glyphicon-remove text-danger cursor" ng-click="removeProduct($index)"></span></td>
+                            </tr>
+                        </table>
+                        <div class="font-size-12" ng-show="editOrderForm.pName.$invalid || editOrderForm.pBrand.$invalid || editOrderForm.pAmount.$invalid || editOrderForm.pNum.$invalid || editOrderForm.pUnit.$invalid || editOrderForm.pWeight.$invalid">
+                            <span class="label label-danger" ng-show="editOrderForm.pName.$invalid">名称</span>
+                            <span class="label label-danger" ng-show="editOrderForm.pBrand.$invalid">品牌</span>
+                            <span class="label label-danger" ng-show="editOrderForm.pAmount.$invalid">单价</span>
+                            <span class="label label-danger" ng-show="editOrderForm.pNum.$invalid">数量</span>
+                            <span class="label label-danger" ng-show="editOrderForm.pUnit.$invalid">单位</span>
+                            <span class="label label-danger" ng-show="editOrderForm.pWeight.$invalid">重量</span>
+                            <span class="label label-success">不能为空/格式错误</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-info">
+                    <div class="box-heading">
+                        <h5><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>付款人信息</b></h5>
+                    </div>
+                    <div class="box-body" >
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>姓名</b></span>
+                                    <input type="text" name="editpayerName" ng-model="Order.payerName" class="form-control" placeholder="付款人姓名" maxlength="20" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editpayerName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editpayerName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>联系方式</b></span>
+                                    <input type="tel" name="editpayerPhone" ng-model="Order.payerPhone" class="form-control" placeholder="付款人联系方式" maxlength="20" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editpayerPhone.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editpayerPhone.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>证件类型</b></span>
+                                    <input type="text" name="editpayerIdType" ng-model="Order.payerIdType" class="form-control" placeholder="付款人证件类型" maxlength="10" readonly/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>证件号码</b></span>
+                                    <input type="text" name="editpayerIdNo" ng-model="Order.payerIdNo" class="form-control" placeholder="付款人证件号码" maxlength="20" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editpayerIdNo.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editpayerIdNo.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>邮编</b></span>
+                                    <input type="text" ng-model="Order.payerZipCode" class="form-control" placeholder="付款人邮编" maxlength="10"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>地址</b></span>
+                                    <input type="text" name="editpayerAddress" ng-model="Order.payerAddress" class="form-control" placeholder="付款人地址" maxlength="60" require />
+                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editpayerAddress.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editpayerAddress.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-info">
+                    <div class="box-heading">
+                        <h5><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>收寄件人信息</b></h5>
+                    </div>
+                    <div class="box-body" >
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>寄件人姓名</b></span>
+                                    <input type="text" name="editSendName" ng-model="Order.sendName" class="form-control" placeholder="寄件人姓名" maxlength="20" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editSendName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editSendName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>寄件人联系方式</b></span>
+                                    <input type="tel" name="editSendPhone" ng-model="Order.sendPhone" class="form-control" placeholder="寄件人联系方式" maxlength="20" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editSendPhone.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editSendPhone.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>寄件人地址</b></span>
+                                    <input type="text" name="editSendAddress" ng-model="Order.sendAddress" class="form-control" placeholder="寄件人地址" maxlength="60" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editSendAddress.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editSendAddress.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>收件人姓名</b></span>
+                                    <input type="text" name="editReceiveName" ng-model="Order.receiveName" class="form-control" placeholder="收件人姓名" maxlength="20" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editReceiveName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editReceiveName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>收件人邮编</b></span>
+                                    <input type="text" name="editReceiveZipCode" ng-model="Order.receiveZipCode" class="form-control" placeholder="收件人邮编" maxlength="20" />
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>收件人联系方式</b></span>
+                                    <input type="tel" name="editReceivePhone" ng-model="Order.receivePhone" class="form-control" placeholder="收件人联系方式" maxlength="20" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editReceivePhone.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editReceivePhone.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>收件人省份</b></span>
+                                    <select class="form-control" ng-model="Order.receiveProvince" ng-options="status.value for status in ProvinceList" ng-change="initCitys()"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>收件人城市</b></span>
+                                    <select class="form-control" ng-model="Order.receiveCity" ng-options="status.value for status in CityList"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>收件人地址</b></span>
+                                    <input type="text" name="editReceiveAddress" ng-model="Order.receiveAddress" class="form-control" placeholder="收件人地址" maxlength="20" required />
+                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editReceiveAddress.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editReceiveAddress.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box box-info">
+                    <div class="box-heading">
+                        <h5><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>状态跟踪</b></h5>
+                    </div>
+                    <div class="box-body" >
+                        <table class="table table-hover">
+                            <tr>
+                                <th class="info" style="width:10%;">责任人</th>
+                                <th class="info" style="width:20%;">更新时间</th>
+                                <th class="info" style="width:12%;">坐标</th>
+                                <th class="info" style="width:25%;">地址</th>
+                                <th class="info" style="width:8%;">状态</th>
+                                <th class="info" style="width:25%;">备注</th>
+                            </tr>
+                            <tr ng-repeat="item in Order.updateInfo" >
+                                <td>{{item.updater}}</td>
+                                <td>{{item.time|date:'yyyy-MM-dd hh:mm:ss'}}</td>
+                                <td>{{item.gis}}</td>
+                                <td>{{item.gisText}}</td>
+                                <td>{{item.status|dict:'OrderStatus'}}</td>
+                                <td>{{item.remark}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="box box-info">
+                    <div class="box-heading">
+                        <h5><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>其他信息</b></h5>
+                    </div>
+                    <div class="box-body">
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>国际物流商</b></span>
+                                    <input type="text" ng-model="Order.worldTransName" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>国际物流编号</b></span>
+                                    <input type="text" ng-model="Order.worldTransId" class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>国内物流商</b></span>
+                                    <input type="text" ng-model="Order.chinaTransName" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>国内物流编号</b></span>
+                                    <input type="text" ng-model="Order.chinaTransId" class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-line">
+                    <div class="col-lg-12">
+                        <div class="btn-group pull-right">
+                            <button class="btn btn-sm btn-success" ng-click="editOrder()">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </script>
+
+</section>

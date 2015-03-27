@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="../themes/default/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../themes/default/css/base.css"/>
+    <script type="text/javascript" src="../js/dev/lib/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="../js/dev/lib/jquery-qrcode/jquery.qrcode.min.js"></script>
+</head>
+<body>
+    <table class="table table-hover fs12">
+        <th colspan="5" class="text-center"><h5><b>仲良速递</b></h5></th>
+        <tr>
+            <td rowspan="2" colspan=""><div id="qrcode" class="text-center"></div></td>
+            <td><span class="control-label"><b class="label label-primary">订单编号</b></span></td>
+            <td colspan="3"><span id="orderId" class="control-label fs12"></span></td>
+            <!--<tr>
+                <td><span class="control-label"><b class="label label-primary">订单编号</b></span></td>
+                <td><span id="orderId" class="control-label fs12">S1299234830000229910</span></td>
+            </tr>-->
+            <tr>
+                <td><span class="control-label"><b class="label label-primary">订单名称</b></span></td>
+                <td><span id="orderName" class="control-label fs12"></span></td>
+                <td><span class="control-label"><b class="label label-primary">重量(kg)</b></span></td>
+                <td><span id="productWeight" class="control-label fs12"></span></td>
+            </tr>
+        </tr>
+        <tr>
+            <td><span class="control-label"><b class="label label-primary">&emsp;寄件人</b></span></td>
+            <td colspan="2"><span id="sendName" class="control-label fs12"></span></td>
+            <td><span class="control-label"><b class="label label-primary">寄件电话</b></span></td>
+            <td colspan="2"><span id="sendPhone" class="control-label fs12"></span></td>
+        </tr>
+        <tr>
+            <td><span class="control-label"><b class="label label-primary">寄件地址</b></span></td>
+            <td colspan="5"><span id="sendAddress" class="control-label fs12"></span></td>
+        </tr>
+        <tr>
+            <td><span class="control-label"><b class="label label-primary">&emsp;收件人</b></span></td>
+            <td colspan="2"><span id="receiveName" class="control-label fs12"></span></td>
+            <td><span class="control-label"><b class="label label-primary">收件电话</b></span></td>
+            <td colspan="2"><span id="receivePhone" class="control-label fs12"></span></td>
+        </tr>
+        <tr>
+            <td><span class="control-label"><b class="label label-primary">收件地址</b></span></td>
+            <td colspan="5"><span id="receiveAddress" class="control-label fs12"></span></td>
+        </tr>
+    </table>
+</body>
+</html>
+<script>
+    $(document).ready(function(){
+        $('#qrcode').qrcode({width: 120,height: 120,text: "http://express.annlover.com/wechat.html#/?OrderId=610291500140161"});
+    })
+    var doSettingValues = function(order){
+        if(order){
+            $('#orderId').text(order.id);
+            $('#orderName').text(order.name);
+            $('#productWeight').text(order.productWeight);
+            $('#sendName').text(order.sendName);
+            $('#sendPhone').text(order.sendPhone);
+            $('#sendAddress').text(order.sendAddress);
+            $('#receiveName').text(order.receiveName);
+            $('#receivePhone').text(order.receivePhone);
+            $('#receiveAddress').text(order.receiveAddress);
+        }
+    }
+</script>

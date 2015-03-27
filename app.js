@@ -123,6 +123,6 @@ app.post("/userBiz/logout", userBiz.logout);
 app.post("/customerBiz/login", customerBiz.login);
 app.post("/customerBiz/logout", customerBiz.logout);
 
-app.set("port", 3002);
+app.set("port", 4001);
 app.listen(app.get("port"));
 logger.info("logistics_server start at " + app.get("port"));

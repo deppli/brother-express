@@ -4,7 +4,8 @@ log4js.configure({
     appenders: [
         { type: "console" },
         { type: "file", filename: path.join(__dirname, "../logs/access.log"), category: "access" }
-    ]
+    ],
+    replaceConsole: true
 });
 
 var level = process.env.NODE_ENV == "pro"? "ERROR": "INFO",

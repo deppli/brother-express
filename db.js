@@ -1,6 +1,6 @@
 //mongodb数据库连接
 var mongoose = require('mongoose'),
-    uri = 'mongodb://localhost/logistics',
+    uri = 'mongodb://localhost/express',
     conn = exports.mongoConn = mongoose.createConnection(uri),
     logger = require("./util/logger").logger;
 

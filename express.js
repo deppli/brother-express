@@ -37,7 +37,7 @@ app.use(express.static(path.join(__dirname, "/web")));
 
 var wechat = require('wechat');
 var config = {
-    token: 'brother-express',
+    token: 'brother',
     appid: 'wx7aae9121e7cab6f0',
     encodingAESKey: '1KwxH9lqocwDgfnJJvWniLFv0gwAVgDgPbHayZHtaHQ'
 };

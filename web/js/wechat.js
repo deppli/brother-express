@@ -1,4 +1,4 @@
-(function(require, define) {
+ï»¿(function(require, define) {
     var mode = "dev";
 
     require.config({
@@ -60,7 +60,7 @@
 
     require(["angular", "base"], function(angular, base) {
         /*if (navigator.userAgent.toLowerCase().indexOf('chrome') < 0) {
-         document.write("ÇëÊ¹ÓÃwebkitÄÚºËä¯ÀÀÆ÷µÇÂ¼");
+         document.write("è¯·ä½¿ç”¨webkitå†…æ ¸æµè§ˆå™¨ç™»å½•");
          return;
          }*/
         angular.bootstrap(document, ["ngView"]);

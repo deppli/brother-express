@@ -12,7 +12,7 @@ define(["angular"], function(angular) {
 			encrySeed: "logistics_server",
             maxFileSize: 20 * 1024 * 1024,
             maxIdFileSize: 200 * 1024,
-            wechatEntry: "http://www.brother-express/wechat.html#/?OrderId="
+            wechatEntry: "http://www.brother-express.com/wechat.html#/?OrderId="
 		};
 	});
 });

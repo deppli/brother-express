@@ -8,7 +8,7 @@ log4js.configure({
     replaceConsole: true
 });
 
-var level = process.env.NODE_ENV == "pro"? "ERROR": "INFO",
+var level = "INFO",
     logger = log4js.getLogger("access");
 logger.setLevel(level);
 exports.logger = logger;

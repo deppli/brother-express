@@ -1,4 +1,4 @@
-define(["angular", "cryptojs-sha256", "angular-route", "angular-bootstrap", "config", "dict", "common",
+﻿define(["angular", "cryptojs-sha256", "angular-route", "angular-bootstrap", "config", "dict", "common",
         "angular-cookies", "service", "component", "angular-dragdrop","angular-file-upload"], function(angular, crypto) {
 	return angular.module('ngView', ["ngRoute", "ngConfig", "ngDict", "ngCommon", "ngCookies", "ngService", "ngComponent", "ui.bootstrap", "ngDragDrop", "angularFileUpload"])
 
@@ -241,6 +241,7 @@ define(["angular", "cryptojs-sha256", "angular-route", "angular-bootstrap", "con
                     orderId: data.id
                 }
 
+                $scope.pathError = null;
                 $remote.post("/service/queryOrderPath", orderData, function(data){
                     $scope.Order.orderPaths = data.trackingEventList;
                 }, function(){

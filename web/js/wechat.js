@@ -1,7 +1,4 @@
 (function(require, define) {
-    /**
-     * devå¼€å‘ proç”Ÿäº§
-     */
     var mode = "dev";
 
     require.config({
@@ -53,7 +50,7 @@
             /**
              * angular module
              */
-            base: "wx/module/base"
+            base: "wechat/module/base"
 
             /**
              * controller
@@ -63,7 +60,7 @@
 
     require(["angular", "base"], function(angular, base) {
         /*if (navigator.userAgent.toLowerCase().indexOf('chrome') < 0) {
-         document.write("è¯·ä½¿ç”¨webkitå†…æ ¸æµè§ˆå™¨ç™»å½•");
+         document.write("ÇëÊ¹ÓÃwebkitÄÚºËä¯ÀÀÆ÷µÇÂ¼");
          return;
          }*/
         angular.bootstrap(document, ["ngView"]);

@@ -1,4 +1,4 @@
-var express = require("express"),
+﻿var express = require("express"),
     bodyParser = require("body-parser"),
     log4js = require("log4js"),
     logger = require("./util/logger").logger,
@@ -21,7 +21,7 @@ if (process.argv.indexOf("install") > 0) {
     return;
 }
 
-app.use(log4js.connectLogger(logger, {level: "auto"}));
+app.use(log4js.connectLogger(logger, {level: "auto", format:':method :url'}));
 
 var circle = 7200*1000
 app.use(session({
@@ -34,6 +34,26 @@ app.use(session({
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded
 app.use(express.static(path.join(__dirname, "/web")));
+
+var wechat = require('wechat');
+var config = {
+    token: 'brother-express',
+    appid: 'wx7aae9121e7cab6f0',
+    encodingAESKey: '1KwxH9lqocwDgfnJJvWniLFv0gwAVgDgPbHayZHtaHQ'
+};
+var model = require('./models/model'),
+    orderModel = model.Order;
+app.use(express.query()); // Or app.use(express.query());
+app.use('/wxtoken', wechat(config, function (req, res, next) {
+    console.log(req.weixin)
+    orderModel.find().exec(function(err, doc) {
+        if (err) {
+            res.reply("查询失败")
+            return;
+        }
+        res.reply(doc)
+    });
+}));
 
 var customer = require("./routes/api/customer"),
     group = require("./routes/api/group"),

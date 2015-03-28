@@ -1,4 +1,4 @@
-var model = require('./../../models/model'),
+﻿var model = require('./../../models/model'),
     provinceModel = model.Province,
     cityModel = model.City,
     menuModel = model.Menu,
@@ -140,17 +140,18 @@ exports.queryOrderPath = function(req, res) {
         method: config.EXPRESS_API_METHOD
     };
 
+    var body = "";
     var request = http.request(options, function (response) {
         response.setEncoding('utf8');
         response.on('data', function (chunk) {
-            res.send(chunk);
+            body+=chunk;
+        }).on('end', function(){
+            res.send(body);
         });
-    });
-
-    request.on('error', function (err) {
-        res.status(400).json(msg.ORDER.orderPathSyncError);
+    }).on('error', function (err) {
         console.log('problem with request: ' + err.message);
-    });
+        res.status(400).json(msg.ORDER.orderPathSyncError);
+    })
 
     request.end();
 };

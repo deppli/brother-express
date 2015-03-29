@@ -671,7 +671,6 @@ body {
 .online{
     font-size:12px;
     background: rgba(31, 29, 29, .5);
-    position: fixed;
     width:100%;
     z-index: 10;
 }

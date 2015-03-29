@@ -173,8 +173,8 @@
             {name: "首页", link: "#/welcome", role: function() {return true}, active: true},
             {name: "公司介绍", link: "#/company", role: function() {return true}},
             //{name: "条例法规", link: "#/policy", role: function() {return true}},
-            {name: "业务介绍", link: "#/business", role: function() {return true}},
-            {name: "辅助工具", link: "#/tools", role: function() {return true}}
+            {name: "业务介绍", link: "#/business", role: function() {return true}}
+            //{name: "辅助工具", link: "#/tools", role: function() {return true}}
         ];
 
         $scope.resetMenu = function() {

@@ -1,5 +1,15 @@
-define(["angular","service"], function(angular) {
+﻿define(["angular","service"], function(angular) {
 	angular.module('ngComponent', ["ngService"])
+    .directive("ngNav", function(){
+        return function(scope, element, attrs) {
+
+            var nav = attrs.ngNav;
+
+            element.bind("click", function(){
+                $(nav).toggleClass("in");
+            })
+        }
+    })
     .directive("ngIcheck", function(){
         return function(scope, element, attrs) {
 

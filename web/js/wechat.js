@@ -1,4 +1,7 @@
 ﻿(function(require, define) {
+    /**
+     * dev开发 pro生产
+     */
     var mode = "dev";
 
     require.config({

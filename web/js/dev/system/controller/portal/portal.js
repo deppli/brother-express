@@ -1,4 +1,4 @@
-define(["thenjs"], function(then) {
+﻿define(["thenjs"], function(then) {
 	return [["BusinessCtrl", ["$scope", "$rootScope", "$remote", "$modal",
 	function($scope, $rootScope, $remote, $modal) {
         console.log("业务介绍");
@@ -21,6 +21,9 @@ define(["thenjs"], function(then) {
         for (var i=0; i<4; i++) {
             $scope.addSlide();
         }
+    }]], ["ContactCtrl", ["$scope", "$rootScope", "$remote", "$modal",
+    function ($scope, $rootScope, $remote, $modal) {
+        console.log("联系方式");
     }]], ["ToolsCtrl", ["$scope", "$rootScope", "$remote", "$modal",
     function ($scope, $rootScope, $remote, $modal) {
         console.log("辅助工具");

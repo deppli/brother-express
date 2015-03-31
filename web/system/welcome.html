@@ -83,16 +83,6 @@
                         <div class="col-md-4 data-value">{{Order.status|dict:'OrderStatus'}}</div>
                     </div>
                     <div class="row row-line">
-                        <div class="col-md-2 data-name">创建人：</div>
-                        <div class="col-md-4 data-value">{{Order.creater}}</div>
-                        <div class="col-md-2 data-name">创建时间：</div>
-                        <div class="col-md-4 data-value">{{Order.createTime|date:"yyyy-MM-dd hh:mm:ss"}}</div>
-                    </div>
-                    <div class="row row-line">
-                        <div class="col-md-2 data-name">描述信息：</div>
-                        <div class="col-md-10 data-value">{{Order.description}}</div>
-                    </div>
-                    <div class="row row-line">
                         <div class="col-md-2 data-name">产品统称：</div>
                         <div class="col-md-4 data-value">{{Order.productName}}</div>
                         <div class="col-md-2 data-name">产品总数量：</div>
@@ -124,20 +114,12 @@
                     <div class="row row-line">
                         <div class="col-md-2 data-name">收件人名称：</div>
                         <div class="col-md-4 data-value">{{Order.receiveName}}</div>
-                        <div class="col-md-2 data-name">收件人电话：</div>
-                        <div class="col-md-4 data-value">{{Order.receivePhone}}</div>
                     </div>
                     <div class="row row-line">
                         <div class="col-md-2 data-name">收货人省份：</div>
                         <div class="col-md-4 data-value">{{Order.receiveProvinceName}}</div>
                         <div class="col-md-2 data-name">收货人城市：</div>
                         <div class="col-md-4 data-value">{{Order.receiveCityName}}</div>
-                    </div>
-                    <div class="row row-line">
-                        <div class="col-md-2 data-name">收货人邮编：</div>
-                        <div class="col-md-4 data-value">{{Order.receiveZipCode}}</div>
-                        <div class="col-md-2 data-name">收件人地址：</div>
-                        <div class="col-md-4 data-value">{{Order.receiveAddress}}</div>
                     </div>
                     <div class="row row-line">
                         <span class="label label-warning">订单轨迹</span>

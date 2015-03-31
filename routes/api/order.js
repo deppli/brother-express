@@ -1,4 +1,4 @@
-var model = require('./../../models/model'),
+﻿var model = require('./../../models/model'),
     orderModel = model.Order,
     userModel = model.User,
     msg = require("../../resource/msg"),
@@ -30,7 +30,6 @@ exports.add = function (req, res) {
             kind: 1,                //已审核
             amount: req.body.amount,
             name: req.body.name,
-            description: req.body.description,
             creater: req.body.creater,
             worldTransId:  req.body.worldTransId,
             worldTransName:  req.body.worldTransName,
@@ -164,7 +163,6 @@ exports.edit = function (req, res) {
         idGate: req.body.idGate,
         amount: req.body.amount,
         name: req.body.name,
-        description: req.body.description,
         status:  req.body.status,
         worldTransId:  req.body.worldTransId,
         worldTransName:  req.body.worldTransName,

@@ -1,4 +1,4 @@
-define(["thenjs", "excel-builder", "downloadify"], function(then, excelBuilder, downloader) {
+﻿define(["thenjs", "excel-builder", "downloadify"], function(then, excelBuilder, downloader) {
     return [["OrderCtrl", ["$scope", "$rootScope", "$remote", "$modal", "$scopeData", "$config", "$constants",
         function($scope, $rootScope, $remote, $modal, $scopeData, $config, $constants) {
             $scope.payerIdType = "身份证";
@@ -118,6 +118,19 @@ define(["thenjs", "excel-builder", "downloadify"], function(then, excelBuilder, 
                 }
             }
 
+            $scope.pathOrder = function(){
+                if($scope.selectedOrder){
+                    var postData = {
+                        id: $scope.selectedOrder.id
+                    }
+
+                    $remote.post("/order/detail", postData, function(data){
+                        $scope.Order = data;
+                        $scope.pathModal();
+                    });
+                }
+            }
+
             $scope.deleteOrder = function(){
                 if($scope.selectedOrder){
                     var postData = {
@@ -146,6 +159,15 @@ define(["thenjs", "excel-builder", "downloadify"], function(then, excelBuilder, 
                 var modalDetail = $modal.open({
                     templateUrl: 'editOrder',
                     controller: 'EditOrderCtrl',
+                    size: "lg",
+                    scope: $scope
+                });
+            }
+
+            $scope.pathModal = function(){
+                var modalDetail = $modal.open({
+                    templateUrl: 'pathOrder',
+                    controller: 'PathOrderCtrl',
                     size: "lg",
                     scope: $scope
                 });
@@ -237,8 +259,11 @@ define(["thenjs", "excel-builder", "downloadify"], function(then, excelBuilder, 
 
 
                 var seq = 0;
+                var postData = {
+                    time: 1
+                }
                 //遍历后端返回数据，解析原有[{key1:value1,key2:value2}]形式为[value,value]
-                $remote.post("/order/list", null, function(orders){
+                $remote.post("/order/list", postData, function(orders){
                     orders.forEach(function(order){
                         if(order.status == $constants.STATUS_ORDER_CLEARANCE && order.products && order.products.length > 0){
                             order.products.forEach(function(product){
@@ -345,7 +370,7 @@ define(["thenjs", "excel-builder", "downloadify"], function(then, excelBuilder, 
                         {value:'商品数量', metadata: {style: header.id}},
                         {value:'单位', metadata: {style: header.id}},
                         {value:'重量', metadata: {style: header.id}},
-                        {value:'商品价值', metadata: {style: header.id}},
+                        {value:'商品价值(元)', metadata: {style: header.id}},
                         {value:'收件人', metadata: {style: header.id}},
                         {value:'收件人地址', metadata: {style: header.id}},
                         {value:'收件人电话', metadata: {style: header.id}},
@@ -354,8 +379,11 @@ define(["thenjs", "excel-builder", "downloadify"], function(then, excelBuilder, 
                 ];
 
                 var seq = 0;
+                var postData = {
+                    time: 1
+                }
                 //遍历后端返回数据，解析原有[{key1:value1,key2:value2}]形式为[value,value]
-                $remote.post("/order/list", null, function(orders) {
+                $remote.post("/order/list", postData, function(orders) {
                     orders.forEach(function(order){
                         if(order.status == $constants.STATUS_ORDER_CLEARANCE && order.products && order.products.length > 0){
                             order.products.forEach(function(product){
@@ -475,7 +503,7 @@ define(["thenjs", "excel-builder", "downloadify"], function(then, excelBuilder, 
 
                 var nowTime = new Date();
 
-                $scope.orderId = "S" + nowTime.format("yyyyMMddhhmmssS") + Math.ceil(Math.random()*1000);
+                $scope.orderId = "S" + nowTime.format("yyMMddhhmmss") + Math.ceil(Math.random()*100);
 
                 $scope.newOrder = function(){
                     if(!$scope.products || $scope.products.length == 0){
@@ -489,7 +517,6 @@ define(["thenjs", "excel-builder", "downloadify"], function(then, excelBuilder, 
                             id: $scope.orderId,
                             //type: $constants.TYPE_ORDER_SINGLE,        //后台新建订单
                             name: $scope.orderName,
-                            description: $scope.orderDescription,
                             creater: $rootScope.backInfo.loginId || "",
                             amount: $scope.amount || 0,
                             worldTransId: $scope.orderId || "",
@@ -623,7 +650,6 @@ define(["thenjs", "excel-builder", "downloadify"], function(then, excelBuilder, 
                             dbId: $scope.selectedOrder._id,
                             idGate: $scope.Order.idGate || "",
                             name: $scope.Order.name || "",
-                            description: $scope.Order.description || "",
                             status:  $scope.Order.status.key,
                             updateInfo: $scope.Order.updateInfo,
                             amount: $scope.Order.amount || 0,
@@ -669,5 +695,45 @@ define(["thenjs", "excel-builder", "downloadify"], function(then, excelBuilder, 
                     }
                 }
             }]
-        ]];
+        ],["PathOrderCtrl", ["$scope", "$rootScope", "$remote", "$modalInstance", "$scopeData", "$config", "$constants",
+        function($scope, $rootScope, $remote, $modalInstance, $scopeData, $config, $constants) {
+            var result = $scope.initOptions("OrderStatus", $scope.Order.status);
+            $scope.OrderStatusList = result[0];
+            $scope.Order.status = $scope.OrderStatusList[result[1]];
+
+            if(!$scope.Order.updateInfo){
+                $scope.Order.updateInfo = [];
+            }
+
+            $scope.Order.updateInfo.forEach(function(each){
+                each.status = $scope.OrderStatusList[each.status];
+            })
+
+            $scope.opened = [];
+            $scope.open = function($event, index) {
+                //var param = "opened" + index;
+                //console.log(param);
+                $event.preventDefault();
+                $event.stopPropagation();
+                $scope.opened[index] = true;
+            };
+
+            $scope.addPath = function(){
+                var data = {
+                    updater:$rootScope.backInfo.loginId,
+                    time: Date.now(),
+                    status: $scope.OrderStatusList[0]
+                }
+
+                $scope.Order.updateInfo.push(data);
+            }
+
+            $scope.removePath = function(index){
+                $scope.Order.updateInfo.splice(index,1);
+            }
+
+            $scope.updatePath = function(){
+                console.log("订单更新")
+            }
+        }]]];
 });

@@ -71,7 +71,7 @@ body {
 
 .sys-navlogo {
     padding: 5px;
-    padding-right:60px;
+    padding-right:40px;
 }
 
 .sys-navbar {
@@ -80,11 +80,13 @@ body {
     background-color: rgba(0, 0, 0, 1);
     -webkit-box-shadow: 0 0 2px 0 rgba(0,0,0,0.5);
     box-shadow: 0 0 2px 0 rgba(0,0,0,0.5);
+    height:70px;
 }
 
 .sys-navbar .sys-navlogo, .sys-navbar .navbar-nav>li>a {
     font-weight: 500;
     margin-right:2px;
+    line-height: 40px;
 }
 .navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse .navbar-nav>.active>a:focus{
     background-color: rgba(0, 0, 0, 1);
@@ -316,7 +318,7 @@ body {
 .left-side {
     position: absolute;
     width: 220px;
-    top: 50px;
+    top: 70px;
     min-height:640px;
 }
 .float-side {

@@ -1,4 +1,4 @@
-<section class="content-header">
+﻿<section class="content-header">
     <h4><b>订单管理</b></h4>
     <h6>该功能用于新增/查看/维护订单信息</h6>
     <div class="sp-line"></div>
@@ -119,14 +119,6 @@
                                 <div class="input-group input-group-sm">
                                     <span class="label label-success mr10"><b>币种 - </b>CNY</span>
                                     <span class="label label-primary"><b>汇率(美元) - </b>{{_exchange}}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row row-line">
-                            <div class="col-lg-12">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-addon"><b>订单描述</b></span>
-                                    <input type="text" name="orderDescription" ng-model="orderDescription" class="form-control" placeholder="订单描述" />
                                 </div>
                             </div>
                         </div>
@@ -286,17 +278,17 @@
                             <div class="col-lg-6">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>姓名</b></span>
-                                    <input type="text" name="payerName" ng-model="payerName" class="form-control" placeholder="付款人姓名" maxlength="20" required/>
-                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.payerName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
-                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.payerName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                    <input type="text" name="payerName" ng-model="payerName" class="form-control" placeholder="付款人姓名" maxlength="20" />
+                                    <!--<span class="input-group-addon tipInvalid" ng-show="addOrderForm.payerName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.payerName.$valid"><span class="glyphicon glyphicon-ok"></span></span>-->
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>联系方式</b></span>
-                                    <input type="tel" name="payerPhone" ng-model="payerPhone" class="form-control" placeholder="付款人联系方式" maxlength="20" required/>
-                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.payerPhone.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
-                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.payerPhone.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                    <input type="tel" name="payerPhone" ng-model="payerPhone" class="form-control" placeholder="付款人联系方式" maxlength="20" />
+                                    <!--<span class="input-group-addon tipInvalid" ng-show="addOrderForm.payerPhone.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.payerPhone.$valid"><span class="glyphicon glyphicon-ok"></span></span>-->
                                 </div>
                             </div>
                         </div>
@@ -326,9 +318,9 @@
                             <div class="col-lg-6">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>地址</b></span>
-                                    <input type="text" name="payerAddress" ng-model="payerAddress" class="form-control" placeholder="付款人地址" maxlength="60" required/>
-                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.payerAddress.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
-                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.payerAddress.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                    <input type="text" name="payerAddress" ng-model="payerAddress" class="form-control" placeholder="付款人地址" maxlength="60" />
+                                    <!--<span class="input-group-addon tipInvalid" ng-show="addOrderForm.payerAddress.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.payerAddress.$valid"><span class="glyphicon glyphicon-ok"></span></span>-->
                                 </div>
                             </div>
                         </div>
@@ -510,14 +502,6 @@
                             </div>
                         </div>
                         <div class="row row-line">
-                            <div class="col-lg-12">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-addon"><b>订单描述</b></span>
-                                    <input type="text" ng-model="Order.description" class="form-control" placeholder="订单描述" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row row-line">
                             <div class="col-lg-6">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>产品统称</b></span>
@@ -672,17 +656,17 @@
                             <div class="col-lg-6">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>姓名</b></span>
-                                    <input type="text" name="editpayerName" ng-model="Order.payerName" class="form-control" placeholder="付款人姓名" maxlength="20" required />
-                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editpayerName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
-                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editpayerName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                    <input type="text" name="editpayerName" ng-model="Order.payerName" class="form-control" placeholder="付款人姓名" maxlength="20" />
+                                    <!--<span class="input-group-addon tipInvalid" ng-show="editOrderForm.editpayerName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editpayerName.$valid"><span class="glyphicon glyphicon-ok"></span></span>-->
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>联系方式</b></span>
-                                    <input type="tel" name="editpayerPhone" ng-model="Order.payerPhone" class="form-control" placeholder="付款人联系方式" maxlength="20" required />
-                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editpayerPhone.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
-                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editpayerPhone.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                    <input type="tel" name="editpayerPhone" ng-model="Order.payerPhone" class="form-control" placeholder="付款人联系方式" maxlength="20" />
+                                    <!--<span class="input-group-addon tipInvalid" ng-show="editOrderForm.editpayerPhone.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editpayerPhone.$valid"><span class="glyphicon glyphicon-ok"></span></span>-->
                                 </div>
                             </div>
                         </div>
@@ -712,9 +696,9 @@
                             <div class="col-lg-6">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>地址</b></span>
-                                    <input type="text" name="editpayerAddress" ng-model="Order.payerAddress" class="form-control" placeholder="付款人地址" maxlength="60" require />
-                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editpayerAddress.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
-                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editpayerAddress.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                    <input type="text" name="editpayerAddress" ng-model="Order.payerAddress" class="form-control" placeholder="付款人地址" maxlength="60" />
+                                    <!--<span class="input-group-addon tipInvalid" ng-show="editOrderForm.editpayerAddress.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editpayerAddress.$valid"><span class="glyphicon glyphicon-ok"></span></span>-->
                                 </div>
                             </div>
                         </div>
@@ -810,7 +794,7 @@
                     <div class="box-body" >
                         <table class="table table-hover">
                             <tr>
-                                <th class="info" style="width:10%;">责任人</th>
+                                <th class="info" style="width:10%;">更新人</th>
                                 <th class="info" style="width:20%;">更新时间</th>
                                 <th class="info" style="width:12%;">坐标</th>
                                 <th class="info" style="width:25%;">地址</th>
@@ -871,6 +855,89 @@
                     </div>
                 </div>
             </div>
+        </form>
+    </script>
+
+    <script type="text/ng-template" id="pathOrder">
+        <form name="pathOrderForm" class="my-form" novalidate>
+            <div class="padding-modal">
+                <h4>
+                    <span class="label label-warning"><span class="glyphicon glyphicon-tags padding-width-space-sm"></span>轨迹更新</span>
+                    <div class="sp-line"></div>
+                </h4>
+                <div class="box">
+                    <div class="box-heading">
+                        <h5><span class="glyphicon glyphicon-book padding-width-space-sm"></span><b>基本信息</b></h5>
+                    </div>
+                    <div class="box-body" >
+                        <div class="row row-line">
+                            <div class="col-lg-2 text-center">
+                                <qrcode version="7" data="{{_WechatEntry}}{{Order.id}}" download ng-show="Order.id"></qrcode>
+                            </div>
+                            <div class="col-lg-10">
+                                <div class="input-group input-group-sm input-inner-margin">
+                                    <span class="input-group-addon"><b>订单编号</b></span>
+                                    <input type="text" ng-model="Order.id" class="form-control" readonly/>
+                                </div>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>订单名称</b></span>
+                                    <input type="text" ng-model="Order.name" class="form-control" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-12">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>订单状态</b></span>
+                                    <select class="form-control" ng-model="Order.status" ng-options="status.value for status in OrderStatusList"></select>
+                                </div>
+                            </div>
+                        </div>
+                <div class="box box-info">
+                    <div class="box-heading">
+                        <h5><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>状态跟踪</b><span class="glyphicon glyphicon-plus pull-right text-white cursor" ng-click="addPath()"></span></h5>
+                    </div>
+                    <div class="box-body" >
+                        <table class="table table-hover">
+                            <tr>
+                                <th class="info" style="width:16%;">更新人</th>
+                                <th class="info" style="width:20%;">更新时间</th>
+                                <th class="info" style="width:18%;">地址</th>
+                                <th class="info" style="width:16%;">状态</th>
+                                <th class="info" style="width:22%;">备注</th>
+                                <th class="info" style="width:8%;"><span class="glyphicon glyphicon-remove text-danger cursor" ng-click="removePath($index)"></span></th>
+                            </tr>
+                            <tr ng-repeat="path in Order.updateInfo track by $index" >
+                                <td><input name="updater" type="text" name="updater" ng-model="path.updater" class="form-control" required/></td>
+                                <td>
+                                    <div class="input-group">
+                                    <input name="time" type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="path.time" is-open="opened[$index]" min-date="minDate" max-date="'2020-01-01'" show-weeks="false" show-button-bar="false" readonly/>
+                                    <div class="input-group-addon cursor" ng-click="open($event, $index)">
+                                        <i class="glyphicon glyphicon-calendar" ></i>
+                                    </div>
+                                    </div>
+                                <td><input name="gisText" type="text" name="gisText" ng-model="path.gisText" class="form-control" required/></td>
+                                <td><select class="form-control" ng-model="path.status" ng-options="status.value for status in OrderStatusList"></select></td>
+                                <td><input name="remark" type="text" name="remark" ng-model="path.remark" class="form-control" required/></td>
+                                <td><span class="glyphicon glyphicon-remove text-danger cursor" ng-click="removeProduct($index)"></span></td>
+                            </tr>
+                        </table>
+                        <div class="font-size-12" ng-show="pathOrderForm.gisText.$invalid || pathOrderForm.remark.$invalid">
+                            <span class="label label-danger" ng-show="pathOrderForm.gisText.$invalid">地址</span>
+                            <span class="label label-danger" ng-show="pathOrderForm.remark.$invalid">备注</span>
+                            <span class="label label-success">不能为空</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-line">
+                    <div class="col-lg-12">
+                        <div class="btn-group pull-right">
+                            <button class="btn btn-sm btn-success" ng-click="updatePath()">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div></div>
         </form>
     </script>
 

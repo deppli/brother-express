@@ -1,4 +1,4 @@
-define(["thenjs", "cryptojs-sha256", "bootstrap-icheck"], function(then, crypto) {
+﻿define(["thenjs", "cryptojs-sha256", "bootstrap-icheck"], function(then, crypto) {
     return [["CustomerCtrl", ["$scope", "$rootScope", "$remote", "$modal", "$scopeData", "$config", "$constants",
         function($scope, $rootScope, $remote, $modal, $scopeData, $config, $constants) {
 
@@ -124,7 +124,6 @@ define(["thenjs", "cryptojs-sha256", "bootstrap-icheck"], function(then, crypto)
                         idNo: $scope.CustomerIdNo|"",
                         birthday: $scope.CustomerBirthday||"",
                         phone: $scope.CustomerPhone||"",
-                        email: $scope.CustomerEmail||"",
                         address: $scope.CustomerAddress||""
                     }
 
@@ -160,7 +159,6 @@ define(["thenjs", "cryptojs-sha256", "bootstrap-icheck"], function(then, crypto)
                         idNo: $scope.Customer.idNo||"",
                         birthday: $scope.Customer.birthday||"",
                         phone: $scope.Customer.phone||"",
-                        email: $scope.Customer.email||"",
                         address: $scope.Customer.address||""
                     }
                     if($scope.CheckPassword && $scope.EditPassword){

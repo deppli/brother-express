@@ -1,4 +1,4 @@
-var model = require('../../models/model'),
+﻿var model = require('../../models/model'),
     customerModel = model.Customer,
     msg = require("../../resource/msg"),
     then = require("thenjs");
@@ -49,7 +49,6 @@ exports.add = function(req, res) {
             idNo: req.body.idNo,
             birthday: req.body.birthday,
             phone: req.body.phone,
-            email: req.body.email,
             address: req.body.address,
             status: req.body.status||1
         });
@@ -106,7 +105,6 @@ exports.edit = function (req, res) {
         idNo: req.body.idNo,
         birthday: req.body.birthday,
         phone: req.body.phone,
-        email: req.body.email,
         address: req.body.address,
         //status: req.body.status,
         group: req.body.group

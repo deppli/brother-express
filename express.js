@@ -75,7 +75,7 @@ app.post("/news/edit", hooks.role(),news.edit);
 app.post("/news/delete", hooks.role(),news.delete);
 
 app.post("/customer/check", customer.check);
-app.post("/customer/add", hooks.role(),customer.add);
+app.post("/customer/add", customer.add);
 app.post("/customer/list", hooks.role(),  customer.list);
 app.post("/customer/detail", hooks.role(),  customer.detail);
 app.post("/customer/edit", hooks.role(),  customer.edit);
@@ -109,6 +109,7 @@ app.post("/order/detail", hooks.role(),  order.detail);
 app.post("/order/edit", hooks.role(),  order.edit);
 app.post("/order/delete", hooks.role(),  order.delete);
 app.post("/order/count", hooks.role(),  order.count);
+app.post("/order/pathUpdate", hooks.role(),  order.pathUpdate);
 
 app.post("/orderBatch/processExcel", hooks.role(), orderBatch.processExcel);
 app.post("/orderBatch/commitBatch", hooks.role(), orderBatch.commitBatch);

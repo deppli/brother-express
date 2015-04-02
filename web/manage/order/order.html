@@ -60,6 +60,7 @@
                 <tr ng-if="selectedOrder && $index == selectedOrder.index" class="bg-warning">
                     <td colspan="7" >
                         <button class="btn btn-primary btn-sm" ng-click="detailOrder()">详情</button>
+                        <button class="btn btn-primary btn-sm" ng-click="pathOrder()">轨迹更新</button>
                         <button class="btn btn-success btn-sm" ng-click="printOrder()">打印面单</button>
                         <button class="btn btn-danger btn-sm" ng-click="deleteOrder()">删除</button>
                     </td>
@@ -797,8 +798,8 @@
                                 <th class="info" style="width:10%;">更新人</th>
                                 <th class="info" style="width:20%;">更新时间</th>
                                 <th class="info" style="width:12%;">坐标</th>
-                                <th class="info" style="width:25%;">地址</th>
-                                <th class="info" style="width:8%;">状态</th>
+                                <th class="info" style="width:22%;">地址</th>
+                                <th class="info" style="width:11%;">状态</th>
                                 <th class="info" style="width:25%;">备注</th>
                             </tr>
                             <tr ng-repeat="item in Order.updateInfo" >

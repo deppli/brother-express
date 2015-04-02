@@ -207,8 +207,18 @@ exports.edit = function (req, res) {
     });
 };
 
-exports.processUpdate = function (req, res) {
-
+exports.pathUpdate = function (req, res) {
+    var update = {
+        status:  req.body.status,
+        updateInfo: req.body.updateInfo
+    };
+    orderModel.findByIdAndUpdate(req.body.dbId, update, undefined, function (err, doc) {
+        if (err) {
+            res.status(400).send(err.message);
+            return;
+        }
+        res.json("success");
+    });
 };
 
 exports.delete = function (req, res) {

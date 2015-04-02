@@ -733,7 +733,20 @@
             }
 
             $scope.updatePath = function(){
-                console.log("订单更新")
+                $scope.Order.updateInfo.forEach(function(each){
+                    each.status = each.status.key;
+                })
+                var postData = {
+                    dbId: $scope.selectedOrder._id,
+                    status: $scope.Order.status.key,
+                    updateInfo: $scope.Order.updateInfo
+                }
+
+                $remote.post("/order/pathUpdate", postData, function(data){
+                    $modalInstance.close();
+                    var msg = {text:$constants.MESSAGE_ORDER_PATH_UPDATE_SUCCESS};
+                    $scope.showMessage(msg);
+                });
             }
         }]]];
 });

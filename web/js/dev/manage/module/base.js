@@ -1,4 +1,4 @@
-define(["angular", "cryptojs-sha256", "angular-route", "angular-bootstrap", "config", "dict", "common",
+﻿define(["angular", "cryptojs-sha256", "angular-route", "angular-bootstrap", "config", "dict", "common",
         "angular-cookies", "service", "component", "angular-dragdrop", "angular-file-upload", "angular-qrcode"], function(angular, crypto) {
 	return angular.module('ngView', ["ngRoute", "ngConfig", "ngDict", "ngCommon", "ngCookies", "ngService", "ngComponent", "ui.bootstrap", "ngDragDrop", "angularFileUpload", "monospaced.qrcode"])
 
@@ -204,6 +204,8 @@ define(["angular", "cryptojs-sha256", "angular-route", "angular-bootstrap", "con
                 scope.msg = msg;
             }
 
+            if(!$rootScope.msg) {
+                $rootScope.msg = true;
             var modalMsg = $modal.open({
                 templateUrl: 'message',
                 controller: 'MessageCtrl',
@@ -211,9 +213,13 @@ define(["angular", "cryptojs-sha256", "angular-route", "angular-bootstrap", "con
                 scope: scope
             });
 
-            /*modalMsg.result.then(function (result) {
-             console.log(result);
-             });*/
+                modalMsg.result.then(function (result) {
+                    $rootScope.msg = false;
+                }, function (reason) {
+                    $rootScope.msg = false;
+                });
+            }
+
         }
 	}])
     .controller("MessageCtrl", ["$scope", "$rootScope", "$cookies", "$location", "$remote", "$config", "$modalInstance",

@@ -1,4 +1,4 @@
-define(["angular", "common"], function(angular) {
+﻿define(["angular", "common"], function(angular) {
 	angular.module("ngDict", ["ngCommon"])
     .factory("$constants", [function() {
         return {
@@ -32,7 +32,8 @@ define(["angular", "common"], function(angular) {
             MESSAGE_FILE_EXCEL_PROCESSING:"文档解析中，请稍等",
             MESSAGE_FILE_EXCEL_CONTENT_ERROR:"批量文档内容有误",
             MESSAGE_FILE_EXCEL_EXCHANGE_EMPTY:"获取汇率失败，请重新查询更新",
-            MESSAGE_MUST_UPLOAD_IDNO:"请先上传完整身份证信息"
+            MESSAGE_MUST_UPLOAD_IDNO:"请先上传完整身份证信息",
+            MESSAGE_ORDER_PATH_UPDATE_SUCCESS:"订单轨迹更新成功"
         };
     }])
 	.factory("$dict", [function() {

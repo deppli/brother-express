@@ -14,10 +14,10 @@
     <link rel="stylesheet" type="text/css" href="themes/default/css/base.css"/>
 </head>
 <body ng-controller="BaseCtrl">
-    <header class="navbar navbar-fixed-top sys-navbar navbar-inverse">
+    <header class="navbar sys-navbar navbar-inverse">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" ng-nav="#navbar">
+            <div >
+                <button id="menuButton" type="button" class="navbar-toggle" ng-nav="#navbar">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -41,12 +41,13 @@
         </div>
     </div>
     </header>
+    <div id="content">
 	<div class="content" ng-view></div>
+    </div>
     <footer class="footer" coor="footer">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-10 col-lg-offset-1 partner">
-                    <article class="col-lg-3 partner-item">
+                <div class="row partner">
+                    <article class="col-sm-3 partner-item">
                         <h6 class="title">
                             <a class="more" target="_blank" title="详细网点"><i class="glyphicon glyphicon-tag padding-width-space-sm"></i>详细网点</a><br>
                             <b>138 处全球网点支持</b>
@@ -57,7 +58,7 @@
                             </a>
                         </div>
                     </article>
-                    <article class="col-lg-3 partner-item">
+                    <article class="col-sm-3 partner-item">
                         <h6 class="title">
                             <a class="more" target="_blank" title="时间故事"><i class="glyphicon glyphicon-tag padding-width-space-sm"></i>时间故事</a><br>
                             <b>10 年安全稳定零失误的传递</b>
@@ -68,7 +69,7 @@
                             </a>
                         </div>
                     </article>
-                    <article class="col-lg-3 partner-item">
+                    <article class="col-sm-3 partner-item">
                         <h6 class="title">
                             <a class="more" target="_blank" title="业务详情"><i class="glyphicon glyphicon-tag padding-width-space-sm"></i>业务详情</a><br>
                             <b>2,000,000 笔订单处理</b>
@@ -79,7 +80,7 @@
                             </a>
                         </div>
                     </article>
-                    <article class="col-lg-3 partner-item">
+                    <article class="col-sm-3 partner-item">
                         <h6 class="title">
                             <a href="http://www.annlover.com" class="more" target="_blank" title="系统信息"><i class="glyphicon glyphicon-tag padding-width-space-sm"></i>系统信息</a><br>
                             <b>2015.03.01 全新互联网系统</b>
@@ -91,9 +92,8 @@
                         </div>
                     </article>
                 </div>
-            </div>
             <div class="row">
-                <ul class="link">
+                <ul class="link col-sm-12">
                     <li class="link-item"><a target="_blank" title="关于仲良">关于仲良</a></li>
                     <li class="link-item"><a target="_blank" title="官方博客">官方博客</a></li>
                     <li class="link-item"><a target="_blank" title="诚征英才">诚征英才</a></li>
@@ -101,9 +101,9 @@
                     <li class="link-item"><a target="_blank" title="联系我们">联系我们</a></li>
                     <li class="link-item"><a target="_blank" title="网站地图">网站地图</a></li>
                     <li class="link-item"><a href="http://www.annlover.com" target="_blank" title="技术支持">技术支持</a></li>
-                    <li class="link-item">仲良物流版权所有 2015-2017 <a href="http://www.brother-express.com" target="_blank">沪ICP备15007970号-1</a></li>
                     <div class="clearfix"></div>
                 </ul>
+                <li class="link-item no-border">仲良物流版权所有 2015-2017 <a href="http://www.brother-express.com" target="_blank">沪ICP备15007970号-1</a></li>
             </div>
         </div>
     </footer>
@@ -113,7 +113,7 @@
 
 <script type="text/ng-template" id="loginModal">
     <div class="modal-body" ng-submit="submit()">
-        <form class="sys-form-modal form-login" >
+        <form class="sys-form-modal" >
             <div class="input-group" ng-show="Error">
                 <p><span class="label label-danger">{{Error}}</span></p>
             </div>
@@ -134,7 +134,7 @@
 </script>
 <script type="text/ng-template" id="message">
     <div class="modal-body">
-        <form class="sys-form-modal form-login" >
+        <form class="sys-form-modal" >
             <div class="input-group">
                 <p><span ng-bind="msg.text"></span></p>
             </div>

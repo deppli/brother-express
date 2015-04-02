@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html id="ng-app">
 <head>
     <meta charset="UTF-8">
@@ -73,9 +73,22 @@
 </div>
 </body>
 <script data-main="js/wechat.js" src="js/require.min.js"></script>
+<script type="text/ng-template" id="message">
+    <div class="modal-body">
+        <form class="sys-form-modal form-login" >
+            <div class="input-group">
+                <p><span ng-bind="msg.text"></span></p>
+            </div>
+            <div class="login-btn text-center">
+                <button class="btn btn-danger" ng-click="confirm()" ng-show="msg.type == 1">确认</button>
+                <button class="btn btn-primary" ng-click="close()">关闭</button>
+            </div>
+        </form>
+    </div>
+</script>
 <script type="text/ng-template" id="updateOrderModal">
     <div class="modal-body modal-sm" ng-submit="updateOrder()">
-        <form name="updateOrderForm" class="sys-form-modal form-login" >
+        <form name="updateOrderForm" class="sys-form-modal form-login" novalidate>
             <div class="row row-line">
                 <div class="col-xs-12">
                     <label>登录名</label>

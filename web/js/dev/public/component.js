@@ -8,6 +8,18 @@
             element.bind("click", function(){
                 $(nav).toggleClass("in");
             })
+
+            $("#content").bind("click", function(){
+                $(nav).removeClass("in");
+            })
+
+            $(".footer").bind("click", function(){
+                $(nav).removeClass("in");
+            })
+
+            $("#navbar").bind("click", function(){
+                $(nav).removeClass("in");
+            })
         }
     })
     .directive("ngIcheck", function(){

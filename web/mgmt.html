@@ -20,7 +20,7 @@
         <div class="container">
             <div class="navbar-header">
                 <a class="navbar-brand sys-navlogo">
-                    <img src="themes/default/img/logo.jpg" height="40">
+                    <img src="themes/default/img/logo.jpg" height="60">
                 </a>
             </div>
             <nav>
@@ -34,7 +34,7 @@
         <div class="row">
             <div class="col-sm-4"></div>
             <div class="col-sm-4">
-                <form class="login-panel form-login" ng-submit="login()">
+                <form class="form-login" ng-submit="login()">
                     <div class="input-group" ng-show="Error">
                         <p><span class="label label-danger" ng-bind="Error"></span></p>
                     </div>
@@ -108,7 +108,7 @@
 <script data-main="js/manage.js" src="js/require.min.js"></script>
 <script type="text/ng-template" id="message">
     <div class="modal-body">
-        <form class="sys-form-modal form-login" >
+        <form class="sys-form-modal" >
             <div class="input-group">
                 <p><span ng-bind="msg.text"></span></p>
             </div>

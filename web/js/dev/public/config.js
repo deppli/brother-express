@@ -1,4 +1,4 @@
-define(["angular"], function(angular) {
+﻿define(["angular"], function(angular) {
 	angular.module('ngConfig', [])
 	
 	.factory("$config", function() {
@@ -11,7 +11,8 @@ define(["angular"], function(angular) {
 			ieSign: false,
 			encrySeed: "logistics_server",
             maxFileSize: 20 * 1024 * 1024,
-            maxIdFileSize: 200 * 1024,
+            maxIdFileSize: 500 * 1024,
+            idCardPath: "/upload/idno/",
             wechatEntry: "http://www.brother-express.com/wechat.html#/?OrderId="
 		};
 	});

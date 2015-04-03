@@ -72,8 +72,8 @@
 	)
 
 	/** 初始化ngView对象，初始化定义$rootScope相关方法 **/
-	.run(['$rootScope', '$config', "$route", "$remote", "$modal", "$dict", "$filter",
-	function($rootScope, $config, $route, $remote, $modal, $dict, $filter) {
+	.run(['$rootScope', '$config', "$route", "$remote", "$modal", "$dict", "$filter", "$constants",
+	function($rootScope, $config, $route, $remote, $modal, $dict, $filter, $constants) {
         $rootScope.showLoading = function(){
             if(!$rootScope.loading){
                 $rootScope.loading = true;
@@ -168,6 +168,15 @@
             result[0] = list;
             result[1] = finalIndex;
             return result;
+        }
+
+        $rootScope.checkForm = function(formElement){
+            if(formElement.$invalid){
+                var msg = {text:$constants.MESSAGE_FORM_INVALID};
+                $rootScope.showMessage(msg);
+                return false;
+            }
+            return true;
         }
 	}])
 

@@ -906,7 +906,7 @@
                                 <th class="info" style="width:18%;">地址</th>
                                 <th class="info" style="width:16%;">状态</th>
                                 <th class="info" style="width:22%;">备注</th>
-                                <th class="info" style="width:8%;"><span class="glyphicon glyphicon-remove text-danger cursor" ng-click="removePath($index)"></span></th>
+                                <th class="info" style="width:8%;"><span class="glyphicon glyphicon-trash"></span></th>
                             </tr>
                             <tr ng-repeat="path in Order.updateInfo track by $index" >
                                 <td><input name="updater" type="text" name="updater" ng-model="path.updater" class="form-control" required/></td>
@@ -920,7 +920,7 @@
                                 <td><input name="gisText" type="text" name="gisText" ng-model="path.gisText" class="form-control" required/></td>
                                 <td><select class="form-control" ng-model="path.status" ng-options="status.value for status in OrderStatusList"></select></td>
                                 <td><input name="remark" type="text" name="remark" ng-model="path.remark" class="form-control" required/></td>
-                                <td><span class="glyphicon glyphicon-remove text-danger cursor" ng-click="removeProduct($index)"></span></td>
+                                <td><span class="glyphicon glyphicon-remove text-danger cursor" ng-click="removePath($index)"></span></td>
                             </tr>
                         </table>
                         <div class="font-size-12" ng-show="pathOrderForm.gisText.$invalid || pathOrderForm.remark.$invalid">

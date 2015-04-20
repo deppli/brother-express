@@ -68,6 +68,7 @@
     })
     var doSettingValues = function(order){
         if(order){
+	    $('#qrcode').html("");
             var qrText = "http://www.brother-express.com/wechat.html#/?OrderId=" + order.id;
             $('#qrcode').qrcode({width: 90,height: 90,text: qrText});
             $('#orderId').text(order.id);

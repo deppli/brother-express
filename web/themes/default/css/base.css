@@ -86,7 +86,7 @@ body {
 .sys-navbar .sys-navlogo, .sys-navbar .navbar-nav>li>a {
     font-weight: 500;
     margin-right:2px;
-    line-height: 40px;
+    line-height: 39px;
 }
 .navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse .navbar-nav>.active>a:focus{
     background-color: rgba(0, 0, 0, 1);
@@ -209,6 +209,9 @@ body {
 
 .fs12{
     font-size:12px;
+}
+.fs16{
+    font-size:16px;
 }
 .hidden{
     display: none;
@@ -627,7 +630,7 @@ body {
 }
 .reg-panel{
     padding:0;
-    margin-bottom:10px;
+    /*margin-bottom:10px;*/
     background-color:white;
     /*border-top:solid 3px #00A9DD;*/
 }

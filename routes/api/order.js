@@ -116,6 +116,9 @@ exports.list = function (req, res) {
 
     var queryStr = {};
     var time = {};
+    if(req.body.idBatch){
+        queryStr.idBatch = req.body.idBatch;
+    }
     if(req.body.id){
         queryStr.id = req.body.id;
     }
@@ -160,6 +163,7 @@ exports.detail = function (req, res) {
 
 exports.edit = function (req, res) {
     var update = {
+        idBatch: req.body.idBatch,
         idGate: req.body.idGate,
         amount: req.body.amount,
         name: req.body.name,
@@ -208,10 +212,20 @@ exports.edit = function (req, res) {
 };
 
 exports.pathUpdate = function (req, res) {
+    var idBatch = req.body.idBatch;
     var update = {
         status:  req.body.status,
         updateInfo: req.body.updateInfo
     };
+    if(idBatch){
+        orderModel.update({idBatch:idBatch}, update, {safe: false, multi: true}, function (err, doc) {
+            if (err) {
+                res.status(400).send(err.message);
+                return;
+            }
+            res.json("success");
+        });
+    }else{
     orderModel.findByIdAndUpdate(req.body.dbId, update, undefined, function (err, doc) {
         if (err) {
             res.status(400).send(err.message);
@@ -219,6 +233,7 @@ exports.pathUpdate = function (req, res) {
         }
         res.json("success");
     });
+    }
 };
 
 exports.delete = function (req, res) {

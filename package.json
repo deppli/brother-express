@@ -18,6 +18,8 @@
         "nodemailer-smtp-transport": "*",
         "wechat": "*",
         "bower": "*",
-        "async": "*"
+        "async": "*",
+        "alipay": "*",
+        "ejs": "*"
     }
 }

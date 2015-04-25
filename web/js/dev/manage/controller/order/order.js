@@ -1,4 +1,4 @@
-﻿define(["thenjs", "excel-builder", "downloadify"], function(then, excelBuilder, downloader) {
+﻿define(["thenjs", "excel-builder", "downloadify", "bootstrap-icheck"], function(then, excelBuilder, downloader) {
     return [["OrderCtrl", ["$scope", "$rootScope", "$remote", "$modal", "$scopeData", "$config", "$constants",
         function($scope, $rootScope, $remote, $modal, $scopeData, $config, $constants) {
             $scope.payerIdType = "身份证";
@@ -27,6 +27,10 @@
 
                     $remote.post("/order/detail", postData, function(data){
                         $scope.Order = data;
+                        if(data.createTime){
+                            var now = new Date(data.createTime);
+                            data.createTime = now.format("yyyy 年 MM 月 dd 日");
+                        }
                         var iframe = document.getElementById("printPage");
                         iframe.contentWindow.focus();
                         iframe.contentWindow.doSettingValues(data);
@@ -56,6 +60,7 @@
 
             $scope.listOrder = function(init){
                 var postData = {};
+                postData.idBatch = $scope.Query.idBatch||null
                 postData.id = $scope.Query.id||null
                 if($scope.Query.type){
                     postData.type = $scope.Query.type.key
@@ -647,6 +652,7 @@
 
                     if($scope.checkForm($scope.editOrderForm)) {
                         var postData = {
+                            idBatch: $scope.Order.idBatch || "",
                             dbId: $scope.selectedOrder._id,
                             idGate: $scope.Order.idGate || "",
                             name: $scope.Order.name || "",
@@ -700,6 +706,9 @@
             var result = $scope.initOptions("OrderStatus", $scope.Order.status);
             $scope.OrderStatusList = result[0];
             $scope.Order.status = $scope.OrderStatusList[result[1]];
+            $scope.UpdateMethod = 0;
+            $scope.method1 = 0;
+            $scope.method2 = 1;
 
             if(!$scope.Order.updateInfo){
                 $scope.Order.updateInfo = [];
@@ -736,17 +745,36 @@
                 $scope.Order.updateInfo.forEach(function(each){
                     each.status = each.status.key;
                 })
-                var postData = {
+                var postData;
+                var method = $scope.UpdateMethod;
+                if(method == 0){
+                    postData = {
                     dbId: $scope.selectedOrder._id,
                     status: $scope.Order.status.key,
                     updateInfo: $scope.Order.updateInfo
                 }
-
                 $remote.post("/order/pathUpdate", postData, function(data){
                     $modalInstance.close();
                     var msg = {text:$constants.MESSAGE_ORDER_PATH_UPDATE_SUCCESS};
                     $scope.showMessage(msg);
                 });
+                }else{
+                    if($scope.Order.idBatch){
+                        postData = {
+                            idBatch: $scope.Order.idBatch,
+                            status: $scope.Order.status.key,
+                            updateInfo: $scope.Order.updateInfo
+                        }
+                        $remote.post("/order/pathUpdate", postData, function(data){
+                            $modalInstance.close();
+                            var msg = {text:$constants.MESSAGE_ORDER_PATH_UPDATE_BATCH_SUCCESS};
+                            $scope.showMessage(msg);
+                        });
+                    }else{
+                        var msg = {text:$constants.MESSAGE_ORDER_PATH_UPDATE_BATCH_CHECK_ERR};
+                        $scope.showMessage(msg);
+                    }
+                }
             }
         }]]];
 });

@@ -33,6 +33,8 @@
             MESSAGE_FILE_EXCEL_CONTENT_ERROR:"批量文档内容有误",
             MESSAGE_FILE_EXCEL_EXCHANGE_EMPTY:"获取汇率失败，请重新查询更新",
             MESSAGE_MUST_UPLOAD_IDNO:"请先上传完整身份证信息",
+            MESSAGE_ORDER_PATH_UPDATE_BATCH_CHECK_ERR:"批次号为空，不能批量更新轨迹",
+            MESSAGE_ORDER_PATH_UPDATE_BATCH_SUCCESS:"批量订单轨迹更新成功",
             MESSAGE_ORDER_PATH_UPDATE_SUCCESS:"订单轨迹更新成功"
         };
     }])

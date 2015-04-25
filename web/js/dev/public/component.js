@@ -49,7 +49,17 @@
         return function(scope, element, attrs) {
 
             var role = attrs.name;
+                var loop = attrs.loop;
 
+                if(loop){
+                    if(scope[role] == scope[attrs.ngIradio]){
+                        $(element).iCheck('check');
+                    }
+                    jQuery(element).on('ifChecked', function(event){
+                        scope[role] = element.val();
+                    });
+
+                }else{
             if(scope.$parent[role] == eval("scope." + attrs.ngIradio)){
                 $(element).iCheck('check');
             }
@@ -58,10 +68,12 @@
                 scope.$parent[role] = element.val();
             });
 
+                }
             jQuery(element).iCheck({
                 checkboxClass: 'icheckbox_flat-green',
                 radioClass: 'iradio_flat-green'
             });
+
         }
     })
     .directive('ngThumb', ['$window', function($window) {

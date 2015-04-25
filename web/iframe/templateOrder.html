@@ -8,56 +8,58 @@
     <script type="text/javascript" src="../js/dev/lib/jquery-qrcode/jquery.qrcode.min.js"></script>
 </head>
 <body>
-    <table class="table table-hover fs12">
-        <th colspan="5" class="text-left"><img src="../themes/default/img/logo.jpg" height="40"></th>
-        <th class="text-right">
-            国内热线：021-32505221<br>
-            网址：www.brother-express.com
-        </th>
+    <table class="table table-hover fs12" style="border: solid 1px #ddd;">
         <tr>
-            <td rowspan="3" colspan="2"><div id="qrcode" class="text-left"></div></td>
-            <td><span class="control-label"><b class="label label-primary">订单编号</b></span></td>
-            <td colspan="3"><span id="orderId" class="control-label fs16"></span></td>
-            <!--<tr>
-                <td><span class="control-label"><b class="label label-primary">订单编号</b></span></td>
-                <td><span id="orderId" class="control-label fs12">S1299234830000229910</span></td>
-            </tr>-->
-            <tr>
-                <td><span class="control-label"><b class="label label-primary">日期</b></span></td>
-                <td colspan="3"><span id="orderDate" class="control-label fs12"></span></td>
-            </tr>
-            <tr>
-                <td><span class="control-label"><b class="label label-primary">订单名称</b></span></td>
-                <td><span id="orderName" class="control-label fs12"></span></td>
-                <td><span class="control-label"><b class="label label-primary">重量(kg)</b></span></td>
-                <td><span id="productWeight" class="control-label fs12"></span></td>
-            </tr>
+            <th colspan="6" class="text-left"><img src="../themes/default/img/logo.jpg" height="40"></th>
+            <td class="text-right fs10">
+                国内热线：021-32505221<br>
+                网址：www.brother-express.com
+            </td>
         </tr>
         <tr>
-            <td><span class="control-label"><b class="label label-primary">寄&nbsp;件&nbsp;人</b></span></td>
-            <td colspan="2"><span id="sendName" class="control-label fs12"></span></td>
-            <td><span class="control-label"><b class="label label-primary">寄件电话</b></span></td>
+            <td rowspan="3" colspan="2" style="border-right:solid 1px #ddd"><div id="qrcode" class="text-left"></div></td>
+            <td><span class="control-label text-center"><b class="labels fs16">订单编号</b></span></td>
+            <td colspan="4"><span id="orderId" class="control-label fs16"></span></td>
+        </tr>
+        <!--<tr>
+            <td><span class="control-label text-center"><b class="labels">订单编号</b></span></td>
+            <td><span id="orderId" class="control-label fs12">S1299234830000229910</span></td>
+        </tr>-->
+        <tr>
+            <td><span class="control-label text-center"><b class="labels">订单名称</b></span></td>
+            <td colspan="4"><span id="orderName" class="control-label fs12"></span></td>
+        </tr>
+        <tr>
+            <td><span class="control-label text-center"><b class="labels">日&emsp;&emsp;期</b></span></td>
+            <td style="border-right:solid 1px #ddd"><span id="orderDate" class="control-label fs12"></span></td>
+            <td><span class="control-label text-center"><b class="labels">重&emsp;&emsp;量</b></span></td>
+            <td colspan="2"><span id="productWeight" class="control-label fs12"></span>&emsp;kg</td>
+        </tr>
+        <tr>
+            <td><span class="control-label text-center"><b class="labels">寄&nbsp;件&nbsp;人</b></span></td>
+            <td colspan="3" style="border-right:solid 1px #ddd"><span id="sendName" class="control-label fs12"></span></td>
+            <td><span class="control-label text-center"><b class="labels">寄件电话</b></span></td>
             <td colspan="2"><span id="sendPhone" class="control-label fs12"></span></td>
         </tr>
         <tr>
-            <td><span class="control-label"><b class="label label-primary">寄件地址</b></span></td>
-            <td colspan="2"><span id="sendAddress" class="control-label fs12"></span></td>
-            <td><span class="control-label"><b class="label label-primary">签&emsp;&emsp;名</b></span></td>
+            <td><span class="control-label text-center"><b class="labels">寄件地址</b></span></td>
+            <td colspan="3" style="border-right:solid 1px #ddd"><span id="sendAddress" class="control-label fs12"></span></td>
+            <td><span class="control-label text-center"><b class="labels">签&emsp;&emsp;名</b></span></td>
             <td colspan="2"><span id="sendSign" class="control-label fs12"></span></td>
         </tr>
         <tr>
-            <td><span class="control-label"><b class="label label-primary">收&nbsp;件&nbsp;人</b></span></td>
-            <td colspan="2"><span id="receiveName" class="control-label fs12"></span></td>
-            <td><span class="control-label"><b class="label label-primary">收件电话</b></span></td>
+            <td><span class="control-label text-center"><b class="labels">收&nbsp;件&nbsp;人</b></span></td>
+            <td colspan="3" style="border-right:solid 1px #ddd"><span id="receiveName" class="control-label fs12"></span></td>
+            <td><span class="control-label text-center"><b class="labels">收件电话</b></span></td>
             <td colspan="2"><span id="receivePhone" class="control-label fs12"></span></td>
         </tr>
         <tr>
-            <td><span class="control-label"><b class="label label-primary">收件地址</b></span></td>
-            <td colspan="5"><span id="receiveAddress" class="control-label fs12"></span></td>
+            <td><span class="control-label text-center"><b class="labels">收件地址</b></span></td>
+            <td colspan="6"><span id="receiveAddress" class="control-label fs12"></span></td>
         </tr>
-        <tr>
-            <td colspan="4"><span class="control-label"><b class="label label-primary">备注</b></span></td>
-            <td colspan="2"><div class="text-right">目的地：中国</div></span></td>
+        <tr style="height:80px;">
+            <td colspan="5" style="border-right:solid 1px #ddd"><span class="control-label">备注:</span></td>
+            <td colspan="2"><div>目的地：中国</div></span></td>
         </tr>
     </table>
 </body>
@@ -68,7 +70,7 @@
     })
     var doSettingValues = function(order){
         if(order){
-	    $('#qrcode').html("");
+            $('#qrcode').html("");
             var qrText = "http://www.brother-express.com/wechat.html#/?OrderId=" + order.id;
             $('#qrcode').qrcode({width: 90,height: 90,text: qrText});
             $('#orderId').text(order.id);

@@ -8,6 +8,11 @@
     <div class="row">
         <div class="panel panel-info panel-right">
             <tabset class="fs12">
+                <tab heading="批次号">
+                    <div class="form-group form-group-sm">
+                        <input type="text" ng-model="Query.idBatch" class="form-control"/>
+                    </div>
+                </tab>
                 <tab heading="订单编号">
                     <div class="form-group form-group-sm">
                         <input type="text" ng-model="Query.id" class="form-control"/>
@@ -30,6 +35,7 @@
             <div class="row row-line fs12">
                 <div class="col-lg-12">
                     <span class="mr10"></span>
+                    <label class="label label-success mr10" ng-show="Query.idBatch">批次号：{{Query.idBatch}}</label>
                     <label class="label label-success mr10" ng-show="Query.id">订单编号：{{Query.id}}</label>
                     <label class="label label-success mr10" ng-show="Query.type">订单类型：{{Query.type.value}}</label>
                     <label class="label label-success mr10" ng-show="Query.status">订单状态：{{Query.status.value}}</label>
@@ -102,10 +108,11 @@
                             </div>
                             <div class="col-lg-10">
                                 <div class="input-group input-group-sm input-inner-margin">
+                                    <span class="input-group-addon"><b>批次号</b></span>
+                                    <input type="text" name="orderIdBatch" ng-model="orderIdBatch" class="form-control" placeholder="订单批次号" maxlength="30" />
                                     <span class="input-group-addon"><b>订单编号</b></span>
                                     <input type="text" name="orderId" ng-model="orderId" class="form-control" placeholder="订单编号" maxlength="30" />
-                                    <!--<span class="input-group-addon tipInvalid" ng-show="addOrderForm.orderId.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
-                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.orderId.$valid"><span class="glyphicon glyphicon-ok"></span></span>-->
+
                                 </div>
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>订单名称</b></span>
@@ -474,6 +481,8 @@
                             </div>
                             <div class="col-lg-10">
                                 <div class="input-group input-group-sm input-inner-margin">
+                                    <span class="input-group-addon"><b>批次号</b></span>
+                                    <input type="text" name="editOrderIdBatch" ng-model="Order.idBatch" class="form-control" placeholder="订单批次号" maxlength="30" />
                                     <span class="input-group-addon"><b>订单编号</b></span>
                                     <input type="text" ng-model="Order.id" class="form-control" readonly/>
                                 </div>
@@ -877,6 +886,8 @@
                             </div>
                             <div class="col-lg-10">
                                 <div class="input-group input-group-sm input-inner-margin">
+                                    <span class="input-group-addon"><b>订单批次号</b></span>
+                                    <input type="text" ng-model="Order.idBatch" class="form-control" readonly/>
                                     <span class="input-group-addon"><b>订单编号</b></span>
                                     <input type="text" ng-model="Order.id" class="form-control" readonly/>
                                 </div>
@@ -887,7 +898,14 @@
                             </div>
                         </div>
                         <div class="row row-line">
-                            <div class="col-lg-12">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span><input name="UpdateMethod" type="radio" loop="true" ng-value="'0'" ng-iradio="method1" />单条更新（按订单号）</span>
+                                    &emsp;&emsp;
+                                    <span><input name="UpdateMethod" type="radio" loop="true" ng-value="'1'" ng-iradio="method2" />批量更新（按批次号）</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>订单状态</b></span>
                                     <select class="form-control" ng-model="Order.status" ng-options="status.value for status in OrderStatusList"></select>

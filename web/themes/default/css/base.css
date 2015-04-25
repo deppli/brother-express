@@ -207,6 +207,9 @@ body {
     background-color: #f56954 !important;
 }
 
+.fs10{
+    font-size:10px;
+}
 .fs12{
     font-size:12px;
 }
@@ -454,7 +457,7 @@ body {
     position: absolute;
 }
 .login-panel{
-    margin-top:-500px;
+    margin-top:-460px;
     right:100px;
 }
 @media (max-width: 768px) {
@@ -612,8 +615,9 @@ body {
     padding-top: 20px;
     padding-bottom:20px;
     list-style: none;
-    border-bottom: dashed 1px #00A033;
-    background:white;
+    /*border-bottom: dashed 1px #00A033;*/
+    border-bottom:1px dashed rgba(66,66,66,.1);
+    background:rgb(255, 250, 237);
     margin-bottom:0;
 }
 .reg-steps-item{
@@ -755,4 +759,54 @@ body {
 
 .no-border{
     border:none;
+}
+
+.order-entry{
+    width: 400px;
+    height: 300px;
+    background-size: 100%;
+    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.15);
+    border:solid 4px white;
+    cursor: pointer;
+}
+.order-entry-guest{
+    background-image: url("../img/entry1.png");
+}
+.order-entry-customer{
+    background-image: url("../img/entry2.png");
+}
+
+.webBox{
+    position: relative;
+    background: #ffffff;
+    margin-bottom: 20px;
+    width: 100%;
+    border: 1px solid rgba(0,0,0,.1);
+    border-top:0;
+}
+.webBox .box-heading {
+    position: relative;
+    border-bottom: 1px solid #f4f4f4;
+    background-color:rgba(0, 99, 8, 0.8);
+    color: #ffffff;
+    padding-top:3px;
+    padding-bottom:3px;
+    padding-left:10px;
+    padding-right:10px;
+}
+.webBox .box-body {
+    padding: 10px;
+    padding-top: 10px;
+}
+
+.webBox .input-group-addon{
+    background: rgba(215, 253, 255, 0.3);
+    border-radius: 0;
+    border:0;
+}
+
+.webBox .form-control{
+    background: rgba(255, 112, 0, 0.05);
+    box-shadow: none;
+    border:0;
 }

@@ -175,6 +175,7 @@ body {
 }
 .table{
     font-size:12px;
+    margin-bottom:10px;
 }
 .data-name {
     /*font-size:12px;*/
@@ -690,6 +691,9 @@ body {
     width:100%;
     height:100%;
 }
+.ml12{
+    margin-left: 12px;
+}
 .mr10{
     margin-right: 10px;
 }
@@ -779,34 +783,51 @@ body {
 .webBox{
     position: relative;
     background: #ffffff;
-    margin-bottom: 20px;
+    padding-top:5px;
+    margin-bottom: 10px;
     width: 100%;
-    border: 1px solid rgba(0,0,0,.1);
-    border-top:0;
+    /*border: 1px solid rgba(0,0,0,.1);
+    border-top:0;*/
 }
 .webBox .box-heading {
     position: relative;
-    border-bottom: 1px solid #f4f4f4;
-    background-color:rgba(0, 99, 8, 0.8);
-    color: #ffffff;
-    padding-top:3px;
-    padding-bottom:3px;
-    padding-left:10px;
-    padding-right:10px;
+    color: #A6A6A6;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 .webBox .box-body {
     padding: 10px;
-    padding-top: 10px;
+    padding-bottom: 0px;
 }
 
 .webBox .input-group-addon{
-    background: rgba(215, 253, 255, 0.3);
+    background: rgba(122, 167, 171, 0.3);
     border-radius: 0;
     border:0;
 }
 
 .webBox .form-control{
-    background: rgba(255, 112, 0, 0.05);
+    background: rgba(97, 97, 97, 0.05);
     box-shadow: none;
     border:0;
+}
+
+.webBox table .form-control{
+    font-size: 12px;
+    padding: 0;
+    padding-left: 5px;
+    background: none;
+    border-radius: 0;
+    border: 1px solid rgba(163, 163, 163, 0.3);
+    height: 25px;
+}
+
+.webBox table th{
+    border-top: none !important;
+}
+
+.webBox table td{
+    border-top: 1px dashed rgba(221, 221, 221, 0.18) !important;
 }

@@ -65,7 +65,9 @@ exports.commitExcel = function (req, res) {
                     otherAmount: orderData[26],
                     isFixed: orderData[24],
                     isFast: orderData[25],
-                    isProtected: orderData[26]
+                    isProtected: orderData[26],
+                    worldTransId: orderData[0],
+                    worldTransName: msg.MAIN.companyName
                 };
                 cont(null, order);
             }).then(function(cont, order) {

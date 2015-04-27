@@ -1,5 +1,6 @@
 module.exports = {
     MAIN: {
+        companyName: '仲良速递',
         err: '错误提示',
         dbErr: '数据库错误',
         validateEmail: '邮箱验证未完成',

@@ -180,6 +180,7 @@
 
             //根据数据生成[行邮]Excel文件
             $scope.exportExcel = function(){
+                var msg = {type:$constants.MESSAGE_DIALOG_TYPE_CONF, text:$constants.MESSAGE_ORDER_EXPORT_HY, confCallback:function(){
                 if(!$scope._exchange){
                     var msg = {text:$constants.MESSAGE_FILE_EXCEL_EXCHANGE_EMPTY};
                     $scope.showMessage(msg);
@@ -312,11 +313,13 @@
                     var file = $constants.NAME_EXPORT_ORDER_EXCEL_TYPEA_NAME;
                     $scope.download(data, file);
                 })
-
+                }};
+                $scope.showMessage(msg);
             }
 
             //根据数据生成[包税]Excel文件
             $scope.exportExcelBS = function(){
+                var msg = {type:$constants.MESSAGE_DIALOG_TYPE_CONF, text:$constants.MESSAGE_ORDER_EXPORT_BS, confCallback:function(){
                 var artistWorkbook = excelBuilder.createWorkbook();
                 var albumList = artistWorkbook.createWorksheet({name: '包税数据'});
                 var stylesheet = artistWorkbook.getStyleSheet();
@@ -421,7 +424,8 @@
                     var file = $constants.NAME_EXPORT_ORDER_EXCEL_TYPEB_NAME;
                     $scope.download(data, file);
                 });
-
+                }};
+                $scope.showMessage(msg);
             }
 
             $scope.download = function(data, fileName){

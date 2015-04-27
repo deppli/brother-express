@@ -36,6 +36,9 @@
 	        'cryptojs-sha256': {
 	            deps: ['cryptojs-core', 'cryptojs-hmac'],
 	            exports: "CryptoJS"
+	        },
+            'bootstrap-icheck': {
+                deps: ["jquery"]
 	        }
         },
 		paths: {
@@ -58,6 +61,7 @@
             "cryptojs-sha256": "lib/crypto/build/components/sha256-min",
             xlsx: "lib/xlsx/dist/xlsx.core.min",
             thenjs: "lib/thenjs/then.min",
+            "bootstrap-icheck": "lib/bootstrap-icheck/icheck.min",
 
             common: "public/common",
             service: "public/service",

@@ -2,7 +2,7 @@
 	angular.module("ngDict", ["ngCommon"])
     .factory("$constants", [function() {
         return {
-            NAME_COMPANY_NAME: "仲良物流",
+            NAME_COMPANY_NAME: "仲良速递",
             NAME_EXPORT_ORDER_EXCEL_TYPEA_NAME: "行邮.xlsx",
             NAME_EXPORT_ORDER_EXCEL_TYPEB_NAME: "包税.xlsx",
             STATUS_ORDER_CLEARANCE:5,        //清关中
@@ -35,7 +35,10 @@
             MESSAGE_MUST_UPLOAD_IDNO:"请先上传完整身份证信息",
             MESSAGE_ORDER_PATH_UPDATE_BATCH_CHECK_ERR:"批次号为空，不能批量更新轨迹",
             MESSAGE_ORDER_PATH_UPDATE_BATCH_SUCCESS:"批量订单轨迹更新成功",
-            MESSAGE_ORDER_PATH_UPDATE_SUCCESS:"订单轨迹更新成功"
+            MESSAGE_ORDER_PATH_UPDATE_SUCCESS:"订单轨迹更新成功",
+            MESSAGE_ORDER_EXPORT_HY:"将导出一天内状态为清关中行邮数据",
+            MESSAGE_ORDER_EXPORT_BS:"将导出一天内状态为清关中包税数据",
+            MESSAGE_CONF_DEL_ORDER:"确认删除选定订单记录?"
         };
     }])
 	.factory("$dict", [function() {
@@ -85,6 +88,10 @@
                 "4": "抵港提货",
                 "5": "清关中",
                 "9": "完成"
+            },
+            GateMode: {
+                "0": "行邮",
+                "1": "包税"
             }
         }
         return {

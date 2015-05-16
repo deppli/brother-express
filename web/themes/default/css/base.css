@@ -217,6 +217,9 @@ body {
 .fs16{
     font-size:16px;
 }
+.fs42{
+    font-size:42px !important;
+}
 .hidden{
     display: none;
 }
@@ -247,6 +250,9 @@ body {
 }
 .text-success{
     color:#00a65a;
+}
+.text-danger{
+    color:#f56954;
 }
 .text-info{
     color:#00c0ef;
@@ -572,7 +578,7 @@ body {
     color: #777;
     text-align: center;
     border-top: 1px solid #e5e5e5;
-    background: #F5F5F5;
+    background: #F8F1F1;
 }
 
 .partner{
@@ -782,10 +788,12 @@ body {
 
 .webBox{
     position: relative;
-    background: #ffffff;
+    background: none;
     padding-top:5px;
     margin-bottom: 10px;
+    margin-top:20px;
     width: 100%;
+    border: solid 1px #e2e2e2;
     /*border: 1px solid rgba(0,0,0,.1);
     border-top:0;*/
 }
@@ -809,16 +817,28 @@ body {
 }
 
 .webBox .form-control{
-    background: rgba(97, 97, 97, 0.05);
+    background: rgba(237, 237, 237, 1);
     box-shadow: none;
     border:0;
+}
+
+.webBox .value{
+    width: 100%;
+    text-align: right;
+    background: rgba(255,255,255,0);
+}
+
+.webBox .name{
+    width: 100%;
+    text-align: left;
+    background: rgba(255,255,255,0);
 }
 
 .webBox table .form-control{
     font-size: 12px;
     padding: 0;
     padding-left: 5px;
-    background: none;
+    background: #ffffff;
     border-radius: 0;
     border: 1px solid rgba(163, 163, 163, 0.3);
     height: 25px;
@@ -829,5 +849,23 @@ body {
 }
 
 .webBox table td{
-    border-top: 1px dashed rgba(221, 221, 221, 0.18) !important;
+    border-top: none !important;
+}
+
+.bg-net {
+    background: url("../img/homebg.gif");
+}
+.bg-dark {
+    background: #7C7C7C;
+}
+.bg-white{
+    background: #FFFFFF;
+}
+.border-danger{
+    border-color: #F56954;
+    border-width: 3px;
+}
+.row-amt{
+    border-bottom: solid 2px #E8E8E8;
+    margin: 0;
 }

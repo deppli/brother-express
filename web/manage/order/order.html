@@ -115,6 +115,8 @@
 
                                 </div>
                                 <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>清关方式</b></span>
+                                    <select class="form-control" ng-model="gateMode" ng-options="method.value for method in GateModeList"></select>
                                     <span class="input-group-addon"><b>订单名称</b></span>
                                     <input type="text" name="orderName" ng-model="orderName" class="form-control" placeholder="订单名称" maxlength="40" required/>
                                     <span class="input-group-addon tipInvalid" ng-show="addOrderForm.orderName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
@@ -487,6 +489,8 @@
                                     <input type="text" ng-model="Order.id" class="form-control" readonly/>
                                 </div>
                                 <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>清关方式</b></span>
+                                    <select class="form-control" ng-model="Order.gateMode" ng-options="method.value for method in GateModeList"></select>
                                     <span class="input-group-addon"><b>订单名称</b></span>
                                     <input type="text" name="editOrderName" ng-model="Order.name" class="form-control" placeholder="订单名称" maxlength="40" required/>
                                     <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editOrderName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>

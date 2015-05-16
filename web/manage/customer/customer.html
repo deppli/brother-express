@@ -23,7 +23,7 @@
                 <tr ng-click="selectCustomer(item, $index)" class="cursor">
                     <td>{{item.loginId}}</td>
                     <td>{{item.nickname}}</td>
-                    <td>{{item.sex}}</td>
+                    <td>{{item.sex|dict:'Sex'}}</td>
                     <td>{{item.name}}</td>
                     <td>{{item.phone}}</td>
                     <td>{{item.status|dict:'CustomerStatus'}}</td>

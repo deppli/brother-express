@@ -37,7 +37,6 @@ exports.login = function (req, res) {
             cont(null, doc);
         });
     }).then(function (cont, customer) {
-        console.log(customer);
         var password = req.body.password,
             loginId = req.body.loginId,
             loginTime = req.body.loginTime;
@@ -46,13 +45,7 @@ exports.login = function (req, res) {
             return;
         }
         req.session.customer = customer;
-        res.json({
-            _id: customer._id,
-            name: customer.name,
-            position: customer.position,
-            status: customer.status,
-            role: customer.role
-        });
+        res.json(customer);
     }).fail(function (cont, error) {
         res.status(400).send(error.message);
     });

@@ -39,10 +39,11 @@ var CustomerSchema = new Schema({
     img: {type: String},//头像，base64串
     sex: {type: String},//性别
     idNo: {type: String},//证件号
-    idNoImgF: {type: String},//证件照正面
+    idNoImgA: {type: String},//证件照正面
     idNoImgB:{type: String},//证件照反面
     birthday: {type: String},//生日
     phone: {type: String},//手机号码
+    zipCode: {type: String},    //邮编
     email: {type: String},//电子邮箱
     address: {type: String},//地址
     balance: {type: String}, //账户余额
@@ -91,6 +92,7 @@ var OrderSchema = new Schema({
     id: {type: String, required: true, unique:true},
     idBatch: {type: String},    //批量编号
     idGate: {type: String},     //清关编号
+    gateMode: {type: String, default: 0},   //清关模式  0:行邮，1:包税
     gateApi: {type: String, default: 0},    //清关公司编号，后续扩展对接不同清关公司Api接口
     type: {type: String, default: 0},   //0-基本订单，1-批量导入订单，2-会员创建订单
     kind: {type: String, default: 0},   //0-待审核，1-已审核

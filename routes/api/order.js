@@ -31,6 +31,7 @@ exports.add = function (req, res) {
             amount: req.body.amount,
             name: req.body.name,
             creater: req.body.creater,
+            gateMode: req.body.gateMode || 0,
             worldTransId:  req.body.worldTransId,
             worldTransName:  req.body.worldTransName,
             chinaTransId:  req.body.chinaTransId,
@@ -134,6 +135,9 @@ exports.list = function (req, res) {
         begin.setDate(begin.getDate()  - req.body.time);
         time = {"$and":[{"createTime":{"$gt": begin}},{"createTime":{"$lt": now}}]};
     }
+    if(req.body.gateMode){
+        queryStr.gateMode = req.body.gateMode;
+    }
 
     orderModel.find(time).find(queryStr).skip(skipSize).limit(pageSize).exec(function(err, doc){
         if (err) {
@@ -165,6 +169,7 @@ exports.edit = function (req, res) {
     var update = {
         idBatch: req.body.idBatch,
         idGate: req.body.idGate,
+        gateMode: req.body.gateMode,
         amount: req.body.amount,
         name: req.body.name,
         status:  req.body.status,

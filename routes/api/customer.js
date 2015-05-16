@@ -45,6 +45,8 @@ exports.add = function(req, res) {
             name: req.body.name,
             password: req.body.password,
             img: req.body.img,
+            idNoImgA: req.body.idNoImgA,
+            idNoImgB: req.body.idNoImgB,
             sex: req.body.sex,
             idNo: req.body.idNo,
             birthday: req.body.birthday,

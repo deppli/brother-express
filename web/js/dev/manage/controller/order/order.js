@@ -266,7 +266,8 @@
 
                 var seq = 0;
                 var postData = {
-                    time: 1
+                        time: 1,
+                        gateMode: 0         //行邮
                 }
                 //遍历后端返回数据，解析原有[{key1:value1,key2:value2}]形式为[value,value]
                 $remote.post("/order/list", postData, function(orders){
@@ -388,7 +389,8 @@
 
                 var seq = 0;
                 var postData = {
-                    time: 1
+                        time: 1,        //一天内
+                        gateMode: 1     //包税
                 }
                 //遍历后端返回数据，解析原有[{key1:value1,key2:value2}]形式为[value,value]
                 $remote.post("/order/list", postData, function(orders) {
@@ -485,6 +487,10 @@
                 $scope.isFast = $scope.isOrNot[0];
                 $scope.isProtected = $scope.isOrNot[0];
 
+                var gateMode = $scope.initOptions("GateMode");
+                $scope.GateModeList = gateMode[0];
+                $scope.gateMode = $scope.GateModeList[0];
+
                 $scope.getProvinces(function(){
                     var provinces = $scope.initOptions("Provinces");
                     $scope.ProvinceList = provinces[0];
@@ -527,6 +533,7 @@
                             //type: $constants.TYPE_ORDER_SINGLE,        //后台新建订单
                             name: $scope.orderName,
                             creater: $rootScope.backInfo.loginId || "",
+                            gateMode: $scope.Order.gateMode.key || 0,
                             amount: $scope.amount || 0,
                             worldTransId: $scope.orderId || "",
                             worldTransName: $constants.NAME_COMPANY_NAME || "",
@@ -600,6 +607,10 @@
                     $scope.Order.amount = $scope.Order.transportAmount + $scope.Order.taxAmount + $scope.Order.safeAmount + $scope.Order.otherAmount;
                 })
 
+                var gateMode = $scope.initOptions("GateMode", $scope.Order.gateMode);
+                $scope.GateModeList = gateMode[0];
+                $scope.Order.gateMode = $scope.GateModeList[gateMode[1]];
+
                 $scope.getProvinces(function(){
                     var provinces = $scope.initOptions("Provinces", $scope.Order.receiveProvince);
                     $scope.ProvinceList = provinces[0];
@@ -659,6 +670,7 @@
                             idBatch: $scope.Order.idBatch || "",
                             dbId: $scope.selectedOrder._id,
                             idGate: $scope.Order.idGate || "",
+                            gateMode: $scope.Order.gateMode.key || 0,
                             name: $scope.Order.name || "",
                             status:  $scope.Order.status.key,
                             updateInfo: $scope.Order.updateInfo,

@@ -519,6 +519,8 @@
                 var nowTime = new Date();
 
                 $scope.orderId = "S" + nowTime.format("yyMMddhhmmss") + Math.ceil(Math.random()*100);
+                $scope.worldTransId = $scope.orderId;
+                $scope.worldTransName = $constants.NAME_COMPANY_NAME;
 
                 $scope.newOrder = function(){
                     if(!$scope.products || $scope.products.length == 0){
@@ -533,10 +535,10 @@
                             //type: $constants.TYPE_ORDER_SINGLE,        //后台新建订单
                             name: $scope.orderName,
                             creater: $rootScope.backInfo.loginId || "",
-                            gateMode: $scope.Order.gateMode.key || 0,
+                            gateMode: $scope.gateMode.key || 0,
                             amount: $scope.amount || 0,
-                            worldTransId: $scope.orderId || "",
-                            worldTransName: $constants.NAME_COMPANY_NAME || "",
+                            worldTransId: $scope.worldTransId || "",
+                            worldTransName: $scope.worldTransName || "",
                             chinaTransId: $scope.chinaTransId || "",
                             chinaTransName: $scope.chinaTransName || "",
                             payerName: $scope.payerName || "",

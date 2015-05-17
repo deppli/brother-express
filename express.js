@@ -23,7 +23,7 @@ if (process.argv.indexOf("install") > 0) {
 
 app.use(log4js.connectLogger(logger, {level: "auto", format:':method :url'}));
 
-var circle = 7200*1000
+var circle = 36000*1000
 app.use(session({
     resave: false, // don"t save session if unmodified
     cookie: {httpOnly: true, expires: new Date(Date.now() + circle), maxAge: circle},   //2小时

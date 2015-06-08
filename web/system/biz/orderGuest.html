@@ -962,8 +962,7 @@
                     <form id="orderCommit" name="orderCommit" method="POST" action="/alipay/create_direct_pay_by_user" target="_blank">
                         <input type="hidden" name="alipayId" value="{{orderId}}"/>
                         <input type="hidden" name="alipayName" value="仲良速递快递服务"/>
-                        <!--<input type="hidden" name="alipayAmount" value="{{orderTotalAmt}}"/>-->
-                        <input type="hidden" name="alipayAmount" value="0.01"/>
+                        <input type="hidden" name="alipayAmount" value="{{orderTotalAmt}}"/>
                         <input type="hidden" name="alipayDesc" value="{{orderName}}"/>
                         <input type="hidden" name="alipayItem" value="http://www.brother-express.com"/>
                         <div class="col-sm-12 bg-white">

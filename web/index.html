@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="themes/default/css/base.css"/>
 </head>
 <body ng-controller="BaseCtrl">
-    <header class="navbar sys-navbar navbar-inverse">
+    <header class="sys-navbar navbar-inverse">
         <div class="container">
             <div >
                 <button id="menuButton" type="button" class="navbar-toggle" ng-nav="#navbar">
@@ -35,9 +35,10 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right fs12">
-                    <!--<li ng-click="reg()"><a ng-bind="'注册'"></a></li>
+                    <li ng-hide="$root.webInfo.isLogin" ng-click="reg()"><a ng-bind="'注册'"></a></li>
                     <li ng-hide="$root.webInfo.isLogin" ng-click="login()"><a ng-bind="'登录'"></a></li>
-                    <li ng-show="$root.webInfo.isLogin" ng-click="logout()"><a ng-bind="'注销'"></a></li>-->
+                    <li ng-show="$root.webInfo.isLogin" ng-click="logout()"><a ng-bind="'注销'"></a></li>
+                    <li ng-show="$root.webInfo.isLogin" ng-click="pcenter()"><a ng-bind="'会员中心'"></a></li>
                 </ul>
         </div>
     </div>
@@ -113,22 +114,25 @@
 <script data-main="js/system.js" src="js/require.min.js"></script>
 
 <script type="text/ng-template" id="loginModal">
-    <div class="modal-body" ng-submit="submit()">
+    <div class="bg-skyblue" style="height: 10px;"></div>
+    <div class="modal-body">
         <form class="sys-form-modal" >
             <div class="input-group" ng-show="Error">
                 <p><span class="label label-danger">{{Error}}</span></p>
             </div>
             <div class="input-group">
                 <span class="glyphicon glyphicon-user input-group-addon"></span>
-                <input type="text" class="form-control" name="loginId" ng-model="loginId" placeholder="用户名"/>
+                <input type="text" class="form-control fs12" name="loginId" ng-model="loginId" placeholder="用户名"/>
             </div>
             <div class="input-group"><h4></h4></div>
-            <div class="input-group">
+            <div class="input-group" ng-hide="isReset">
                 <span class="glyphicon glyphicon-link input-group-addon"></span>
-                <input type="password" class="form-control" name="password" ng-model="password" placeholder="密码"/>
+                <input type="password" class="form-control fs12" name="password" ng-model="password" placeholder="密码"/>
             </div>
+            <div class="fs12 text-skyblue pull-right margin-height-space-sm cursor" ng-hide="isReset" ng-click="checkReset()">忘记密码?</div>
             <div class="login-btn">
-                <button type="submit" class="btn btn-success btn-block">登录</button>
+                <button type="button" class="btn btn-success btn-block bg-skyblue" ng-hide="isReset" ng-click="submit()">登录</button>
+                <button type="button" class="btn btn-warning btn-block" ng-click="forgetPassword()" ng-show="isReset">重置密码</button>
             </div>
         </form>
     </div>
@@ -152,6 +156,112 @@
             <progressbar class="progress-striped active" value="100" type="primary"><b>处理中</b></progressbar>
         </div>
         <div class="sp-line"></div>
+    </div>
+</script>
+<script type="text/ng-template" id="orderModal">
+    <div class="panel panel-info sys-panel">
+        <div class="panel-heading">
+            <span class="glyphicon glyphicon-align-justify padding-width-space-sm"></span><span>订单详情</span>
+            <!--<span class="glyphicon glyphicon-remove pull-right"></span>-->
+        </div>
+        <div class="panel-body">
+            <div class="container-fluid">
+                <div class="row row-line">
+                    <span class="label label-warning">订单信息</span>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2 data-name">订单编号：</div>
+                    <div class="col-sm-4 data-value">{{Order.id}}</div>
+                    <div class="col-sm-2 data-name">订单名称：</div>
+                    <div class="col-sm-4 data-value">{{Order.name}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2 data-name">订单类型：</div>
+                    <div class="col-sm-4 data-value">{{Order.type|dict:'OrderType'}}</div>
+                    <div class="col-sm-2 data-name">订单状态：</div>
+                    <div class="col-sm-4 data-value">{{Order.status|dict:'OrderStatus'}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2 data-name">产品统称：</div>
+                    <div class="col-sm-4 data-value">{{Order.productName}}</div>
+                    <div class="col-sm-2 data-name">产品总重量：</div>
+                    <div class="col-sm-4 data-value">{{Order.productWeight}} kg</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2 data-name">国际物流商：</div>
+                    <div class="col-sm-4 data-value">{{Order.worldTransName}}</div>
+                    <div class="col-sm-2 data-name">国际物流单号：</div>
+                    <div class="col-sm-4 data-value">{{Order.worldTransId}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2 data-name">国内物流商：</div>
+                    <div class="col-sm-4 data-value">{{Order.chinaTransName}}</div>
+                    <div class="col-sm-2 data-name">国内物流单号：</div>
+                    <div class="col-sm-4 data-value">{{Order.chinaTransId}}
+                        <span ng-show="Order.chinaTransId" class="btn btn-info btn-sm" ng-click="queryExpress()">查询</span>
+                    </div>
+                </div>
+                <div class="row row-line">
+                    <span class="label label-warning">收件人信息</span>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2 data-name">收件人名称：</div>
+                    <div class="col-sm-4 data-value">{{Order.receiveName}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2 data-name">收货人省份：</div>
+                    <div class="col-sm-4 data-value">{{Order.receiveProvinceName}}</div>
+                    <div class="col-sm-2 data-name">收货人城市：</div>
+                    <div class="col-sm-4 data-value">{{Order.receiveCityName}}</div>
+                </div>
+                <div class="row row-line">
+                    <span class="label label-warning">订单轨迹</span>
+                </div>
+                <div class="row">
+                    <table class="table table-hover">
+                        <tr>
+                            <th class="info" style="width:15%;">更新人</th>
+                            <th class="info" style="width:20%;">更新时间</th>
+                            <th class="info" style="width:15%;">地点</th>
+                            <th class="info" style="width:10%;">状态</th>
+                            <th class="info" style="width:40%;">备注</th>
+                        </tr>
+                        <tr ng-repeat="item in Order.updateInfo">
+                            <td>{{item.updater}}</td>
+                            <td>{{item.time|date:'yyyy-MM-dd'}}</td>
+                            <td>{{item.gisText}}</td>
+                            <td>{{item.status|dict:'OrderStatus'}}</td>
+                            <td>{{item.remark}}</td>
+                        </tr>
+                        <tr ng-show="pathError">
+                            <td colspan="5"><b class="text-danger" ng-bind="pathError"></b></td>
+                        </tr>
+                        <tr ng-repeat="path in Order.orderPaths">
+                            <td>-</td>
+                            <td>{{path.date}}</td>
+                            <td>{{path.place}}</td>
+                            <td>转运</td>
+                            <td>{{path.details}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="expressModal">
+    <div class="modal-header">
+        <div class="form-group">
+            <p><button class="btn btn-default">国内物流查询</button></p>
+        </div>
+        <div class="form-group">
+            <span class="label label-success">快递公司：{{Order.chinaTransName}}</span>
+            <span class="label label-success">快递单号：{{Order.chinaTransId}}</span>
+        </div>
+    </div>
+    <div class="modal-body">
+        <iframe name="kuaidi100" src="http://www.kuaidi100.com/frame/app/index2.html" width="800" height="400" marginwidth="0" marginheight="0" hspace="0" vspace="0" frameborder="0" scrolling="no"></iframe>
     </div>
 </script>
 

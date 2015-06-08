@@ -13,7 +13,19 @@
             maxFileSize: 20 * 1024 * 1024,
             maxIdFileSize: 500 * 1024,
             idCardPath: "/upload/idno/",
-            wechatEntry: "http://www.brother-express.com/wechat.html#/?OrderId="
+            wechatEntry: "http://www.brother-express.com/wechat.html#/?OrderId=",
+			onlineOrderLimit: 1000,
+			onlineOrderFastCost: 20,
+			onlineOrderFixedCost: 10,
+			onlineOrderTransportBasicCost: 49,
+			onlineOrderTransportStepCost: 7,
+			onlineOrderBoxCost: 10,
+			onlineOrderReturnCost: 20,
+			onlineOrderStoreCost1: 20,
+			onlineOrderStoreCost2: 50,
+			onlineOrderElecCost: 20,
+			onlineOrderDetailProductCost: 5,
+			onlineOrderRemovePagesCost: 5
 		};
 	});
 });

@@ -14,9 +14,16 @@ function hooks(fn) {
 hooks.role = function(role) {
     function roleCheck(req) {
         return then(function(cont) {
+            if(role == 1){
+                if (!req.session.customer) {
+                    cont(new Error(msg.USER.userNeedLogin));
+                    return;
+                }
+            }else{
             if (!req.session.user) {
                 cont(new Error(msg.USER.userNeedLogin));
                 return;
+            }
             }
             /*switch (typeof role) {
                 case "number":

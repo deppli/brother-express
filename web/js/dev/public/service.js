@@ -17,6 +17,46 @@ define(["angular", "config"], function(angular) {
 				RegExp.$1.length==1 ? o[k] : ("00"+ o[k]).substr((""+ o[k]).length));
 		return format;
 	};
+	window.longCount = function(str1,str2,type) {
+		var comma1 = 0;
+		if (str1.indexOf(".")!=-1) {
+			str1 = str1.replace(/0*$/,"");
+			comma1 = str1.length - str1.indexOf(".")-1;
+		}
+		var comma2 = 0;
+		if (str2.indexOf(".")!=-1) {
+			str2 = str2.replace(/0*$/,"");
+			comma2 = str2.length - str2.indexOf(".")-1;
+		}
+		str1 = str1.replace(/\./,"");
+		str2 = str2.replace(/\./,"");
+		var value,comma;
+		if (type!="*") {
+			if (comma1>comma2) {
+				for (var i=0;i<comma1-comma2;i++) str2 += "0";
+				comma = (type=="/")?0:comma1;
+			}else {
+				for (var i=0;i<comma2-comma1;i++) str1 += "0";
+				comma = (type=="/")?0:comma2;
+			}
+		}else {
+			comma = comma1 + comma2;
+		}
+		if (type=="+") {
+			value = parseInt(str1,10) + parseInt(str2,10);
+		}else if (type=="-") {
+			value = parseInt(str1,10) - parseInt(str2,10);
+		}else if (type=="*") {
+			value = parseInt(str1,10) * parseInt(str2,10);
+		}else if (type=="/") {
+			value = parseInt(str1,10) / parseInt(str2,10);
+		}
+		value = String(value);
+		if (comma>0) value = value.substring(0,value.length-comma)+"."+value.substring(value.length-comma,value.length);
+		if (value.indexOf(".")!=-1)
+			value = value.replace(/0*$/,"");
+		return value;
+	}
 	angular.module('ngService', ["ngConfig"])
 	.factory("$singleton", function() {
 		return function(fn) {
@@ -76,6 +116,8 @@ define(["angular", "config"], function(angular) {
 				if(data == "登录状态已失效，请重新登录后操作"){
                     $cookies.backInfo = "";
 					$rootScope.backInfo = {};
+					$cookies.webInfo = "";
+					$rootScope.webInfo = {};
                     var msg = {text:data};
                     $rootScope.showMessage(msg)
 				}else if(typeof errorCallback != "function"){

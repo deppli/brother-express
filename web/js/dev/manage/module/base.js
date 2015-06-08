@@ -76,6 +76,17 @@
 	function($rootScope, $config, $route, $remote, $dict, $filter, $modal) {
         $(window).bind('beforeunload',function(){return '';});
 
+        $rootScope.initJnl = function(prefix){
+            var nowTime = new Date();
+            var random = Math.ceil(Math.random()*999);
+            if(random < 10){
+                random = "00" + random;
+            }else if(random < 100 && random >= 10){
+                random = "0" + random;
+            }
+            return prefix + nowTime.format("yyMMddhhmmss") + random;
+        }
+
         $rootScope._WechatEntry = $config.wechatEntry;
         $rootScope.loading = false;
 
@@ -191,7 +202,9 @@
                 templateUrl: 'message',
                 controller: 'MessageCtrl',
                 size: "sm",
-                scope: scope
+                    scope: scope,
+                    backdrop: 'static',
+                    keyboard:false
             });
 
                 modalMsg.result.then(function (result) {

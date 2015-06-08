@@ -11,8 +11,8 @@
                     <h5><span class="glyphicon glyphicon-book padding-width-space-sm"></span><b>基本设置</b></h5>
                 </div>
                 <div class="box-body" >
-                    <div class="row row-line">
-                        <div class="col-lg-12" ng-repeat="param in Params">
+                    <div class="row">
+                        <div class="col-lg-12 row-line" ng-repeat="param in Params">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon"><b>{{param.paramsGroupName}}({{param.paramsName}})</b></span>
                                 <input name="param.paramsValue" type="text" ng-model="param.paramsValue" class="form-control" />

@@ -163,8 +163,12 @@ angularFileUpload.service('$upload', ['$http', '$q', '$timeout', function($http,
 
 angularFileUpload.directive('ngFileSelect', [ '$parse', '$timeout', '$compile', function($parse, $timeout, $compile) { return {
 	restrict: 'AEC',
-	require:'?ngModel',
+	require:['?ngModel'],
+	scope: false,
 	link: function(scope, elem, attr, ngModel) {
+		if(attr.inTabset){
+			handleFileSelect(scope.$parent.$parent, elem, attr, ngModel, $parse, $timeout, $compile);
+		}else{
 		handleFileSelect(scope, elem, attr, ngModel, $parse, $timeout, $compile);
 	}
 }}]);
@@ -236,7 +240,7 @@ function handleFileSelect(scope, elem, attr, ngModel, $parse, $timeout, $compile
 		}
 		if (ngModel) {
 			scope[attr.ngModel] ? scope[attr.ngModel].value = files : scope[attr.ngModel] = files;
-			ngModel && ngModel.$setViewValue(files != null && files.length == 0 ? '' : files);
+			//ngModel && ngModel.$setViewValue(files != null && files.length == 0 ? '' : files);
 		}
 		if (change) {
 			$timeout(function() {

@@ -3,6 +3,7 @@
     cityModel = model.City,
     menuModel = model.Menu,
     userModel = model.User,
+    customerModel = model.Customer,
     paramsModel = model.Params,
     orderModel = model.Order,
     async = require('async'),
@@ -27,12 +28,96 @@ var transporter = nodemailer.createTransport(smtpTransport({
     }
 }));
 
+exports.checkCustomer = function(req, res) {
+    var customer = {
+        loginId: req.body.loginId
+    };
+
+    customerModel.findOne(customer).exec(function(err, doc) {
+        if (err) {
+            res.status(400).send(err.message);
+            return;
+        }
+        if (doc) {
+            res.status(400).send(msg.USER.loginIdExist);
+            return;
+        }
+        res.json("success");
+    });
+}
+
+exports.addCustomer = function(req, res) {
+    then(function (cont) {
+        var customer = {
+            loginId: req.body.loginId
+        };
+
+        customerModel.findOne(customer).exec(function(err, doc) {
+            if (err) {
+                cont(new Error(err));
+                return;
+            }
+            if (doc) {
+                cont(new Error(msg.USER.loginIdExist));
+                return;
+            }
+            cont(null, doc);
+        });
+    }).then(function(cont, doc) {
+        paramsModel.findOne({paramsId:'0B001'}).exec(function (err, doc) {
+            if (err) {
+                cont(new Error(err));
+                return;
+            }
+            cont(null, doc);
+        });
+    }).then(function(cont, doc){
+        var customer = new customerModel({
+            loginId: req.body.loginId,
+            nickname: req.body.nickname,
+            name: req.body.name,
+            password: req.body.password,
+            img: req.body.img,
+            idNoImgA: req.body.idNoImgA,
+            idNoImgB: req.body.idNoImgB,
+            sex: req.body.sex,
+            idNo: req.body.idNo,
+            birthday: req.body.birthday,
+            zipCode: req.body.zipCode||"",
+            phone: req.body.phone,
+            address: req.body.address,
+            status: req.body.status||1,
+            balance: doc.paramsValue||0
+        });
+
+        customer.save(function (err, doc) {
+            if (err) {
+                cont(new Error(err));
+                return;
+            }
+            cont(null, doc);
+        });
+    }).then(function(cont, doc) {
+        customerModel.findOne(doc).exec(function(err, doc) {
+            if (err) {
+                cont(new Error(err));
+                return;
+            }
+            __logger.info(doc)
+            res.json(doc);
+        });
+    }).fail(function (cont, error) {
+        res.status(400).send(error.message);
+    });
+
+};
+
 exports.upload = function (req, res) {
     var form = new formidable.IncomingForm();
 
     var type = req.query.type;
     var fileName = req.query.file;
-    form.uploadDir = config.UPLOAD_PATH;
+    form.uploadDir = config.basic.UPLOAD_PATH;
     form.keepExtensions = true;
     form.maxFieldsSize = 20 * 1024 * 1024;
 
@@ -45,21 +130,18 @@ exports.upload = function (req, res) {
     form.parse(req, function(err, fields, files) {
         var newPath;
         if(fileName!=undefined){
-            var readStream=fs.createReadStream(files.file.path);
-            var writeStream;
             if(type==1){    //若为身份证上传
-                newPath = config.UPLOAD_IDNO_PATH + fileName + ".jpg";
-                writeStream=fs.createWriteStream(newPath);
+                newPath = config.basic.UPLOAD_IDNO_PATH + fileName + ".jpg";
             }else if(type==2){  //若为批量订单上传
-                newPath = config.UPLOAD_PATH + fileName + ".xlsx";
-                writeStream=fs.createWriteStream(newPath);
+                newPath = config.basic.UPLOAD_PATH + fileName + ".xlsx";
             }
-            readStream.pipe(writeStream);
-            readStream.on('end',function(){
-                fs.unlinkSync(files.file.path);
+            fs.rename(files.file.path, newPath, function(err){
                 if(!err){
                     files.file.path = newPath;
                     res.json(files);
+                    __logger.info("文件上传成功:" + newPath);
+                }else{
+                    __logger.error("文件上传失败:" + err);
                 }
             });
         }
@@ -124,7 +206,7 @@ exports.queryOrder = function (req, res) {
     });
 };
 
-exports.queryOrderPath = function(req, res) {
+exports.thirdPath = function(req, res) {
 
     var data = {
         cno: req.body.orderId,   //610291500140161
@@ -134,10 +216,10 @@ exports.queryOrderPath = function(req, res) {
     var content = qs.stringify(data);
 
     var options = {
-        hostname: config.EXPRESS_API_HOST,
-        port: config.EXPRESS_API_PORT,
-        path: config.EXPRESS_API_PATH + content,
-        method: config.EXPRESS_API_METHOD
+        hostname: config.basic.EXPRESS_API_HOST,
+        port: config.basic.EXPRESS_API_PORT,
+        path: config.basic.EXPRESS_API_PATH + content,
+        method: config.basic.EXPRESS_API_METHOD
     };
 
     var body = "";
@@ -154,6 +236,73 @@ exports.queryOrderPath = function(req, res) {
     })
 
     request.end();
+};
+
+/**
+ * 全轨迹查询，包括第三方清关轨迹
+ * @param req
+ * @param res
+ */
+exports.fullPath = function(req, res) {
+
+    var order = {id : req.body.id}
+
+    then(function(cont){
+        //TODO 增加关联查询
+        orderModel.findOne(order, {updateInfo: 1}).exec(function(err, doc) {
+            if (!doc){
+                cont(new Error(msg.ORDER.orderIdNotExist));
+            }else{
+                cont(err, doc.updateInfo);
+            }
+        })
+    }).then(function(cont, globalPath){
+        var data = {
+            cno: req.body.id,   //610291500140161
+            cp: "65001"
+        };
+
+        var content = qs.stringify(data);
+
+        var options = {
+            hostname: config.basic.EXPRESS_API_HOST,
+            port: config.basic.EXPRESS_API_PORT,
+            path: config.basic.EXPRESS_API_PATH + content,
+            method: config.basic.EXPRESS_API_METHOD
+        };
+
+        var body = "";
+        var request = http.request(options, function (response) {
+            response.setEncoding('utf8');
+            response.on('data', function (chunk) {
+                body+=chunk;
+            }).on('end', function(){
+                var data = JSON.parse(body)
+                var localPath = [];
+                if(data.trackingEventList){
+                    data.trackingEventList.forEach(function(each){
+                        var node = {};
+                        node.time = each.date;
+                        node.gisText = each.place;
+                        node.status = "";
+                        node.remark = each.details;
+                        localPath.push(node);
+                    })
+                }
+                var path = globalPath.concat(localPath);
+                cont(null, path)
+            });
+        }).on('error', function (err) {
+            console.log('problem with request: ' + err.message);
+            cont(new Error(msg.ORDER.orderPathSyncError));
+        })
+        request.end();
+    }).then(function(cont, path){
+        res.send(path);
+    }).fail(function (cont, error) {
+        console.log(error);
+        res.status(400).send(error);
+    });
 };
 
 exports.listSettings = function(req, res) {
@@ -210,6 +359,91 @@ exports.updateSettings = function(req, res) {
         }
     });
 }
+
+//游客新建订单
+exports.createOrder = function (req, res) {
+    then(function (cont) {
+        var order = {
+            id: req.body.id
+        };
+
+        orderModel.findOne(order).exec(function(err, doc) {
+            if (err) {
+                cont(new Error(err));
+                return;
+            }
+            if (doc) {
+                cont(new Error(msg.ORDER.orderIdExist));
+                return;
+            }
+            cont(null, doc);
+        });
+    }).then(function(cont, doc) {
+        var order = new orderModel({
+            id: req.body.id,
+            type: 3,                //游客订单
+            payStatus: 0,                //未支付
+            amount: req.body.amount,
+            name: req.body.name,
+            creater: req.body.creater,
+            gateMode: req.body.gateMode || 0,
+            idNoImgA: req.body.idAUrl || "",
+            idNoImgB: req.body.idBUrl || "",
+            worldTransId:  req.body.worldTransId,
+            worldTransName:  req.body.worldTransName,
+            chinaTransId:  req.body.chinaTransId,
+            chinaTransName:  req.body.chinaTransName,
+            payerName: req.body.payerName,
+            payerPhone: req.body.payerPhone,
+            payerIdType: req.body.payerIdType,
+            payerIdNo: req.body.payerIdNo,
+            payerAddress: req.body.payerAddress,
+            payerZipCode: req.body.payerZipCode,
+            sendName: req.body.sendName,
+            sendAddress: req.body.sendAddress,
+            sendPhone: req.body.sendPhone,
+            receiveName: req.body.receiveName,
+            receiveProvince: req.body.receiveProvince,
+            receiveProvinceName: req.body.receiveProvinceName||"",
+            receiveCity: req.body.receiveCity,
+            receiveCityName: req.body.receiveCityName,
+            receiveAddress: req.body.receiveAddress,
+            receivePhone: req.body.receivePhone,
+            receiveZipCode: req.body.receiveZipCode,
+            productName: req.body.productName,
+            productNum: req.body.productNum,
+            productAmount: req.body.productAmount,
+            productWeight: req.body.productWeight,
+            products: req.body.products,
+            transportAmount: req.body.transportAmount,
+            taxAmount: req.body.taxAmount,
+            safeAmount: req.body.safeAmount,
+            otherAmount: req.body.otherAmount,
+            isFixed: req.body.isFixed||0,
+            isFast: req.body.isFast||0,
+            isProtected: req.body.isProtected||0,
+            flagBox: req.body.flagBox||0,
+            flagDetailProduct: req.body.flagDetailProduct||0,
+            flagElec: req.body.flagElec||0,
+            flagRemovePages: req.body.flagRemovePages||0,
+            flagReturnProduct: req.body.flagReturnProduct||0,
+            flagStore: req.body.flagStore||0
+        });
+
+        order.save(function (err, doc) {
+            if (err) {
+                cont(new Error(err));
+                return;
+            }
+            cont(null, doc);
+        });
+    }).then(function(cont, doc) {
+        res.json("success");
+    }).fail(function (cont, error) {
+        res.status(400).send(error.message);
+    });
+
+};
 
 //微信、外部渠道更新订单信息
 exports.updateOrder = function(req, res) {
@@ -271,7 +505,7 @@ exports.sendMail = function(req, res){
 
     html = "<html><body><p>您好：</p> " +
     "<p>我们收到您在仲良速递的注册申请，请点击下面的链接激活帐户：</p>" +
-    "<a href='" + config.SYSTEM_HOST + "/service/validateEmail?token=" + token + "'>" + "请点击本链接激活帐号</a></body></html>"
+    "<a href='" + config.basic.SYSTEM_HOST + "/service/validateEmail?token=" + token + "'>" + "请点击本链接激活帐号</a></body></html>"
 
     var mail = {
         from: '仲良速递<service@brother-express.com>',
@@ -280,10 +514,15 @@ exports.sendMail = function(req, res){
         html: html
     }
     transporter.sendMail(mail, function(err, info){
-        console.log(err);
-        console.log(info);
-    });
+        if(err){
+            __logger.error("账号注册邮件(" + toEmail +")发送失败：" + err)
+            res.status(400).send(err.message);
+        }else{
+            __logger.info("账号注册邮件(" + toEmail +")发送成功")
     res.json("success");
+}
+    });
+    //res.json("success");
 }
 
 //校验邮箱验证
@@ -310,3 +549,89 @@ exports.checkValidateEmail = function(req, res){
         res.status(400).send(msg.MAIN.validateEmail);
     }
 }
+
+exports.forgetPassword = function(req, res){
+    var toEmail = req.body.loginId;
+
+    var customer = {
+        loginId: toEmail
+    };
+
+    customerModel.findOne(customer).exec(function(err, doc) {
+        if (err) {
+            res.status(400).send(err);
+            return;
+        }
+        if (!doc) {
+            res.status(400).send(msg.USER.loginIdNone);
+            return;
+        }else{
+            var token = Math.ceil(Math.random()*10000000);
+            req.session.token = token;
+            req.session.loginId = toEmail;
+
+            html = "<html><body><p>您好：</p> " +
+            "<p>我们收到您在仲良速递的密码重置申请，请于10分钟内点击下面的链接完成密码重置操作：</p>" +
+            "<a href='" + config.basic.SYSTEM_HOST + "/resetPwd.html?loginId=" + toEmail + "&token=" + token + "'>" + "请点击本链接进行密码重置</a></body></html>"
+
+            var mail = {
+                from: '仲良速递<service@brother-express.com>',
+                to: toEmail,
+                subject: '仲良速递账户密码重置',
+                html: html
+            }
+            transporter.sendMail(mail, function(err, info){
+                if(err){
+                    __logger.error("密码重置邮件(" + toEmail +")发送失败：" + err)
+                    res.status(400).send(err);
+                }else{
+                    __logger.info("密码重置邮件(" + toEmail +")发送成功")
+                    res.json("success");
+                }
+            });
+        }
+    });
+
+}
+
+//密码重置
+exports.resetPassword = function(req, res){
+    var token = req.body.token;
+    var loginId = req.session.loginId;
+    var password = req.body.password;
+    var sessionToken = req.session.token;
+    console.log(loginId)
+    console.log(token)
+    console.log(password)
+    console.log(sessionToken)
+    if(token && sessionToken && token == sessionToken && loginId){
+        req.session.token = null;
+        req.session.loginId = null;
+        customerModel.findOneAndUpdate({loginId: loginId}, {password: password}, function (err, doc) {
+            if (err) {
+                res.status(400).send(err.message);
+                return;
+            }
+            res.json("success");
+        });
+    }else{
+        res.status(400).send("error");
+    }
+}
+
+//查询订单支付状态
+exports.queryPayStatus = function (req, res) {
+    orderModel.findOne({id: req.body.orderId}).exec(function(err, doc) {
+        if (err) {
+            __logger.info("订单(" + req.body.orderId + ")状态获取失败:" + err);
+            res.status(400).send(err);
+            return;
+        }
+        if (!doc) {
+            __logger.info("订单(" + req.body.orderId + ")不存在");
+            res.status(400).send(msg.USER.userNone);
+            return;
+        }
+        return res.json({payStatus: doc.payStatus});
+    });
+};

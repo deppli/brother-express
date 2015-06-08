@@ -22,7 +22,7 @@
             })
         }
     })
-    .directive("ngIcheck", function(){
+    .directive("ngIcheck", function($compile){
         return function(scope, element, attrs) {
 
             var role = attrs.ngIcheck;
@@ -45,7 +45,7 @@
             });
         }
     })
-    .directive("ngIradio", function(){
+    .directive("ngIradio", function($compile){
         return function(scope, element, attrs) {
 
             var role = attrs.name;
@@ -57,6 +57,7 @@
                     }
                     jQuery(element).on('ifChecked', function(event){
                         scope[role] = element.val();
+                    scope.$apply();
                     });
 
                 }else{
@@ -66,6 +67,7 @@
 
             jQuery(element).on('ifChecked', function(event){
                 scope.$parent[role] = element.val();
+                    scope.$parent.$apply();
             });
 
                 }

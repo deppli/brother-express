@@ -2,6 +2,8 @@ var mongoose = require("mongoose"),
     db = require("../db"),
     Schema = mongoose.Schema;
 
+//{'paramsId' : '0A001', 'paramsName' : '美元', 'paramsGroup' : '0A', 'paramsGroupName' : '汇率', 'paramsValue' : '0.16'}
+//{'paramsId' : '0B001', 'paramsName' : '注册会员赠送余额', 'paramsGroup' : '0B', 'paramsGroupName' : '折扣', 'paramsValue' : '20'}
 var ParamsSchema = new Schema({
     paramsId: {type: String, unique:true},
     paramsName: {type: String},
@@ -46,11 +48,14 @@ var CustomerSchema = new Schema({
     zipCode: {type: String},    //邮编
     email: {type: String},//电子邮箱
     address: {type: String},//地址
-    balance: {type: String}, //账户余额
-    level: {type: String},  //等级
+    balance: {type: Number, default:0}, //账户余额
+    level: {type: String, default: '0'},  //等级, 0-普通会员
+    point: {type: Number, default:0},   //积分
+    exp: {type: Number,default:0},  //成长值
+    totalPay: {type: Number, default:0},//累积充值
     createDate: {type: Date, default: Date.now},//创建日期
     status: {type: String, default: 1},//用户状态：1正常 2冻结 0其他
-    role: {type: Schema.Types.ObjectId, ref: "Role"}
+    role: {type: Schema.Types.ObjectId, ref: 'Role'}
 });
 
 var GroupSchema = new Schema({
@@ -58,7 +63,7 @@ var GroupSchema = new Schema({
     name: {type: String, required: true, unique: true},
     description: {type: String},
     status: {type: String, default: 0},
-    menu: [{type: Schema.Types.ObjectId, ref:"Menu"}]
+    menu: [{type: Schema.Types.ObjectId, ref:'Menu'}]
 });
 
 var UserSchema = new Schema({
@@ -75,7 +80,7 @@ var UserSchema = new Schema({
     address: {type: String},//地址
     createDate: {type: Date, default: Date.now},//创建日期
     status: {type: String, default: 1},//用户状态：1正常 2冻结 0其他
-    group: {type: Schema.Types.ObjectId, ref: "Group", required: true}
+    group: {type: Schema.Types.ObjectId, ref: 'Group', required: true}
 });
 
 var MenuSchema = new Schema({
@@ -85,7 +90,7 @@ var MenuSchema = new Schema({
     link: {type:String},
     role: {type:String},
     level: {type:String},
-    subMenu: [{type: Schema.Types.ObjectId, ref: "Menu"}]
+    subMenu: [{type: Schema.Types.ObjectId, ref: 'Menu'}]
 })
 
 var OrderSchema = new Schema({
@@ -94,9 +99,12 @@ var OrderSchema = new Schema({
     idGate: {type: String},     //清关编号
     gateMode: {type: String, default: 0},   //清关模式  0:行邮，1:包税
     gateApi: {type: String, default: 0},    //清关公司编号，后续扩展对接不同清关公司Api接口
-    type: {type: String, default: 0},   //0-基本订单，1-批量导入订单，2-会员创建订单
-    kind: {type: String, default: 0},   //0-待审核，1-已审核
+    type: {type: String, default: 0},   //0-基本订单，1-批量导入订单，2-会员创建订单，3-游客订单
+    payStatus: {type: String, default: 0},   //0-未支付,1-已支付,2-已审核
+    status: {type: String, default: 0}, //状态:0-订单生成，1-订单入仓，2-订单出货，3-国际物流，4-抵港提货，5-清关中, 9-完成
     name: {type: String, required: true},
+    idNoImgA: {type: String},
+    idNoImgB: {type: String},
     description: {type: String},
     amount: {type: Number},     //订单总金额
     creater: {type: String},
@@ -109,7 +117,6 @@ var OrderSchema = new Schema({
         status: {type: String},
         remark: {type: String}
     }],
-    status: {type: String, default: 0}, //状态:0-订单生成，1-订单入仓，2-订单出货，3-国际物流，4-抵港提货，5-清关中, 9-完成
     worldTransName: {type: String},     //国际物流商
     worldTransId: {type: String},       //国际物流单号
     chinaTransId: {type: String},       //国内物流商
@@ -142,11 +149,13 @@ var OrderSchema = new Schema({
             pName: {type: String},
             pBrand: {type: String},
             pNum: {type: Number},
-            pUnit: {type: String},
+            pUnit: {type: String, default:''},
             pAmount: {type: Number},
             pTotalAmount: {type: Number},
             pWeight: {type: Number},
-            pRemark: {type: Number}
+            pRemark: {type: Number},
+            pTransName: {type: String, default:''},
+            pTransId: {type: String, default:''}
         }
     ],
     manager: {type: String},            //责任人
@@ -154,10 +163,16 @@ var OrderSchema = new Schema({
     taxAmount: {type: Number},          //税费
     safeAmount: {type: Number},         //保价费用
     otherAmount: {type: Number},        //其他费用
-    currency: {type: String, default: "CNY"},   //默认人民币
-    isFixed: {type: String},            //加固标志
-    isFast: {type: String},             //加急标志
-    isProtected: {type: String}         //保价
+    currency: {type: String, default: 'CNY'},   //默认人民币
+    isFixed: {type: String, default: '0'},            //加固标志 0-否,1-是
+    isFast: {type: String, default: '0'},             //加急标志 0-否,1-是
+    isProtected: {type: String, default: '0'},         //保价 0-否,1-是
+    flagBox: {type: String, default: '0'},            //专业包装箱 0-否,1-是
+    flagDetailProduct: {type: String, default: '0'},             //内件清点 0-否,1-是
+    flagElec: {type: String, default: '0'},         //电子设备保险 0-否,1-是
+    flagRemovePages: {type: String, default: '0'},            //取出发票/宣传资料 0-否,1-是
+    flagReturnProduct: {type: String, default: '0'},             //退换货服务 0-否,1-是
+    flagStore: {type: String, default: '0'}         //仓储服务 0-否,1-是
 });
 
 var ProductSchema = new Schema({
@@ -170,25 +185,22 @@ var NewsSchema = new Schema({
     type: {type:String, require:true, default: 0},
     title: {type:String, require:true},
     content: {type: String},
-    creater:{type: Schema.Types.ObjectId, ref: "User"},
+    creater:{type: Schema.Types.ObjectId, ref: 'User'},
     createTime: {type:Date, default: Date.now},
     beginDate: {type:Date, default: Date.now},
     endDate: {type:Date},
     displayType: {type:String, default:0},  //展示类型，0：默认，1：显示new标识
     status: {type: String, default:0}   //状态 - 0:正常
 });
-//db.Menu.update({"name":"公告管理"},{$set:{"name":"订单管理"}},false,true)
 
-//db.Group.update({"type":"0"},{$set:{"menu":[ObjectId("54e0236df152aa2c182ae177")]}},false,true)
-
-exports.Params = db.mongoConn.model("Params", ParamsSchema, "Params");
-exports.Province = db.mongoConn.model("Province", ProvinceSchema, "Province");
-exports.City = db.mongoConn.model("City", CitySchema, "City");
-exports.Role = db.mongoConn.model("Role", RoleSchema, "Role");
-exports.Customer = db.mongoConn.model("Customer", CustomerSchema, "Customer");
-exports.Group = db.mongoConn.model("Group", GroupSchema, "Group");
-exports.User = db.mongoConn.model("User", UserSchema, "User");
-exports.Product = db.mongoConn.model("Product", ProductSchema, "Product");
-exports.Order = db.mongoConn.model("Order", OrderSchema, "Order");
-exports.News = db.mongoConn.model("News", NewsSchema, "News");
-exports.Menu = db.mongoConn.model("Menu", MenuSchema, "Menu");
+exports.Params = db.mongoConn.model('Params', ParamsSchema, 'Params');
+exports.Province = db.mongoConn.model('Province', ProvinceSchema, 'Province');
+exports.City = db.mongoConn.model('City', CitySchema, 'City');
+exports.Role = db.mongoConn.model('Role', RoleSchema, 'Role');
+exports.Customer = db.mongoConn.model('Customer', CustomerSchema, 'Customer');
+exports.Group = db.mongoConn.model('Group', GroupSchema, 'Group');
+exports.User = db.mongoConn.model('User', UserSchema, 'User');
+exports.Product = db.mongoConn.model('Product', ProductSchema, 'Product');
+exports.Order = db.mongoConn.model('Order', OrderSchema, 'Order');
+exports.News = db.mongoConn.model('News', NewsSchema, 'News');
+exports.Menu = db.mongoConn.model('Menu', MenuSchema, 'Menu');

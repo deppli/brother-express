@@ -13,7 +13,8 @@ module.exports = {
         requestSent: '请求成功，验证链接已发送到您的邮箱，有效期24小时，请及时验证！',
         resetInvalid: '请求无效',
         resetOutdate: '请求已过期',
-        timeIntervalErr: '操作太快啦，休息几秒再来'
+        timeIntervalErr: '操作太快啦，休息几秒再来',
+        balanceNotEnough: '余额不足'
     },
     USER: {
         loginIdErr: "用户名格式错误",

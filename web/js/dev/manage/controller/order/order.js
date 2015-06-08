@@ -9,6 +9,9 @@
             var types = $scope.initOptions("OrderType");
             $scope.QueryOrderType = types[0];
 
+            var kinds = $scope.initOptions("PayStatus");
+            $scope.QueryOrderPayStatus = kinds[0];
+
             $scope.TimeList = [
                 {key:1, value: '1天'},
                 {key:3, value: '3天'},
@@ -19,6 +22,28 @@
                 {key:365, value: '365天'}
             ];
 
+            $scope.batchPrint = function(){
+                var postData = {};
+                postData.idBatch = $scope.Query.idBatch||null
+                postData.id = $scope.Query.id||null
+                if($scope.Query.type){
+                    postData.type = $scope.Query.type.key
+                }
+                if($scope.Query.status){
+                    postData.status = $scope.Query.status.key
+                }
+                if($scope.Query.time){
+                    postData.time = $scope.Query.time.key
+                }
+
+                $remote.post("/order/list", postData, function(data){
+                    var iframe = document.getElementById("printPage");
+                    iframe.contentWindow.focus();
+                    iframe.contentWindow.doSettingValues(data);
+                    iframe.contentWindow.print();
+                })
+            }
+
             $scope.printOrder = function(){
                 if($scope.selectedOrder){
                     var postData = {
@@ -26,14 +51,11 @@
                     }
 
                     $remote.post("/order/detail", postData, function(data){
-                        $scope.Order = data;
-                        if(data.createTime){
-                            var now = new Date(data.createTime);
-                            data.createTime = now.format("yyyy 年 MM 月 dd 日");
-                        }
+                        var orders = [];
+                        orders.push(data)
                         var iframe = document.getElementById("printPage");
                         iframe.contentWindow.focus();
-                        iframe.contentWindow.doSettingValues(data);
+                        iframe.contentWindow.doSettingValues(orders);
                         iframe.contentWindow.print();
                         //console.log(iframe.contentWindow.Order);
                     });
@@ -287,17 +309,17 @@
                                 row.push({value: order.receiveCityName||"", metadata: {style: bodyer.id}});
                                 row.push({value: order.receiveZipCode||"", metadata: {style: bodyer.id}});
                                 row.push({value: order.receiveAddress||"", metadata: {style: bodyer.id}});
-                                row.push({value: order.name||"", metadata: {style: bodyer.id}});
+                                    row.push({value: order.productName||"", metadata: {style: bodyer.id}});
                                 row.push({value: order.productNum||0, metadata: {style: bodyer.id}});
-                                row.push({value: order.productAmount * _exchange||order.productAmount, metadata: {style: bodyer.id}});
+                                    row.push({value: order.productAmount||"获取失败", metadata: {style: bodyer.id}});
                                 row.push({value: order.productWeight||0, metadata: {style: bodyer.id}});
                                 row.push({value: "", metadata: {style: bodyer.id}});
-                                row.push({value: product.pName||"", metadata: {style: bodyer.id}});
+                                    row.push({value: product.pName + " " + product.pNum + product.pUnit||"", metadata: {style: bodyer.id}});
                                 row.push({value: product.pBrand||"", metadata: {style: bodyer.id}});
                                 row.push({value: product.pNum||0, metadata: {style: bodyer.id}});
                                 row.push({value: product.pUnit||"", metadata: {style: bodyer.id}});
-                                row.push({value: product.pTotalAmount * _exchange||"", metadata: {style: bodyer.id}});
-                                row.push({value: "USD"||"", metadata: {style: bodyer.id}});
+                                    row.push({value: product.pTotalAmount||"获取失败", metadata: {style: bodyer.id}});
+                                    row.push({value: "502"||"", metadata: {style: bodyer.id}});
                                 row.push({value: order.payerIdNo||"", metadata: {style: bodyer.id}});
                                 excelData.push(row);
                             });
@@ -376,9 +398,9 @@
                         {value:'订单编号', metadata: {style: header.id}},
                         {value:'商品名称', metadata: {style: header.id}},
                         {value:'商品品牌', metadata: {style: header.id}},
-                        {value:'商品数量', metadata: {style: header.id}},
-                        {value:'单位', metadata: {style: header.id}},
-                        {value:'重量', metadata: {style: header.id}},
+                            //{value:'商品数量', metadata: {style: header.id}},
+                            //{value:'单位', metadata: {style: header.id}},
+                            {value:'重量(kg)', metadata: {style: header.id}},
                         {value:'商品价值(元)', metadata: {style: header.id}},
                         {value:'收件人', metadata: {style: header.id}},
                         {value:'收件人地址', metadata: {style: header.id}},
@@ -387,7 +409,7 @@
                     ]
                 ];
 
-                var seq = 0;
+                    var seq = 1;
                 var postData = {
                         time: 1,        //一天内
                         gateMode: 1     //包税
@@ -396,24 +418,31 @@
                 $remote.post("/order/list", postData, function(orders) {
                     orders.forEach(function(order){
                         if(order.status == $constants.STATUS_ORDER_CLEARANCE && order.products && order.products.length > 0){
-                            order.products.forEach(function(product){
+                                var productName = "";
+                                var productBrand = ""
+                                order.products.forEach(function(product, index){
+                                    var suffix = "/";
+                                    console.log(index);
+                                    if(index + 1 == order.products.length){
+                                        suffix = "";
+                                    }
+                                    productName += (product.pName + product.pNum + suffix);
+                                    productBrand += (product.pBrand  + suffix);
+                                });
                                 var row = [];
                                 var seqCol = {metadata: {style: bodyer.id}};
                                 seqCol.value = seq++;
                                 row.push(seqCol);
                                 row.push({value: order.id||"", metadata: {style: bodyer.id}});
-                                row.push({value: product.pName||"", metadata: {style: bodyer.id}});
-                                row.push({value: product.pBrand||"", metadata: {style: bodyer.id}});
-                                row.push({value: product.pNum||0, metadata: {style: bodyer.id}});
-                                row.push({value: product.pUnit||"", metadata: {style: bodyer.id}});
-                                row.push({value: product.pWeight||"", metadata: {style: bodyer.id}});
-                                row.push({value: product.pTotalAmount||"", metadata: {style: bodyer.id}});
+                                row.push({value: productName||"", metadata: {style: bodyer.id}});
+                                row.push({value: productBrand||"", metadata: {style: bodyer.id}});
+                                row.push({value: order.productWeight||"", metadata: {style: bodyer.id}});
+                                row.push({value: order.productAmount||"", metadata: {style: bodyer.id}});
                                 row.push({value: order.receiveName||"", metadata: {style: bodyer.id}});
                                 row.push({value: order.receiveAddress||"", metadata: {style: bodyer.id}});
                                 row.push({value: order.receivePhone||"", metadata: {style: bodyer.id}});
-                                row.push({value: product.remark||"", metadata: {style: bodyer.id}});
+                                row.push({value: "", metadata: {style: bodyer.id}});
                                 excelData.push(row);
-                            });
                         }
                     });
 
@@ -486,6 +515,15 @@
                 $scope.isFixed = $scope.isOrNot[0];
                 $scope.isFast = $scope.isOrNot[0];
                 $scope.isProtected = $scope.isOrNot[0];
+                $scope.flagBox = $scope.isOrNot[0];
+                $scope.flagDetailProduct = $scope.isOrNot[0];
+                $scope.flagReturnProduct = $scope.isOrNot[0];
+                $scope.flagElec = $scope.isOrNot[0];
+                $scope.flagRemovePages = $scope.isOrNot[0];
+
+                var StorePeriod = $scope.initOptions("StorePeriod");
+                $scope.StorePeriod = StorePeriod[0];
+                $scope.flagStore = $scope.StorePeriod[0]
 
                 var gateMode = $scope.initOptions("GateMode");
                 $scope.GateModeList = gateMode[0];
@@ -518,9 +556,12 @@
 
                 var nowTime = new Date();
 
-                $scope.orderId = "S" + nowTime.format("yyMMddhhmmss") + Math.ceil(Math.random()*100);
+                $scope.orderId = $scope.initJnl("S");
                 $scope.worldTransId = $scope.orderId;
                 $scope.worldTransName = $constants.NAME_COMPANY_NAME;
+                $scope.sendName = $constants.NAME_COMPANY_NAME;
+                $scope.sendPhone = "(718)690-5565";
+                $scope.sendAddress = "122-08 14th Ave，College Point, New York 11354";
 
                 $scope.newOrder = function(){
                     if(!$scope.products || $scope.products.length == 0){
@@ -569,7 +610,13 @@
                             otherAmount: $scope.otherAmount || 0,
                             isFixed: $scope.isFixed.key || 0,
                             isFast: $scope.isFast.key || 0,
-                            isProtected: $scope.isProtected.key || 0
+                            isProtected: $scope.isProtected.key || 0,
+                            flagBox: $scope.flagBox.key||0,
+                            flagDetailProduct: $scope.flagDetailProduct.key||0,
+                            flagElec: $scope.flagElec.key||0,
+                            flagRemovePages: $scope.flagRemovePages.key||0,
+                            flagReturnProduct: $scope.flagReturnProduct.key||0,
+                            flagStore: $scope.flagStore.key||0
                         }
 
                         $remote.post("/order/add", postData, function(data){
@@ -640,21 +687,25 @@
 
                 var isOrNotOptions = $scope.initOptions("IsOrNot");
                 $scope.isOrNot = isOrNotOptions[0];
-                if($scope.Order.isFixed && $scope.Order.isFixed == "1"){
-                    $scope.Order.isFixed = $scope.isOrNot[1];
+
+                $scope.initYNRadios = function(param){
+                    if($scope.Order[param] && $scope.Order[param] == "1"){
+                        $scope.Order[param] = $scope.isOrNot[1];
                 }else{
-                    $scope.Order.isFixed = $scope.isOrNot[0];
+                        $scope.Order[param] = $scope.isOrNot[0];
                 }
-                if($scope.Order.isFast && $scope.Order.isFast == "1"){
-                    $scope.Order.isFast = $scope.isOrNot[1];
-                }else{
-                    $scope.Order.isFast = $scope.isOrNot[0];
                 }
-                if($scope.Order.isProtected && $scope.Order.isProtected == "1"){
-                    $scope.Order.isProtected = $scope.isOrNot[1];
-                }else{
-                    $scope.Order.isProtected = $scope.isOrNot[0];
-                }
+                $scope.initYNRadios("isFixed");
+                $scope.initYNRadios("isFast");
+                $scope.initYNRadios("isProtected");
+                $scope.initYNRadios("flagBox");
+                $scope.initYNRadios("flagDetailProduct");
+                $scope.initYNRadios("flagReturnProduct");
+                $scope.initYNRadios("flagElec");
+                $scope.initYNRadios("flagRemovePages");
+                var result = $scope.initOptions("StorePeriod", $scope.Order.flagStore);
+                $scope.StorePeriod = result[0];
+                $scope.Order.flagStore = $scope.StorePeriod[result[1]];
 
                 var result = $scope.initOptions("OrderStatus", $scope.Order.status);
                 $scope.OrderStatusList = result[0];
@@ -709,7 +760,13 @@
                             otherAmount: $scope.Order.otherAmount || 0,
                             isFixed: $scope.Order.isFixed.key || 0,
                             isFast: $scope.Order.isFast.key || 0,
-                            isProtected: $scope.Order.isProtected.key || 0
+                            isProtected: $scope.Order.isProtected.key || 0,
+                            flagBox: $scope.Order.flagBox.key||0,
+                            flagDetailProduct: $scope.Order.flagDetailProduct.key||0,
+                            flagElec: $scope.Order.flagElec.key||0,
+                            flagRemovePages: $scope.Order.flagRemovePages.key||0,
+                            flagReturnProduct: $scope.Order.flagReturnProduct.key||0,
+                            flagStore: $scope.Order.flagStore.key||0
                         }
                         $remote.post("/order/edit", postData, function(data){
                             $modalInstance.close();

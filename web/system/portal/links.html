@@ -1,0 +1,18 @@
+<div class="container shadow-div">
+    <div class="row bg-net margin-height-space-sm">
+        <div class="portal-title">
+            <div><span class="glyphicon glyphicon-sound-stereo padding-width-space-sm"></span><b>合作商家</b></div>
+        </div>
+        <div class="col-sm-3 partner-links" ng-repeat="link in links">
+            <a href="{{link.link}}" target="_blank"><img src="themes/default/img/files/links/{{$index + 1}}.png" height="80"/></a>
+        </div>
+    </div>
+    <div class="row bg-net">
+        <div class="portal-title">
+            <div><span class="glyphicon glyphicon-user padding-width-space-sm"></span><b>合作海淘</b></div>
+        </div>
+        <div class="col-sm-3 partner-links" ng-repeat="link in linksHT">
+            <a href="{{link.link}}" target="_blank"><img src="themes/default/img/files/links/haitao/{{$index + 1}}.png" height="80"/></a>
+        </div>
+    </div>
+</div>

@@ -59,7 +59,6 @@ exports.delete = function (req, res) {
 
     userModel.findOne(condition).exec(function(err, doc){
         if(doc){
-            console.log(doc);
             res.status(400).send(msg.GROUP.groupInUse);
             return;
         }

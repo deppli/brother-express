@@ -32,7 +32,7 @@ exports.commitExcel = function (req, res) {
                 var order = {
                     idBatch: idBatch,
                     type: 1,        //1-批量订单
-                    kind: 1,        //已审核
+                    payStatus: 1,        //已审核
                     creater: creater,
                     id: orderData[0],
                     name: orderData[1],
@@ -166,7 +166,7 @@ exports.commitBatch = function (req, res) {
             var order = {
                 idBatch: idBatch,
                 type: 1,        //1-批量订单
-                kind: 1,        //已审核
+                payStatus: 1,        //已审核
                 creater: req.body.creater,
                 id: orderData[0],
                 name: orderData[1],
@@ -201,7 +201,6 @@ exports.commitBatch = function (req, res) {
                 isFast: orderData[25],
                 isProtected: orderData[26]
             };
-            console.log(order);
             cont(null, order);
         }).then(function(cont, order){
             provinceModel.findOne({provinceName: order.receiveProvinceName||""}).exec(function (err, doc) {

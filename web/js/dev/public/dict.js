@@ -32,6 +32,7 @@
             MESSAGE_FILE_EXCEL_PROCESSING:"文档解析中，请稍等",
             MESSAGE_FILE_EXCEL_CONTENT_ERROR:"批量文档内容有误",
             MESSAGE_FILE_EXCEL_EXCHANGE_EMPTY:"获取汇率失败，请重新查询更新",
+            MESSAGE_FILE_AMTTICKET_EMPTY:"获取优惠信息失败，请重新查询更新",
             MESSAGE_MUST_UPLOAD_IDNO:"请先上传完整身份证信息",
             MESSAGE_ORDER_PATH_UPDATE_BATCH_CHECK_ERR:"批次号为空，不能批量更新轨迹",
             MESSAGE_ORDER_PATH_UPDATE_BATCH_SUCCESS:"批量订单轨迹更新成功",
@@ -39,7 +40,12 @@
             MESSAGE_ORDER_EXPORT_HY:"将导出一天内状态为清关中行邮数据",
             MESSAGE_ORDER_EXPORT_BS:"将导出一天内状态为清关中包税数据",
             MESSAGE_CONF_DEL_ORDER:"确认删除选定订单记录?",
-            MESSAGE_PAY_FOR_ORDER:"订单支付中，请通过跳转链接完成支付流程"
+            MESSAGE_PAY_FOR_ORDER:"订单支付中，请通过跳转链接完成支付流程",
+            MESSAGE_PAY_SUCCESS:"请确认订单是否支付完成?",
+            MESSAGE_NEXT_STEP_WITHOUT_IDIMG:"证件照片尚未上传,可能导致清关不通过或延误，确定不上传提交订单?",
+            MESSAGE_PAY_STATUS_FAIL:"订单未支付成功，请确认支付结果或重新支付",
+            MESSAGE_PRODUCT_DETAIL_OVER_WEIGHT:"单笔订单货品总重量不能超过3千克",
+            MESSAGE_PRODUCT_DETAIL_OVER_AMOUNT:"单笔订单若货品数量大于1件，总价值不能超过1000元"
         };
     }])
 	.factory("$dict", [function() {
@@ -47,6 +53,11 @@
             IsOrNot: {
                 "0": "否",
                 "1": "是"
+            },
+            StorePeriod: {
+                "0": "30天内",
+                "1": "30天-60天",
+                "2": "60天-90天"
             },
             Sex: {
                 "0": "男",
@@ -71,10 +82,18 @@
                 "1": "正常",
                 "2": "冻结"
             },
+            PayStatus: {
+                "0": "未支付",
+                "1": "已支付",
+                "2": "已审核"
+            },
             CustomerStatus: {
                 "0": "其他",
                 "1": "正常",
                 "2": "冻结"
+            },
+            CustomerLevel: {
+                "0": "普通会员"
             },
             OrderType: {
                 "0": "一般订单",

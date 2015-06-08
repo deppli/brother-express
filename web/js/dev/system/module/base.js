@@ -31,9 +31,28 @@
                 resolve: {
                     ctrl: lazyCtrl("reg")
                 }
-            }).when("/order", {
-                templateUrl: "system/biz/order.html",
+            }).when("/pcenter", {
+                templateUrl: "system/pcenter/pcenter.html",
+                controller: "PCenterCtrl",
+                resolve: {
+                    ctrl: lazyCtrl("pcenter")
+                }
+            })
+            .when("/order", {
+                templateUrl: "system/biz/orderCheck.html",
                 controller: "OrderCtrl",
+                resolve: {
+                    ctrl: lazyCtrl("order")
+                }
+            }).when("/orderGuest", {
+                templateUrl: "system/biz/orderGuest.html",
+                controller: "OrderStepCtrl",
+                resolve: {
+                    ctrl: lazyCtrl("order")
+                }
+            }).when("/orderCustomer", {
+                templateUrl: "system/biz/orderGuest.html",
+                controller: "OrderStepCtrl",
                 resolve: {
                     ctrl: lazyCtrl("order")
                 }
@@ -43,9 +62,9 @@
 				resolve: {
 					ctrl: lazyCtrl("portal")
 				}
-			}).when("/policy", {
-				templateUrl: "system/portal/policy.html",
-				controller: "PolicyCtrl",
+			}).when("/questions", {
+				templateUrl: "system/portal/questions.html",
+				controller: "QuestionsCtrl",
 				resolve: {
 					ctrl: lazyCtrl("portal")
 				}
@@ -61,9 +80,9 @@
                 resolve: {
                     ctrl: lazyCtrl("portal")
                 }
-			}).when("/tools", {
-				templateUrl: "system/portal/tools.html",
-				controller: "ToolsCtrl",
+            }).when("/links", {
+				templateUrl: "system/portal/links.html",
+				controller: "LinksCtrl",
 				resolve: {
 					ctrl: lazyCtrl("portal")
 				}
@@ -72,8 +91,30 @@
 	)
 
 	/** 初始化ngView对象，初始化定义$rootScope相关方法 **/
-	.run(['$rootScope', '$config', "$route", "$remote", "$modal", "$dict", "$filter", "$constants",
-	function($rootScope, $config, $route, $remote, $modal, $dict, $filter, $constants) {
+	.run(['$rootScope', '$config', "$route", "$remote", "$modal", "$dict", "$filter", "$constants", "$location",
+	function($rootScope, $config, $route, $remote, $modal, $dict, $filter, $constants, $location) {
+        $rootScope.config = $config;
+
+        $rootScope.initJnl = function(prefix){
+            var nowTime = new Date();
+            var random = Math.ceil(Math.random()*999);
+            if(random < 10){
+                random = "00" + random;
+            }else if(random < 100 && random >= 10){
+                random = "0" + random;
+            }
+            return prefix + nowTime.format("yyMMddhhmmss") + random;
+        }
+
+        $rootScope.goAnchor = function (id) {
+            $location.hash(id);
+        }
+
+        //跳转至下单处理页面
+        $rootScope.go = function(path){
+            $location.path(path);
+        }
+
         $rootScope.showLoading = function(){
             if(!$rootScope.loading){
                 $rootScope.loading = true;
@@ -100,7 +141,9 @@
                 templateUrl: 'message',
                 controller: 'MessageCtrl',
                 size: "sm",
-                scope: scope
+                scope: scope,
+                backdrop: 'static',
+                keyboard:false
             });
 
             /*modalMsg.result.then(function (result) {
@@ -186,10 +229,12 @@
 
         $scope.menuList = [
             {name: "首页", link: "#/welcome", role: function() {return true}, active: true},
+            {name: "开始下单", link: "#/order", role: function() {return true}},
             {name: "公司介绍", link: "#/company", role: function() {return true}},
-            //{name: "条例法规", link: "#/policy", role: function() {return true}},
+            {name: "常见问题", link: "#/questions", role: function() {return true}},
             {name: "业务介绍", link: "#/business", role: function() {return true}},
-            {name: "联系方式", link: "#/contact", role: function() {return true}}
+            {name: "联系方式", link: "#/contact", role: function() {return true}},
+            {name: "合作伙伴", link: "#/links", role: function() {return true}}
         ];
 
         $scope.resetMenu = function() {
@@ -227,25 +272,19 @@
 			});
 		};
 
-
-	}]).controller("WelcomeCtrl", ["$scope", "$rootScope", "$location", "$remote", "$modal",
-    function ($scope, $rootScope, $location, $remote, $modal) {
-        $scope.displayMode = 0;
-        //变更快捷菜单，查询/下单
-        $scope.changeMode = function(mode){
-            $scope.displayMode = mode;
+        $scope.pcenter = function(){
+            $location.path('pcenter');
         }
 
-        //跳转至下单处理页面
-        $scope.goOrder = function(){
-            $location.path('order');
-        }
-
-        $scope.OrderId = "";
+        //$scope.OrderId = "610291500140161";
 
         //查询单号指定的订单信息
         $scope.queryOrder = function(){
-            var postData = {id : $scope.OrderId};
+            var orderId = $scope.OrderId;
+            if(orderId){
+                orderId = orderId.toUpperCase()
+            }
+            var postData = {id : orderId};
             $scope.Order = null;
             $scope.Error = null;
 
@@ -257,7 +296,7 @@
                 }
 
                 $scope.pathError = null;
-                $remote.post("/service/queryOrderPath", orderData, function(data){
+                $remote.post("/service/thirdPath", orderData, function(data){
                     $scope.Order.orderPaths = data.trackingEventList;
                 }, function(){
                     $scope.pathError = "获取第三方轨迹记录失败，请重试或联系客服"
@@ -287,6 +326,23 @@
             modalInstance.result.then(function() {
             });
         }
+	}]).controller("WelcomeCtrl", ["$scope", "$rootScope", "$location", "$remote", "$modal",
+    function ($scope, $rootScope, $location, $remote, $modal) {
+        $scope.displayMode = 0;
+        //变更快捷菜单，查询/下单
+        $scope.changeMode = function(mode){
+            $scope.displayMode = mode;
+        }
+
+        $scope.detailOrder = function(){
+            $rootScope.OrderId = $scope.OrderId;
+            $scope.queryOrder();
+        }
+
+        //跳转至下单处理页面
+        $scope.goOrder = function(){
+            $location.path('order');
+        }
 
     }]).controller("MessageCtrl", ["$scope", "$rootScope", "$cookies", "$location", "$remote", "$config", "$modalInstance",
     function ($scope, $rootScope, $cookies, $location, $remote, $config, $modalInstance) {
@@ -305,6 +361,21 @@
         }
     }]).controller("LoginCtrl", ["$scope", "$rootScope", "$location", "$remote", "$config", "$cookies", "$modalInstance",
     function ($scope, $rootScope, $location, $remote, $config, $cookies, $modalInstance) {
+        $scope.isReset = false;
+        $scope.isSend = false;
+        $scope.checkReset = function(){
+            $scope.isReset = true;
+        }
+
+        $scope.forgetPassword = function(){
+            var formData = {loginId : $scope.loginId}
+            $remote.post("/service/forgetPassword", formData, function(data){
+                var msg = {type:0,text:"密码重置邮件已发送"};
+                $scope.showMessage(msg)
+                $modalInstance.close();
+            })
+        }
+
         $scope.submit = function() {
             var loginTime = new Date().getTime();
             var password = crypto.SHA256($scope.password).toString();
@@ -320,7 +391,12 @@
                 $rootScope.webInfo.isLogin = true;
                 $cookies.webInfo = JSON.stringify($rootScope.webInfo);
                 $modalInstance.close(data);
+                if($rootScope._loginPath){
+                    $location.path($rootScope._loginPath);
+                    $rootScope._loginPath = null;
+                }else{
                 $location.path('welcome');
+                }
             }, function(data){
                 $scope.Error = data;
             });

@@ -19,7 +19,6 @@
         "wechat": "*",
         "bower": "*",
         "async": "*",
-        "alipay": "*",
         "ejs": "*"
     }
 }

@@ -102,14 +102,14 @@
                             <div class="col-lg-6">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>身份证</b></span>
-                                    <input ng-model="CustomerIdNo" class="form-control" placeholder="请输入身份证" maxlength="20" />
+                                    <input type="text" ng-model="CustomerIdNo" class="form-control" placeholder="请输入身份证" maxlength="20" />
                                 </div>
                             </div>
                             <div class="col-lg-6">
-                                <div class="input-group input-group-sm">
+                                <div class="input-group input-group-sm"  ng-click="open($event)">
                                     <span class="input-group-addon"><b>生日</b></span>
                                     <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="CustomerBirthday" is-open="opened" min-date="minDate" max-date="'2020-01-01'" show-weeks="false" show-button-bar="false" readonly required/>
-                                    <div class="input-group-addon cursor" ng-click="open($event)">
+                                    <div class="input-group-addon cursor">
                                         <i class="glyphicon glyphicon-calendar" ></i>
                                     </div>
                                 </div>
@@ -119,7 +119,7 @@
                             <div class="col-lg-6">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>手机号码</b></span>
-                                    <input type="tel" name="CustomerPhone" type="tel" ng-model="CustomerPhone" class="form-control" placeholder="请输入手机号码" required/>
+                                    <input type="tel" name="CustomerPhone" ng-model="CustomerPhone" class="form-control" placeholder="请输入手机号码" required/>
                                     <span class="input-group-addon tipInvalid" ng-show="addCustomerForm.CustomerPhone.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
                                     <span class="input-group-addon tipValid" ng-show="addCustomerForm.CustomerPhone.$valid"><span class="glyphicon glyphicon-ok"></span></span>
                                 </div>
@@ -128,6 +128,32 @@
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>地址</b></span>
                                     <input ng-model="CustomerAddress" class="form-control" placeholder="请输入地址" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>邮编</b></span>
+                                    <input type="text" name="CustomerZipCode" ng-model="CustomerZipCode" class="form-control" placeholder="请输入邮编"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div ng-file-select ng-model="idImgA" accept=".jpg" class="cursor" in-tabset="true">
+                                    <div class="img-add">
+                                        <div ng-hide="idAUrl">+ 身份证正面</div>
+                                        <img width="100%" height="140" src="{{idAUrl}}" ng-show="idAUrl">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div ng-file-select ng-model="idImgB" accept=".jpg" class="cursor" in-tabset="true">
+                                    <div class="img-add">
+                                        <div ng-hide="idBUrl">+ 身份证反面</div>
+                                        <img width="100%" height="140" src="{{idBUrl}}" ng-show="idBUrl">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -197,14 +223,14 @@
                         <div class="col-lg-6">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon"><b>身份证</b></span>
-                                <input ng-model="Customer.idNo" class="form-control" placeholder="请输入身份证" />
+                                <input type="text" ng-model="Customer.idNo" class="form-control" placeholder="请输入身份证" />
                             </div>
                         </div>
                         <div class="col-lg-6">
-                            <div class="input-group input-group-sm">
+                            <div class="input-group input-group-sm" ng-click="open($event)">
                                 <span class="input-group-addon"><b>生日</b></span>
                                 <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="Customer.birthday" is-open="opened" min-date="minDate" max-date="'2020-01-01'" show-weeks="false" show-button-bar="false" readonly required/>
-                                <div class="input-group-addon cursor" ng-click="open($event)">
+                                <div class="input-group-addon cursor">
                                     <i class="glyphicon glyphicon-calendar" ></i>
                                 </div>
                             </div>
@@ -221,6 +247,38 @@
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon"><b>地址</b></span>
                                 <input ng-model="Customer.address" class="form-control" placeholder="请输入地址" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-line">
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><b>邮编</b></span>
+                                <input type="text" ng-model="Customer.zipCode" class="form-control" placeholder="请输入邮编"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><b>余额</b></span>
+                                <span class="form-control bg-disable">{{Customer.balance|currency:"￥"}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-line">
+                        <div class="col-lg-6">
+                            <div ng-file-select ng-model="idImgA" accept=".jpg" class="cursor" in-tabset="true">
+                                <div class="img-add">
+                                    <div ng-hide="idAUrl">+ 身份证正面</div>
+                                    <img width="100%" height="140" src="{{idAUrl}}" ng-show="idAUrl">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div ng-file-select ng-model="idImgB" accept=".jpg" class="cursor" in-tabset="true">
+                                <div class="img-add">
+                                    <div ng-hide="idBUrl">+ 身份证反面</div>
+                                    <img width="100%" height="140" src="{{idBUrl}}" ng-show="idBUrl">
+                                </div>
                             </div>
                         </div>
                     </div>

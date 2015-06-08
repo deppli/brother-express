@@ -55,7 +55,7 @@
             "angular-cookies": "lib/angular-cookies/angular-cookies.min",
             "angular-bootstrap": "lib/angular-bootstrap/ui-bootstrap-tpls-0.12.0.min",
             "angular-dragdrop": "lib/angular-dragdrop/src/angular-dragdrop.min",
-            "angular-file-upload": "lib/angular-file-upload/dist/angular-file-upload.min",
+            "angular-file-upload": "lib/angular-file-upload/dist/angular-file-upload-all",
             "cryptojs-core": "lib/crypto/build/components/core-min",
             "cryptojs-hmac": "lib/crypto/build/components/hmac-min",
             "cryptojs-sha256": "lib/crypto/build/components/sha256-min",
@@ -78,7 +78,8 @@
 			 */
             portal: "system/controller/portal/portal",
             reg: "system/controller/biz/reg",
-            order: "system/controller/biz/order"
+            order: "system/controller/biz/order",
+            pcenter: "system/controller/pcenter/pcenter"
 		}
 	});
 

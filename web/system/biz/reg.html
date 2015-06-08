@@ -21,7 +21,7 @@
         </ul>
     </div>
     <div class="row" ng-show="STEP == 1">
-        <div class="reg-panel">
+        <div class="reg-panel bg-net">
             <div class="padding30">
                 <form name="customerBasic" novalidate>
                     <div class="row">
@@ -105,13 +105,14 @@
                             <!--ng-disabled="customerBasic.$invalid"-->
                             <button class="btn btn-success pull-right" ng-click="nextStep(1)" ng-disabled="customerBasic.$invalid||exist">下一步</button>
                         </div>
+                        <div class="clearfix"></div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     <div class="row" ng-show="STEP == 2">
-        <div class="reg-panel">
+        <div class="reg-panel bg-net">
             <div class="padding30">
                 <form>
                     <div>确认邮件已经发往您的注册邮箱：</div>
@@ -128,30 +129,37 @@
     </div>
 
     <div class="row" ng-show="STEP == 3">
-        <div class="reg-panel">
+        <div class="reg-panel bg-net">
             <div class="padding30">
                 <form>
                     <div>
-                        <label class="label label-success mr10">证件上传</label>
+                        <label class="portal-title">证件上传</label>
                     </div>
-                    <div class="row-line sp-line"></div>
                     <div class="row row-line">
                         <div class="col-lg-4">
-                            <div class="input-title">身份证正面</div>
-                            <div class="img-select cursor" ng-file-select ng-model="idImgA" accept=".jpg">
-                                <img ng-src="{{idAUrl}}" />
+                            <div class="img-add cursor" ng-file-select ng-model="idImgA" accept=".jpg">
+                                <div ng-hide="idAUrl">+ 身份证正面</div>
+                                <img ng-src="{{idAUrl}}" ng-show="idAUrl"/>
                             </div>
                             <progressbar class="progress-striped active" value="ProgressA.dynamic" type="success"><i>{{ProgressA.dynamic}} %</i></progressbar>
                         </div>
                         <div class="col-lg-4">
-                            <div class="input-title">身份证背面</div>
-                            <div class="img-select cursor" ng-file-select ng-model="idImgB" accept=".jpg">
-                                <img ng-src="{{idBUrl}}" />
+                            <div class="img-add cursor" ng-file-select ng-model="idImgB" accept=".jpg">
+                                <div ng-hide="idBUrl">+ 身份证反面</div>
+                                <img ng-src="{{idBUrl}}" ng-show="idBUrl"/>
                             </div>
                             <progressbar class="progress-striped active" value="ProgressB.dynamic" type="success"><i>{{ProgressB.dynamic}} %</i></progressbar>
                         </div>
                     </div>
-                    <div class="row-line"><b class="fs12 text-success">备注：<span class="text-danger">单张图片大小限制500K</span></b></div>
+                    <div class="row-line"><b class="fs12 text-dark">备注：<span class="text-danger">单张图片大小限制500K</span></b></div>
+                    <div class="row row-line">
+                        <div class="col-lg-4">
+                            <div class="portal-title" style="width: 200px;">完成注册即可获得</div>
+                            <div class="item-money">
+                                {{_amtTicket}} 元
+                            </div>
+                        </div>
+                    </div>
                     <div class="sp-line"></div>
                     <div class="reg-input-group">
                         <button class="btn btn-success pull-right" ng-click="nextStep(3)">下一步</button>
@@ -162,40 +170,45 @@
     </div>
 
     <div class="row" ng-show="STEP == 4">
-        <div class="reg-panel">
+        <div class="reg-panel bg-net">
             <div class="padding30">
                 <h4 class="text-center"><b class="text-success">恭喜您！已完成仲良速递账号注册</b></h4>
                 <form class="display-content">
                     <div class="row">
                         <div class="reg-display-group col-sm-6 col-sm-offset-3">
-                            <label class="label label-primary mr10">登录名(邮箱)</label><span class="text-default">{{loginId}}</span>
+                            <label class="portal-label middle-lh">登录名(邮箱)</label><span class="text-dark pull-right">{{loginId}}</span>
                         </div>
                         <div class="reg-display-group col-sm-6 col-sm-offset-3">
-                            <label class="label label-primary mr10">昵称</label><span class="text-default">{{nickname}}</span>
-                        </div>
-                    </div>
-                    <div class="row ">
-                        <div class="reg-display-group col-sm-6 col-sm-offset-3">
-                            <label class="label label-primary mr10">姓名</label><span class="text-default">{{name}}</span>
-                        </div>
-                        <div class="reg-display-group col-sm-6 col-sm-offset-3">
-                            <label class="label label-primary mr10">性别</label><span class="text-default">{{sex.value}}</span>
+                            <label class="portal-label middle-lh">昵称</label><span class="text-dark pull-right">{{nickname}}</span>
                         </div>
                     </div>
                     <div class="row ">
                         <div class="reg-display-group col-sm-6 col-sm-offset-3">
-                            <label class="label label-primary mr10">身份证</label><span class="text-default">{{idNo}}</span>
+                            <label class="portal-label middle-lh">姓名</label><span class="text-dark pull-right">{{name}}</span>
                         </div>
                         <div class="reg-display-group col-sm-6 col-sm-offset-3">
-                            <label class="label label-primary mr10">手机号码</label><span class="text-default">{{phone}}</span>
+                            <label class="portal-label middle-lh">性别</label><span class="text-dark pull-right">{{sex.value}}</span>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="reg-display-group col-sm-6 col-sm-offset-3">
+                            <label class="portal-label middle-lh">身份证</label><span class="text-dark pull-right">{{idNo}}</span>
+                        </div>
+                        <div class="reg-display-group col-sm-6 col-sm-offset-3">
+                            <label class="portal-label middle-lh">手机号码</label><span class="text-dark pull-right">{{phone}}</span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="reg-display-group col-sm-6 col-sm-offset-3">
-                            <label class="label label-primary mr10">电子邮箱</label><span class="text-default">{{email}}</span>
+                            <label class="portal-label middle-lh">电子邮箱</label><span class="text-dark pull-right">{{loginId}}</span>
                         </div>
                         <div class="reg-display-group col-sm-6 col-sm-offset-3">
-                            <label class="label label-primary mr10">地址</label><span class="text-default">{{address}}</span>
+                            <label class="portal-label middle-lh">地址</label><span class="text-dark pull-right">{{address}}</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="reg-display-group col-sm-6 col-sm-offset-3">
+                            <label class="portal-label middle-lh">账户余额</label><span class="text-dark pull-right">{{balance|currency:"￥ "}}</span>
                         </div>
                     </div>
                 </form>

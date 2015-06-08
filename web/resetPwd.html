@@ -1,0 +1,160 @@
+<!doctype html>
+<html id="ng-app">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="themes/default/img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="themes/default/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="themes/default/css/base.css"/>
+    <script src="js/dev/lib/jquery/dist/jquery.min.js"></script>
+    <script src="js/dev/lib/crypto/build/components/core-min.js"></script>
+    <script src="js/dev/lib/crypto/build/components/hmac-min.js"></script>
+    <script src="js/dev/lib/crypto/build/components/sha256-min.js"></script>
+    <title>密码重置</title>
+    <script>
+        var token;
+        function getArgs() {
+            var args = {};
+            var query = location.search.substring(1);
+            // Get query string
+            var pairs = query.split("&");
+            // Break at ampersand
+            for(var i = 0; i < pairs.length; i++) {
+                var pos = pairs[i].indexOf('=');
+                // Look for "name=value"
+                if (pos == -1) continue;
+                // If not found, skip
+                var argname = pairs[i].substring(0,pos);// Extract the name
+                var value = pairs[i].substring(pos+1);// Extract the value
+                value = decodeURIComponent(value);// Decode it, if needed
+                args[argname] = value;
+                // Store as a property
+            }
+            return args;// Return the object
+        }
+        var querys = getArgs();
+        var loginId = querys.loginId;
+        token = querys.token;
+        $(document).ready(function(){
+            $("#loginId").text(loginId);
+            $("#successDiv").hide();
+        })
+
+        function resetPwd(){
+            var pass = $("#password").val();
+            if(pass && pass != ""){
+                var password = CryptoJS.SHA256(pass).toString();
+                var encPassword = CryptoJS.HmacSHA256(password, "logistics_server").toString()
+                $.post("/service/resetPassword", {'token':token, 'password':encPassword}, function(data){
+                    $("#resetDiv").hide();
+                    $("#successDiv").show();
+                }).error(function() {
+                    location.href = "/error.html"
+                })
+            }else{
+                alert("密码不能为空")
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <header class="navbar navbar-static-top sys-navbar navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand sys-navlogo">
+                    <img src="themes/default/img/logo.jpg" height="40">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container bg-net shadow-div">
+        <h3 class="text-dark">正在进行账号密码重置操作</h3>
+        <div class="sp-line"></div>
+        <div class="portal-title">密码重置</div>
+        <div class="reset-box">
+            <div id="resetDiv">
+                <div><span class="name">账号：</span><span id="loginId" class="text-dark"></span></div>
+                <div><span class="name">新密码：</span><input type="password" name="password" id="password" class="single-input" required/></div>
+                <div class="margin-height-space-sm">
+                    <button class="btn btn-danger" onclick="resetPwd()">密码重置</button>
+                </div>
+            </div>
+            <div id="successDiv" class="padding30">
+                <h4 class="text-success">密码重置成功！</h4>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer" coor="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-lg-offset-1 partner">
+                    <article class="col-lg-3 partner-item">
+                        <h6 class="title">
+                            <a class="more" target="_blank" title="详细网点"><i class="glyphicon glyphicon-tag padding-width-space-sm"></i>详细网点</a><br>
+                            <b>138 处全球网点支持</b>
+                        </h6>
+                        <div class="partner-img">
+                            <a target="_blank" class="icon-partner-bank">
+                                <img src="themes/default/img/partner1.jpg"/>
+                            </a>
+                        </div>
+                    </article>
+                    <article class="col-lg-3 partner-item">
+                        <h6 class="title">
+                            <a class="more" target="_blank" title="时间故事"><i class="glyphicon glyphicon-tag padding-width-space-sm"></i>时间故事</a><br>
+                            <b>10 年安全稳定零失误的传递</b>
+                        </h6>
+                        <div class="partner-img">
+                            <a target="_blank" class="icon-partner-bank">
+                                <img src="themes/default/img/partner2.jpg"/>
+                            </a>
+                        </div>
+                    </article>
+                    <article class="col-lg-3 partner-item">
+                        <h6 class="title">
+                            <a class="more" target="_blank" title="业务详情"><i class="glyphicon glyphicon-tag padding-width-space-sm"></i>业务详情</a><br>
+                            <b>2,000,000 笔订单处理</b>
+                        </h6>
+                        <div class="partner-img">
+                            <a target="_blank" class="icon-partner-bank">
+                                <img src="themes/default/img/partner3.jpg"/>
+                            </a>
+                        </div>
+                    </article>
+                    <article class="col-lg-3 partner-item">
+                        <h6 class="title">
+                            <a href="http://www.annlover.com" class="more" target="_blank" title="系统信息"><i class="glyphicon glyphicon-tag padding-width-space-sm"></i>系统信息</a><br>
+                            <b>2015.03.01 全新互联网系统</b>
+                        </h6>
+                        <div class="partner-img">
+                            <a href="http://www.annlover.com" target="_blank" class="icon-partner-bank">
+                                <img src="themes/default/img/partner4.jpg"/>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="row">
+                <ul class="link">
+                    <li class="link-item"><a target="_blank" title="关于仲良">关于仲良</a></li>
+                    <li class="link-item"><a target="_blank" title="官方博客">官方博客</a></li>
+                    <li class="link-item"><a target="_blank" title="诚征英才">诚征英才</a></li>
+                    <li class="link-item"><a target="_blank" title="开放平台">开放平台</a></li>
+                    <li class="link-item"><a target="_blank" title="联系我们">联系我们</a></li>
+                    <li class="link-item"><a target="_blank" title="网站地图">网站地图</a></li>
+                    <li class="link-item"><a href="http://www.annlover.com" target="_blank" title="技术支持">技术支持</a></li>
+                    <li class="link-item">仲良物流版权所有 2015-2017 <a href="http://www.brother-express.com" target="_blank">沪ICP备15007970号-1</a></li>
+                    <div class="clearfix"></div>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

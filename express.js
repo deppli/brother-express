@@ -8,6 +8,16 @@
     session = require("express-session"),
     db = require("./db");
 
+var customer = require("./routes/api/customer"),
+    group = require("./routes/api/group"),
+    user = require("./routes/api/user"),
+    product = require("./routes/api/product"),
+    order = require("./routes/api/order"),
+    orderBatch = require("./routes/api/orderBatch"),
+    news = require("./routes/api/news"),
+    service = require("./routes/api/service"),
+    alipayApi = require("./routes/api/alipayApi");
+
 // 带"install"参数启动则初始化MongoDB，完成后退出
 if (process.argv.indexOf("install") > 0) {
     require("./util/install.js")().then(function () {
@@ -34,10 +44,12 @@ app.use(session({
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded
 app.use(express.static(path.join(__dirname, "/web")));
+app.set('views', __dirname + '/web');
+app.set('view engine', 'ejs');
 
 var wechat = require('wechat');
 var config = {
-    token: 'brother',
+    token: 'brother-express',
     appid: 'wx7aae9121e7cab6f0',
     encodingAESKey: '1KwxH9lqocwDgfnJJvWniLFv0gwAVgDgPbHayZHtaHQ'
 };
@@ -45,7 +57,6 @@ var model = require('./models/model'),
     orderModel = model.Order;
 app.use(express.query()); // Or app.use(express.query());
 app.use('/wxtoken', wechat(config, function (req, res, next) {
-    console.log(req.weixin)
     orderModel.find().exec(function(err, doc) {
         if (err) {
             res.reply("查询失败")
@@ -55,27 +66,13 @@ app.use('/wxtoken', wechat(config, function (req, res, next) {
     });
 }));
 
-var customer = require("./routes/api/customer"),
-    group = require("./routes/api/group"),
-    user = require("./routes/api/user"),
-    product = require("./routes/api/product"),
-    order = require("./routes/api/order"),
-    orderBatch = require("./routes/api/orderBatch"),
-    news = require("./routes/api/news"),
-    service = require("./routes/api/service"),
-    wx = require("./routes/api/wechat"),
-    jsUpload = require("./routes/api/jsUpload");
-
-app.get("/wechat/scanOrder", wx.scanOrder);
-
 app.post("/news/add", hooks.role(),news.add);
 app.post("/news/list", hooks.role(),news.list);
 app.post("/news/detail", hooks.role(),news.detail);
 app.post("/news/edit", hooks.role(),news.edit);
 app.post("/news/delete", hooks.role(),news.delete);
 
-app.post("/customer/check", customer.check);
-app.post("/customer/add", customer.add);
+app.post("/customer/add", hooks.role(), customer.add);
 app.post("/customer/list", hooks.role(),  customer.list);
 app.post("/customer/detail", hooks.role(),  customer.detail);
 app.post("/customer/edit", hooks.role(),  customer.edit);
@@ -121,19 +118,27 @@ app.post("/news/detail", hooks.role(),  news.detail);
 app.post("/news/edit", hooks.role(),  news.edit);
 app.post("/news/delete", hooks.role(),  news.delete);
 
+app.post("/service/getSettings", service.getSettings);
+app.post("/service/listSettings", hooks.role(), service.listSettings);
+app.post("/service/updateSettings", hooks.role(), service.updateSettings);
+
+app.post("/service/checkCustomer", service.checkCustomer);
+app.post("/service/addCustomer", service.addCustomer);
 app.post("/service/sendMail", service.sendMail);
+app.post("/service/createOrder", service.createOrder);
 app.post("/service/queryOrder", service.queryOrder);
-app.post("/service/queryOrderPath", service.queryOrderPath);
+app.post("/service/thirdPath", service.thirdPath);
 app.post("/service/updateOrder", service.updateOrder);
 app.post("/service/listMenus", service.listMenus);
 app.post("/service/listProvinces", service.listProvinces);
 app.post("/service/listCitys", service.listCitys);
-app.post("/service/getSettings", hooks.role(), service.getSettings);
-app.post("/service/listSettings", hooks.role(), service.listSettings);
-app.post("/service/updateSettings", hooks.role(), service.updateSettings);
 app.post("/service/checkValidateEmail", service.checkValidateEmail);
-app.get("/service/validateEmail", service.validateEmail);
 app.post("/service/upload", service.upload);
+app.get("/service/validateEmail", service.validateEmail);
+app.post("/service/fullPath", service.fullPath);
+app.post("/service/queryPayStatus", service.queryPayStatus);
+app.post("/service/forgetPassword", service.forgetPassword);
+app.post("/service/resetPassword", service.resetPassword);
 
 var userBiz = require("./routes/biz/userBiz");
 var customerBiz = require("./routes/biz/customerBiz");
@@ -143,6 +148,21 @@ app.post("/userBiz/logout", userBiz.logout);
 
 app.post("/customerBiz/login", customerBiz.login);
 app.post("/customerBiz/logout", customerBiz.logout);
+app.post("/customerBiz/createOrder", hooks.role(1), customerBiz.createOrder);
+app.post("/customerBiz/queryCustomer", hooks.role(1), customerBiz.queryCustomer);
+app.post("/customerBiz/queryBalance", hooks.role(1), customerBiz.queryBalance);
+app.post("/customerBiz/listOrder", hooks.role(1), customerBiz.listOrder);
+app.post("/customerBiz/payOrder", hooks.role(1), customerBiz.payOrder);
+app.post("/customerBiz/queryBanlancePayStatus", hooks.role(1), customerBiz.queryBanlancePayStatus);
+
+alipayApi.route(app);
+app.get('/alipay', alipayApi.entry);
+app.post('/alipay/create_direct_pay_by_user', alipayApi.create_direct_pay_by_user);
+//app.all('/alipay/create_direct_bankpay_by_user', alipayApi.create_direct_bankpay_by_user);
+//app.all('/alipay/refund_fastpay_by_platform_pwd', alipayApi.refund_fastpay_by_platform_pwd);
+//app.all('/alipay/create_partner_trade_by_buyer', alipayApi.create_partner_trade_by_buyer);
+//app.all('/alipay/send_goods_confirm_by_platform', alipayApi.send_goods_confirm_by_platform);
+//app.all('/alipay/trade_create_by_buyer', alipayApi.trade_create_by_buyer);
 
 app.set("port", 4001);
 app.listen(app.get("port"));

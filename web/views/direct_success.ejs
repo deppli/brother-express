@@ -1,0 +1,151 @@
+<!doctype html>
+<html id="ng-app">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="/themes/default/img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/themes/default/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/themes/default/css/base.css"/>
+    <script src="/js/dev/lib/jquery/dist/jquery.min.js"></script>
+    <title>支付成功</title>
+    <script>
+        function getArgs() {
+            var args = {};
+            var query = location.search.substring(1);
+            // Get query string
+            var pairs = query.split("&");
+            // Break at ampersand
+            for(var i = 0; i < pairs.length; i++) {
+                var pos = pairs[i].indexOf('=');
+                // Look for "name=value"
+                if (pos == -1) continue;
+                // If not found, skip
+                var argname = pairs[i].substring(0,pos);// Extract the name
+                var value = pairs[i].substring(pos+1);// Extract the value
+                value = decodeURIComponent(value);// Decode it, if needed
+                args[argname] = value;
+                // Store as a property
+            }
+            return args;// Return the object
+        }
+        /*
+         body: "测试订单"
+         buyer_email: "13818239270"
+         buyer_id: "2088702563397891"
+         exterface: "create_direct_pay_by_user"
+         is_success: "T"
+         notify_id: "RqPnCoPT3K9%2Fvwbh3InSNCMbv7%2FFjg753kroAUc8RY0isQoqDS9k%2F%2FVZTPs9w1NeHiPs"
+         notify_time: "2015-05-23+23:47:27"
+         notify_type: "trade_status_sync"
+         out_trade_no: "S15052323464770"
+         payment_type: "1"
+         seller_email: "admin@brother-express.com"
+         seller_id: "2088911134104503"
+         sign: "f73b234fe58c18aec6d25640322ab783"
+         sign_type: "MD5"
+         subject: "仲良速递快递服务"
+         total_fee: "0.01"
+         trade_no: "2015052300001000890054093533"
+         trade_status: "TRADE_SUCCESS"
+         */
+        var querys = getArgs();
+        var orderId = querys.out_trade_no;
+        $(document).ready(function(){
+            $("#orderId").text(orderId);
+        })
+    </script>
+</head>
+
+<body>
+<header class="navbar navbar-static-top sys-navbar navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand sys-navlogo">
+                <img src="/themes/default/img/logo.jpg" height="40">
+            </a>
+        </div>
+    </div>
+</header>
+
+<div class="jumbotron">
+    <h3 class="col-lg-offset-3 "><i class="glyphicon glyphicon-book mr10 text-danger"></i>订单完成</h3>
+    <div class="sp-line"></div>
+    <div class="jumbotron-step col-lg-offset-3">
+        <div class="text-success"><b>您的订单已经支付成功!</b></div>
+        <div class="text-success"><b>订单号：<span id="orderId" class="fs16 text-danger"></span></b></div>
+    </div>
+    <div class="text-center margin-height-space-sm">
+    </div>
+</div>
+
+<footer class="footer" coor="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-lg-offset-1 partner">
+                <article class="col-lg-3 partner-item">
+                    <h6 class="title">
+                        <a class="more" target="_blank" title="详细网点"><i class="glyphicon glyphicon-tag padding-width-space-sm"></i>详细网点</a><br>
+                        <b>138 处全球网点支持</b>
+                    </h6>
+                    <div class="partner-img">
+                        <a target="_blank" class="icon-partner-bank">
+                            <img src="/themes/default/img/partner1.jpg"/>
+                        </a>
+                    </div>
+                </article>
+                <article class="col-lg-3 partner-item">
+                    <h6 class="title">
+                        <a class="more" target="_blank" title="时间故事"><i class="glyphicon glyphicon-tag padding-width-space-sm"></i>时间故事</a><br>
+                        <b>10 年安全稳定零失误的传递</b>
+                    </h6>
+                    <div class="partner-img">
+                        <a target="_blank" class="icon-partner-bank">
+                            <img src="/themes/default/img/partner2.jpg"/>
+                        </a>
+                    </div>
+                </article>
+                <article class="col-lg-3 partner-item">
+                    <h6 class="title">
+                        <a class="more" target="_blank" title="业务详情"><i class="glyphicon glyphicon-tag padding-width-space-sm"></i>业务详情</a><br>
+                        <b>2,000,000 笔订单处理</b>
+                    </h6>
+                    <div class="partner-img">
+                        <a target="_blank" class="icon-partner-bank">
+                            <img src="/themes/default/img/partner3.jpg"/>
+                        </a>
+                    </div>
+                </article>
+                <article class="col-lg-3 partner-item">
+                    <h6 class="title">
+                        <a href="http://www.annlover.com" class="more" target="_blank" title="系统信息"><i class="glyphicon glyphicon-tag padding-width-space-sm"></i>系统信息</a><br>
+                        <b>2015.03.01 全新互联网系统</b>
+                    </h6>
+                    <div class="partner-img">
+                        <a href="http://www.annlover.com" target="_blank" class="icon-partner-bank">
+                            <img src="/themes/default/img/partner4.jpg"/>
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="row">
+            <ul class="link">
+                <li class="link-item"><a target="_blank" title="关于仲良">关于仲良</a></li>
+                <li class="link-item"><a target="_blank" title="官方博客">官方博客</a></li>
+                <li class="link-item"><a target="_blank" title="诚征英才">诚征英才</a></li>
+                <li class="link-item"><a target="_blank" title="开放平台">开放平台</a></li>
+                <li class="link-item"><a target="_blank" title="联系我们">联系我们</a></li>
+                <li class="link-item"><a target="_blank" title="网站地图">网站地图</a></li>
+                <li class="link-item"><a href="http://www.annlover.com" target="_blank" title="技术支持">技术支持</a></li>
+                <li class="link-item">仲良物流版权所有 2015-2017 <a href="http://www.brother-express.com" target="_blank">沪ICP备15007970号-1</a></li>
+                <div class="clearfix"></div>
+            </ul>
+        </div>
+    </div>
+</footer>
+</body>
+
+</html>

@@ -50,6 +50,7 @@ exports.add = function(req, res) {
             sex: req.body.sex,
             idNo: req.body.idNo,
             birthday: req.body.birthday,
+            zipCode: req.body.zipCode||"",
             phone: req.body.phone,
             address: req.body.address,
             status: req.body.status||1
@@ -105,7 +106,10 @@ exports.edit = function (req, res) {
         //img: req.body.img,
         sex: req.body.sex,
         idNo: req.body.idNo,
+        idNoImgA: req.body.idNoImgA,
+        idNoImgB: req.body.idNoImgB,
         birthday: req.body.birthday,
+        zipCode: req.body.zipCode||"",
         phone: req.body.phone,
         address: req.body.address,
         //status: req.body.status,

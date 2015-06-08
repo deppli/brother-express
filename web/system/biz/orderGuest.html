@@ -1,0 +1,994 @@
+<div class="container-fluid">
+    <div class="row">
+        <ul class="reg-steps">
+            <li class="reg-steps-item" ng-class="{'reg-steps-item-focus': STEP==1}">
+                <span class="label label-default padding-width-space-sm" ng-class="{'label-success': STEP==1}">1</span>
+                <span>基本信息</span>
+            </li>
+            <li class="reg-steps-item" ng-class="{'reg-steps-item-focus': STEP==2}">
+                <span class="label label-default padding-width-space-sm" ng-class="{'label-success': STEP==2}">2</span>
+                <span>客户信息</span>
+            </li>
+            <li class="reg-steps-item" ng-class="{'reg-steps-item-focus': STEP==3}">
+                <span class="label label-default padding-width-space-sm" ng-class="{'label-success': STEP==3}">3</span>
+                <span>订单确认</span>
+            </li>
+            <li class="reg-steps-item" ng-class="{'reg-steps-item-focus': STEP==4}">
+                <span class="label label-default padding-width-space-sm" ng-class="{'label-success': STEP==4}">4</span>
+                <span>订单支付</span>
+            </li>
+            <li class="reg-steps-item" ng-class="{'reg-steps-item-focus': STEP==5}">
+                <span class="label label-default padding-width-space-sm" ng-class="{'label-success': STEP==5}">5</span>
+                <span>订单完成</span>
+            </li>
+            <li class="clearfix"></li>
+        </ul>
+    </div>
+    <div class="row" ng-show="STEP == 1">
+        <div class="reg-panel">
+            <div>
+                <form name="customerOrder" class="my-form" novalidate>
+                    <div class="col-sm-12 bg-net">
+                        <div class="webBox">
+                            <div class="box-heading">
+                                <div><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>货品信息</b><span class="glyphicon glyphicon-plus pull-right text-skyblue cursor fs12" ng-click="addProduct()"><b>新增</b></span></div>
+                            </div>
+                            <div class="box-body" >
+                                <table class="table table-hover webBox">
+                                    <tr>
+                                        <th class="default" style="width:30%;">计费项目</th>
+                                        <th class="default" style="width:25%;">明细</th>
+                                        <th class="default" style="width:45%;">说明</th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="input-group-addon fixed-width-120 text-left fs12">
+                                                <span class="glyphicon glyphicon-globe"></span>
+                                                <b>运费首重500克</b>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="fs12 text-danger"><b>￥49</b></span>
+                                        </td>
+                                        <td class="text-warning">货品不超过500克获取货品重量500克以内部分重量，按照首重运费收取</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="input-group-addon fixed-width-120 text-left fs12">
+                                                <span class="glyphicon glyphicon-globe"></span>
+                                                <b>运费续重100克</b>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="fs12 text-danger"><b>￥49</b></span>
+                                        </td>
+                                        <td class="text-warning">超过首重500克以外的货品重量，按照每100克的阶梯收取续重费用.货品重量不能超过3千克</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="input-group-addon fixed-width-120 text-left fs12">
+                                                <span class="glyphicon glyphicon-globe"></span>
+                                                <b>免税州收货</b>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="fs12 text-danger"><b>免费</b></span>
+                                        </td>
+                                        <td class="text-warning">可免去美国国内消费税的免税州地方政策扶植</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="input-group-addon fixed-width-120 text-left fs12">
+                                                <span class="glyphicon glyphicon-globe"></span>
+                                                <b>海外仓库免费保管</b>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="fs12 text-danger"><b>30天</b></span>
+                                        </td>
+                                        <td class="text-warning">包裹在转运仓库储存费用.包裹30天内仓储费用全免,超过90天视作弃货处理</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="input-group-addon fixed-width-120 text-left fs12">
+                                                <span class="glyphicon glyphicon-globe"></span>
+                                                <b>税费</b>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="fs12 text-danger"><b>-</b></span>
+                                        </td>
+                                        <td class="text-warning">部分货品需要缴纳关税，关税由仲良速递代收</td>
+                                    </tr>
+                                </table>
+                                <table class="table table-hover">
+                                    <tr>
+                                        <th class="default" style="width:14%;">分类</th>
+                                        <th class="default" style="width:10%;">名称</th>
+                                        <th class="default" style="width:10%;">品牌</th>
+                                        <th class="default" style="width:9%;">单价(元)</th>
+                                        <th class="default" style="width:7%;">数量</th>
+                                        <th class="default" style="width:6%;">重量(千克)</th>
+                                        <th class="default" style="width:9%;">总价(元)</th>
+                                        <th class="default" style="width:8%;">物流商</th>
+                                        <th class="default" style="width:11%;">物流单号</th>
+                                        <th class="default" style="width:6%;"><span class="glyphicon glyphicon-trash"></span></th>
+                                    </tr>
+                                    <tr ng-repeat="product in products track by $index" >
+                                        <td><select name="pType" ng-model="product.pType" ng-options="proType.value for proType in ProductTypeList" class="form-control" ></select></td>
+                                        <td><input name="pName" type="text" name="pName" ng-model="product.pName" class="form-control" required/></td>
+                                        <td><input name="pBrand" type="text" ng-model="product.pBrand" class="form-control" required/></td>
+                                        <td><input name="pAmount" type="number" ng-model="product.pAmount" class="form-control" required/></td>
+                                        <td><input name="pNum" type="number" ng-model="product.pNum" class="form-control" required/></td>
+                                        <td><input name="pWeight" type="number" ng-model="product.pWeight" class="form-control" required/></td>
+                                        <td class="middle-lh">{{product.pTotalAmount = product.pNum * product.pAmount|currency:"￥"}}</td>
+                                        <td><input name="pTransName" type="text" ng-model="product.pTransName" class="form-control" required/></td>
+                                        <td><input name="pTransId" type="text" ng-model="product.pTransId" class="form-control" required/></td>
+                                        <td><span class="text-danger cursor" ng-click="removeProduct($index)">删除</span></td>
+                                    </tr>
+                                </table>
+                                <div ng-hide="products.length > 0" class="middle-lh"><span class="text-danger fs12">货品详情至少需要存在一条记录</span></div>
+                                <div ng-show="Check.isOverWeight"><span class="text-danger fs12">货品总重量不能超过 3 千克</span></div>
+                                <div ng-show="Check.isOverAmt"><span class="text-danger fs12">单笔订单若包含多件货品，总价不能超过1000元</span></div>
+                                <div class="fs12 text-warning" ng-show="customerOrder.pName.$invalid || customerOrder.pBrand.$invalid || customerOrder.pAmount.$invalid || customerOrder.pNum.$invalid || customerOrder.pWeight.$invalid || customerOrder.pTransName.$invalid || customerOrder.pTransId.$invalid">
+                                    <span class="glyphicon glyphicon-info-sign text-danger"></span>
+                                    <span ng-show="customerOrder.pName.$invalid">[名称]</span>
+                                    <span ng-show="customerOrder.pBrand.$invalid">[品牌]</span>
+                                    <span ng-show="customerOrder.pAmount.$invalid">[单价]</span>
+                                    <span ng-show="customerOrder.pNum.$invalid">[数量]</span>
+                                    <span ng-show="customerOrder.pWeight.$invalid">[重量]</span>
+                                    <span ng-show="customerOrder.pTransName.$invalid">[物流商]</span>
+                                    <span ng-show="customerOrder.pTransId.$invalid">[物流单号]</span>
+                                    <span>不能为空/格式错误</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="webBox">
+                            <div class="box-heading">
+                                <div><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>订单信息</b></div>
+                            </div>
+                            <div class="box-body" >
+                                <div class="row row-line">
+                                    <div class="col-lg-6">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>订单描述</b></span>
+                                            <input type="text" name="orderName" ng-model="orderName" class="form-control" maxlength="40" required/>
+                                            <span class="input-group-addon tipInvalid" ng-show="customerOrder.orderName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="input-group-addon tipValid" ng-show="customerOrder.orderName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-line">
+                                    <div class="col-lg-6">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>运费(元)</b></span>
+                                            <span class="form-control">{{orderTransportAmt|currency:"￥"}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>试算关税(元)</b></span>
+                                            <span class="form-control">{{orderRateAmt|currency:"￥"}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-line">
+                                    <div class="col-lg-6">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>货品统称</b></span>
+                                            <input type="text" name="productName" ng-model="productName" class="form-control" readonly required/>
+                                            <span class="input-group-addon tipInvalid" ng-show="customerOrder.productName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="input-group-addon tipValid" ng-show="customerOrder.productName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>货品总数量</b></span>
+                                            <span class="form-control">{{productNum}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-line">
+                                    <div class="col-lg-6">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>货品总价值(元)</b></span>
+                                            <span class="form-control">{{productAmount|currency:"￥"}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>货品总重量(千克)</b></span>
+                                            <span class="form-control">{{productWeight|number:2}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="sp-line"></div>
+                <div class="reg-input-group">
+                    <a class="btn btn-warning" href="#/order">上一步</a>
+                    <button class="btn btn-success pull-right" ng-click="nextStep(1)">下一步</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-show="STEP == 2">
+        <div class="reg-panel">
+            <div>
+                <form name="customerInfo" class="my-form" novalidate>
+                    <div class="col-sm-12 bg-net">
+                        <div class="webBox">
+                            <div class="box-heading">
+                                <div><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>付款人信息</b></div>
+                            </div>
+                            <div class="box-body" >
+                                <div class="row row-line">
+                                    <div class="col-lg-6">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>姓名</b></span>
+                                            <input type="text" name="payerName" ng-model="payerName" class="form-control" placeholder="" maxlength="40" required/>
+                                            <span class="input-group-addon tipInvalid" ng-show="customerInfo.payerName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="input-group-addon tipValid" ng-show="customerInfo.payerName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-line">
+                                    <div class="col-lg-6">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>联系方式</b></span>
+                                            <input type="text" name="payerPhone" ng-model="payerPhone" class="form-control" placeholder="" required/>
+                                            <span class="input-group-addon tipInvalid" ng-show="customerInfo.payerPhone.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="input-group-addon tipValid" ng-show="customerInfo.payerPhone.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>邮编</b></span>
+                                            <input type="text" name="payerZipCode" ng-model="payerZipCode" class="form-control" placeholder="" required/>
+                                            <span class="input-group-addon tipInvalid" ng-show="customerInfo.payerZipCode.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="input-group-addon tipValid" ng-show="customerInfo.payerZipCode.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-line">
+                                    <div class="col-lg-6">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>证件类型</b></span>
+                                            <input type="text" name="payerIdType" ng-model="payerIdType" class="form-control" placeholder="" readonly/>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>证件号码</b></span>
+                                            <input type="text" name="payerIdNo" ng-model="payerIdNo" class="form-control" placeholder="" required/>
+                                            <span class="input-group-addon tipInvalid" ng-show="customerInfo.payerIdNo.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="input-group-addon tipValid" ng-show="customerInfo.payerIdNo.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-line">
+                                    <div class="col-lg-12">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>地址</b></span>
+                                            <input type="text" name="payerAddress" ng-model="payerAddress" class="form-control" placeholder="" maxlength="60" required/>
+                                            <span class="input-group-addon tipInvalid" ng-show="customerInfo.payerAddress.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="input-group-addon tipValid" ng-show="customerInfo.payerAddress.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-line">
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <div class="input-group-addon"><b>身份证正面</b></div>
+                                            <div ng-file-select ng-model="idImgA" accept=".jpg" class="cursor">
+                                                <div class="img-add">
+                                                    <div ng-hide="idAUrl">+ 身份证正面</div>
+                                                    <img width="100%" height="140" src="{{idAUrl}}" ng-show="idAUrl">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <div class="input-group-addon"><b>身份证反面</b></div>
+                                            <div ng-file-select ng-model="idImgB" accept=".jpg" class="cursor">
+                                                <div class="img-add">
+                                                    <div ng-hide="idBUrl">+ 身份证反面</div>
+                                                    <img width="100%" height="140" src="{{idBUrl}}" ng-show="idBUrl">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="webBox">
+                            <div class="box-heading">
+                                <div><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>收件人信息</b></div>
+                            </div>
+                            <div class="box-body" >
+                                <div class="row row-line">
+                                    <div class="col-lg-6">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>姓名</b></span>
+                                            <input type="text" name="receiveName" ng-model="receiveName" class="form-control" placeholder="" maxlength="40" required/>
+                                            <span class="input-group-addon tipInvalid" ng-show="customerInfo.receiveName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="input-group-addon tipValid" ng-show="customerInfo.receiveName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-line">
+                                    <div class="col-lg-6">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>联系方式</b></span>
+                                            <input type="text" name="receivePhone" ng-model="receivePhone" class="form-control" placeholder="" required/>
+                                            <span class="input-group-addon tipInvalid" ng-show="customerInfo.receivePhone.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="input-group-addon tipValid" ng-show="customerInfo.receivePhone.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>邮编</b></span>
+                                            <input type="text" name="receiveZipCode" ng-model="receiveZipCode" class="form-control" placeholder="" required/>
+                                            <span class="input-group-addon tipInvalid" ng-show="customerInfo.receiveZipCode.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="input-group-addon tipValid" ng-show="customerInfo.receiveZipCode.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-line">
+                                    <div class="col-lg-6">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>收件人省份</b></span>
+                                            <select class="form-control" ng-model="receiveProvince" ng-options="status.value for status in ProvinceList" ng-change="initCitys()"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>收件人城市</b></span>
+                                            <select class="form-control" ng-model="receiveCity" ng-options="status.value for status in CityList"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-line">
+                                    <div class="col-lg-12">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>地址</b></span>
+                                            <input type="text" name="receiveAddress" ng-model="receiveAddress" class="form-control" placeholder="" maxlength="60" required/>
+                                            <span class="input-group-addon tipInvalid" ng-show="customerInfo.receiveAddress.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                            <span class="input-group-addon tipValid" ng-show="customerInfo.receiveAddress.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="webBox border-danger">
+                            <div class="box-heading">
+                                <div class="text-danger"><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>选购增值服务</b></div>
+                            </div>
+                            <div class="box-body" >
+                                <table class="table table-hover">
+                                    <tr>
+                                        <th class="default" style="width:18%;">增值服务名称</th>
+                                        <th class="default" style="width:25%;">选购服务</th>
+                                        <th class="default" style="width:45%;">说明</th>
+                                        <th class="default text-right" style="width:12%;">费用</th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="input-group-addon fixed-width-120 text-left fs12">
+                                                <span class="glyphicon glyphicon-globe"></span>
+                                                <b>仓储服务</b>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="mr10 fs12"><input name="FlagStore" type="radio" loop="true" ng-value=0 ng-iradio="radio0" />&emsp;30天内</span>
+                                            <span class="mr10 fs12"><input name="FlagStore" type="radio" loop="true" ng-value=1 ng-iradio="radio1" />&emsp;30-60天</span>
+                                            <span class="mr10 fs12"><input name="FlagStore" type="radio" loop="true" ng-value=2 ng-iradio="radio2" />&emsp;60-90天</span>
+                                        </td>
+                                        <td class="text-warning">包裹在转运仓库储存费用.包裹30天内仓储费用全免,超过90天视作弃货处理</td>
+                                        <td class="text-right">
+                                            <span class="fs12 text-danger" ng-show="FlagStore == 1"><b>{{config.onlineOrderStoreCost1|currency:"￥"}}</b></span>
+                                            <span class="fs12 text-danger" ng-show="FlagStore == 2"><b>{{config.onlineOrderStoreCost2|currency:"￥"}}</b></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="input-group-addon fixed-width-120 text-left fs12">
+                                                <span class="glyphicon glyphicon-log-in"></span>
+                                                <b>加固包裹</b>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="mr10 fs12"><input name="IsFixed" type="radio" loop="true" ng-value=0 ng-iradio="radio0" />&emsp;否</span>
+                                            <span class="mr10 fs12"><input name="IsFixed" type="radio" loop="true" ng-value=1 ng-iradio="radio1" />&emsp;是</span>
+                                        </td>
+                                        <td class="text-warning">采用泡沫或填充物对易碎品进行加固处理,防止货物破损,但不能保证运输意外受损</td>
+                                        <td class="text-right">
+                                            <span class="fs12 text-danger" ng-show="IsFixed == 1"><b>{{config.onlineOrderFixedCost|currency:"￥"}}</b></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="input-group-addon fixed-width-120 text-left fs12">
+                                                <span class="glyphicon glyphicon-compressed"></span>
+                                                <b>专业包装箱</b>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="mr10 fs12"><input name="FlagBox" type="radio" loop="true" ng-value=0 ng-iradio="radio0" />&emsp;否</span>
+                                            <span class="mr10 fs12"><input name="FlagBox" type="radio" loop="true" ng-value=1 ng-iradio="radio1" />&emsp;是</span>
+                                        </td>
+                                        <td class="text-warning">使用全新的货物包装箱对包裹进行全新加固封箱,进一步保证包裹完整性</td>
+                                        <td class="text-right">
+                                            <span class="fs12 text-danger" ng-show="FlagBox == 1"><b>{{config.onlineOrderBoxCost|currency:"￥"}}</b></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="input-group-addon fixed-width-120 text-left fs12">
+                                                <span class="glyphicon glyphicon-send"></span>
+                                                <b>加急处理</b>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="mr10 fs12"><input name="IsFast" type="radio" loop="true" ng-value=0 ng-iradio="radio0" />&emsp;否</span>
+                                            <span class="mr10 fs12"><input name="IsFast" type="radio" loop="true" ng-value=1 ng-iradio="radio1" />&emsp;是</span>
+                                        </td>
+                                        <td class="text-warning">选择直通绿色通道,大幅缩短货物转运清关物流时间</td>
+                                        <td class="text-right">
+                                            <span class="fs12 text-danger" ng-show="IsFast == 1"><b>{{config.onlineOrderFastCost|currency:"￥"}}</b></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="input-group-addon fixed-width-120 text-left fs12">
+                                                <span class="glyphicon glyphicon-credit-card"></span>
+                                                <b>货品保价</b>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="mr10 fs12"><input name="IsProtected" type="radio" loop="true" ng-value=0 ng-iradio="radio0" />&emsp;否</span>
+                                            <span class="mr10 fs12"><input name="IsProtected" type="radio" loop="true" ng-value=1 ng-iradio="radio1" />&emsp;是</span>
+                                        </td>
+                                        <td class="text-warning">按照货品总价,收取2%的保价费用,若产生货品丢失等问题全额赔偿</td>
+                                        <td class="text-right">
+                                            <span class="fs12 text-danger" ng-show="IsProtected == 1"><b>{{onlineProtectedCost|currency:"￥"}}</b></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="input-group-addon fixed-width-120 text-left fs12">
+                                                <span class="glyphicon glyphicon-phone"></span>
+                                                <b>电子产品保险</b>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="mr10 fs12"><input name="FlagElec" type="radio" loop="true" ng-value=0 ng-iradio="radio0" />&emsp;否</span>
+                                            <span class="mr10 fs12"><input name="FlagElec" type="radio" loop="true" ng-value=1 ng-iradio="radio1" />&emsp;是</span>
+                                        </td>
+                                        <td class="text-warning">若货品为电子产品,收取2%的电子产品强制保险费用,并在此基础上增收20人民币材料费</td>
+                                        <td class="text-right">
+                                            <span class="fs12 text-danger" ng-show="FlagElec == 1"><b>{{onlineElecCost|currency:"￥"}}</b></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="input-group-addon fixed-width-120 text-left fs12">
+                                                <span class="glyphicon glyphicon-transfer"></span>
+                                                <b>退换货服务</b>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="mr10 fs12"><input name="FlagReturnProduct" type="radio" loop="true" ng-value=0 ng-iradio="radio0" />&emsp;否</span>
+                                            <span class="mr10 fs12"><input name="FlagReturnProduct" type="radio" loop="true" ng-value=1 ng-iradio="radio1" />&emsp;是</span>
+                                        </td>
+                                        <td class="text-warning">退换货服务费,运费买家自行承担</td>
+                                        <td class="text-right">
+                                            <span class="fs12 text-danger" ng-show="FlagReturnProduct == 1"><b>{{config.onlineOrderReturnCost|currency:"￥"}}</b></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="input-group-addon fixed-width-120 text-left fs12">
+                                                <span class="glyphicon glyphicon-hand-up"></span>
+                                                <b>内件清点</b>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="mr10 fs12"><input name="FlagDetailProduct" type="radio" loop="true" ng-value=0 ng-iradio="radio0" />&emsp;否</span>
+                                            <span class="mr10 fs12"><input name="FlagDetailProduct" type="radio" loop="true" ng-value=1 ng-iradio="radio1" />&emsp;是</span>
+                                        </td>
+                                        <td class="text-warning">按照用户订单中货品明细进行详细清点,避免商家漏发或货品遗漏</td>
+                                        <td class="text-right">
+                                            <span class="fs12 text-danger" ng-show="FlagDetailProduct == 1"><b>{{config.onlineOrderDetailProductCost|currency:"￥"}}</b></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="input-group-addon fixed-width-120 text-left fs12">
+                                                <span class="glyphicon glyphicon-gift"></span>
+                                                <b>取出发票/宣传资料</b>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="mr10 fs12"><input name="FlagRemovePages" type="radio" loop="true" ng-value=0 ng-iradio="radio0" />&emsp;否</span>
+                                            <span class="mr10 fs12"><input name="FlagRemovePages" type="radio" loop="true" ng-value=1 ng-iradio="radio1" />&emsp;是</span>
+                                        </td>
+                                        <td class="text-warning">馈赠、礼物等需要对商品价格保密情况下,提供取出内件发票或宣传资料服务</td>
+                                        <td class="text-right">
+                                            <span class="fs12 text-danger" ng-show="FlagRemovePages == 1"><b>{{config.onlineOrderRemovePagesCost|currency:"￥"}}</b></span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="sp-line"></div>
+                <div class="reg-input-group">
+                    <a class="btn btn-warning" ng-click="preStep()">上一步</a>
+                    <button class="btn btn-success pull-right" ng-click="nextStep(2)">下一步</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-show="STEP == 3">
+        <div class="reg-panel">
+            <div>
+                <div class="bg-dark">
+                    <form name="orderInfo" class="my-form" novalidate>
+                        <div class="col-sm-12 bg-net">
+                            <div class="webBox">
+                                <div class="box-heading">
+                                    <div>
+                                        <span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>订单信息</b>
+                                        <span class="glyphicon glyphicon-collapse-up padding-width-space-sm"></span>
+                                    </div>
+                                </div>
+                                <div class="box-body" >
+                                    <div class="row row-line">
+                                        <div class="col-lg-6">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>订单描述</b></span>
+                                                <span class="input-group-addon value">{{orderName}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-line">
+                                        <div class="col-lg-6">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>货品统称</b></span>
+                                                <span class="input-group-addon value">{{productName}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>货品总数量</b></span>
+                                                <span class="input-group-addon value">{{productNum}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-line">
+                                        <div class="col-lg-6">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>货品总价值(元)</b></span>
+                                                <span class="input-group-addon value">{{productAmount|currency:"￥"}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>货品总重量(千克)</b></span>
+                                                <span class="input-group-addon value">{{productWeight|number:2}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="webBox">
+                                <div class="box-heading">
+                                    <div><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>付款人信息</b></div>
+                                </div>
+                                <div class="box-body" >
+                                    <div class="row row-line">
+                                        <div class="col-lg-6">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>姓名</b></span>
+                                                <span class="input-group-addon value">{{payerName}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-line">
+                                        <div class="col-lg-6">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>联系方式</b></span>
+                                                <span class="input-group-addon value">{{payerPhone}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>邮编</b></span>
+                                                <span class="input-group-addon value">{{payerZipCode}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-line">
+                                        <div class="col-lg-6">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>证件类型</b></span>
+                                                <span class="input-group-addon value">{{payerIdType}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>证件号码</b></span>
+                                                <span class="input-group-addon value">{{payerIdNo}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-line">
+                                        <div class="col-lg-6">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>地址</b></span>
+                                                <span class="input-group-addon value">{{payerAddress}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="webBox">
+                                <div class="box-heading">
+                                    <div><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>收件人信息</b></div>
+                                </div>
+                                <div class="box-body" >
+                                    <div class="row row-line">
+                                        <div class="col-lg-6">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>姓名</b></span>
+                                                <span class="input-group-addon value">{{receiveName}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-line">
+                                        <div class="col-lg-6">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>联系方式</b></span>
+                                                <span class="input-group-addon value">{{receivePhone}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>邮编</b></span>
+                                                <span class="input-group-addon value">{{receiveZipCode}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-line">
+                                        <div class="col-lg-6">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>证件类型</b></span>
+                                                <span class="input-group-addon value">{{receiveIdType}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>证件号码</b></span>
+                                                <span class="input-group-addon value">{{receiveIdNo}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-line">
+                                        <div class="col-lg-6">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>收件人省份</b></span>
+                                                <span class="input-group-addon value">{{receiveProvince.value}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>收件人城市</b></span>
+                                                <span class="input-group-addon value">{{receiveCity.value}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-line">
+                                        <div class="col-lg-6">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>地址</b></span>
+                                                <span class="input-group-addon value">{{receiveAddress}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="webBox">
+                                <div class="box-heading">
+                                    <div><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>货品信息</b></div>
+                                </div>
+                                <div class="box-body" >
+                                    <table class="table table-hover">
+                                        <tr>
+                                            <th class="default" style="width:22%;">分类</th>
+                                            <th class="default" style="width:14%;">名称</th>
+                                            <th class="default" style="width:10%;">品牌</th>
+                                            <th class="default" style="width:10%;">单价(元)</th>
+                                            <th class="default" style="width:8%;">数量</th>
+                                            <th class="default" style="width:6%;">单位</th>
+                                            <th class="default" style="width:8%;">重量(千克)</th>
+                                            <th class="default" style="width:12%;">总价(元)</th>
+                                        </tr>
+                                        <tr ng-repeat="product in products track by $index" >
+                                            <td>{{product.pType.value}}</td>
+                                            <td>{{product.pName}}</td>
+                                            <td>{{product.pBrand}}</td>
+                                            <td>{{product.pAmount|currency:"￥"}}</td>
+                                            <td>{{product.pNum}}</td>
+                                            <td>{{product.pUnit}}</td>
+                                            <td>{{product.pWeight|number:2}}</td>
+                                            <td>{{product.pTotalAmount|currency:"￥"}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="webBox">
+                                <div class="box-heading">
+                                    <div class="text-success"><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>订单金额明细</b></div>
+                                </div>
+                                <div class="box-body" >
+                                    <div class="row row-line row-amt">
+                                        <div class="col-lg-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>运费</b></span>
+                                                <span class="input-group-addon value text-success">- {{orderTransportAmt|currency:"￥"}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-line row-amt">
+                                        <div class="col-lg-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>税费</b></span>
+                                                <span class="input-group-addon value text-success">- {{orderRateAmt|currency:"￥"}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-line row-amt">
+                                        <div class="col-lg-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>增值服务费用</b></span>
+                                                <span class="input-group-addon value cursor glyphicon glyphicon-eye-open"></span>
+                                                <span class="input-group-addon value text-success">- {{orderServiceAmt|currency:"￥"}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="serviceDetails">
+                                        <div class="row row-line">
+                                            <div class="col-lg-4 col-lg-offset-8">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon name"><b>仓储费用</b></span>
+                                                    <span class="input-group-addon value text-success">{{orderStoreAmt|currency:"￥"}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row row-line">
+                                            <div class="col-lg-4 col-lg-offset-8">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon name"><b>保价费用</b></span>
+                                                    <span class="input-group-addon value text-success">{{orderProtectedAmt|currency:"￥"}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row row-line">
+                                            <div class="col-lg-4 col-lg-offset-8">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon name"><b>加固费用(填充物)</b></span>
+                                                    <span class="input-group-addon value text-success">{{orderFixedAmt|currency:"￥"}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row row-line">
+                                            <div class="col-lg-4 col-lg-offset-8">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon name"><b>加固费用(包装箱)</b></span>
+                                                    <span class="input-group-addon value text-success">{{orderBoxAmt|currency:"￥"}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row row-line">
+                                            <div class="col-lg-4 col-lg-offset-8">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon name"><b>加急费用</b></span>
+                                                    <span class="input-group-addon value text-success">{{orderFastAmt|currency:"￥"}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row row-line">
+                                            <div class="col-lg-4 col-lg-offset-8">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon name"><b>内件清点</b></span>
+                                                    <span class="input-group-addon value text-success">{{orderDetailProductAmt|currency:"￥"}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row row-line">
+                                            <div class="col-lg-4 col-lg-offset-8">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon name"><b>退换货服务</b></span>
+                                                    <span class="input-group-addon value text-success">{{orderReturnProductAmt|currency:"￥"}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row row-line">
+                                            <div class="col-lg-4 col-lg-offset-8">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon name"><b>电子设备强制险</b></span>
+                                                    <span class="input-group-addon value text-success">{{orderElecAmt|currency:"￥"}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row row-line">
+                                            <div class="col-lg-4 col-lg-offset-8">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon name"><b>取出发票/宣传资料</b></span>
+                                                    <span class="input-group-addon value text-success">{{orderRemovePagesAmt|currency:"￥"}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-line row-amt">
+                                        <div class="col-lg-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>折扣优惠</b></span>
+                                                <span class="input-group-addon value cursor glyphicon glyphicon-eye-open"></span>
+                                                <span class="input-group-addon value text-danger">+ {{orderDiscountAmt|currency:"￥"}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="discountDetails">
+                                        <!--<div class="row row-line">
+                                            <div class="col-lg-4 col-lg-offset-8">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon name"><b>首单减免</b></span>
+                                                    <span class="input-group-addon value text-danger">{{orderFirstAmt|currency:"￥"}}</span>
+                                                </div>
+                                            </div>
+                                        </div>-->
+                                    </div>
+                                    <div class="row row-line">
+                                        <div class="col-lg-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>订单总金额</b></span>
+                                                <span class="input-group-addon value text-success fs42">- {{orderTotalAmt|currency:"￥"}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="col-sm-12 bg-white">
+                        <div class="sp-line"></div>
+                        <div class="reg-input-group">
+                            <a class="btn btn-warning" ng-click="preStep()">上一步</a>
+                            <button class="btn btn-success pull-right" ng-click="nextStep(3)">订单确认</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-show="STEP == 4">
+        <div class="reg-panel">
+            <div>
+                <div class="bg-dark">
+                    <form name="payChannel" class="my-form" novalidate>
+                        <div class="col-sm-12 bg-net">
+                            <div class="webBox">
+                                <div class="box-heading">
+                                    <div>
+                                        <span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>订单基本信息</b>
+                                        <span class="glyphicon glyphicon-collapse-up padding-width-space-sm"></span>
+                                    </div>
+                                </div>
+                                <div class="box-body" >
+                                    <div class="row row-line">
+                                        <div class="col-lg-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>订单编号</b></span>
+                                                <span class="input-group-addon value">{{orderId}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-line">
+                                        <div class="col-lg-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>订单描述</b></span>
+                                                <span class="input-group-addon value">{{orderName}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-line">
+                                        <div class="col-lg-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>订单总金额</b></span>
+                                                <span class="input-group-addon value text-success fs42">- {{orderTotalAmt|currency:"￥"}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="webBox">
+                                <div class="box-heading">
+                                    <div><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>支付方式</b></div>
+                                </div>
+                                <div class="box-body" >
+                                    <div class="row row-line">
+                                        <div class="col-lg-6 pay-channel">
+                                            <img src="/images/alipay.gif" height=40 class="cursor" ng-class="{'pay-channel-selected': PAY_CHANNEL==0}" ng-click="payChannelCheck(0)"/>
+                                            <img src="/images/brother.gif" height=40 class="ml12 cursor" ng-class="{'pay-channel-selected': PAY_CHANNEL==1}" ng-click="payChannelCheck(1)" ng-show="_entry==1"/>
+                                        </div>
+                                    </div>
+                                    <div class="row" ng-show="PAY_CHANNEL==1">
+                                        <div class="col-lg-12 row-line">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>账户余额</b></span>
+                                                <span class="input-group-addon value text-danger">{{balance|currency:"￥"}}</span>
+                                                <span class="glyphicon glyphicon-refresh fs12 cursor" ng-click="queryBalance()"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 row-line">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>待支付金额</b></span>
+                                                <span class="input-group-addon value text-success">- {{orderTotalAmt|currency:"￥"}}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 row-line">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>支付后余额</b></span>
+                                                <span class="input-group-addon value text-danger">
+                                                    <span ng-hide="balanceLess">{{balanceLast|currency:"￥"}}</span>
+                                                    <span ng-show="balanceLess">余额不足</span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <form id="orderCommit" name="orderCommit" method="POST" action="/alipay/create_direct_pay_by_user" target="_blank">
+                        <input type="hidden" name="alipayId" value="{{orderId}}"/>
+                        <input type="hidden" name="alipayName" value="仲良速递快递服务"/>
+                        <!--<input type="hidden" name="alipayAmount" value="{{orderTotalAmt}}"/>-->
+                        <input type="hidden" name="alipayAmount" value="0.01"/>
+                        <input type="hidden" name="alipayDesc" value="{{orderName}}"/>
+                        <input type="hidden" name="alipayItem" value="http://www.brother-express.com"/>
+                        <div class="col-sm-12 bg-white">
+                            <div class="sp-line"></div>
+                            <div class="reg-input-group">
+                                <div class="btn btn-success pull-right" ng-click="nextStep(4)">去支付</div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" ng-show="STEP == 5">
+        <div class="jumbotron">
+            <h3 class="col-lg-offset-3 "><i class="glyphicon glyphicon-book mr10 text-danger"></i>订单完成</h3>
+            <div class="sp-line"></div>
+            <div class="jumbotron-step col-lg-offset-3">
+                <div class="text-success"><b>您的订单已经支付成功!</b></div>
+                <div class="text-success"><b>订单号：<span class="fs16 text-danger">{{orderId}}</span></b></div>
+            </div>
+            <div class="text-center margin-height-space-sm">
+            </div>
+        </div>
+    </div>
+</div>

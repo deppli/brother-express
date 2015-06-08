@@ -17,7 +17,7 @@ var formidable = require('formidable'),
 exports.upload = function (req, res) {
     var form = new formidable.IncomingForm();
 
-    form.uploadDir = config.UPLOAD_PATH;
+    form.uploadDir = config.basic.UPLOAD_PATH;
     form.keepExtensions = true;
     form.maxFieldsSize = 20 * 1024 * 1024;
 

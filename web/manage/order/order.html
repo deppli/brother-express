@@ -26,6 +26,10 @@
                     <span class="item-query" ng-click="setQuery('status', null)">全部</span>
                     <span class="item-query" ng-repeat="status in QueryOrderStatus" ng-click="setQuery('status', status)">{{status.value}}</span>
                 </tab>
+                <tab heading="支付状态">
+                    <span class="item-query" ng-click="setQuery('payStatus', null)">全部</span>
+                    <span class="item-query" ng-repeat="payStatus in QueryOrderPayStatus" ng-click="setQuery('payStatus', payStatus)">{{payStatus.value}}</span>
+                </tab>
                 <tab heading="创建时间">
                     <span class="item-query" ng-click="setQuery('time', null)">全部</span>
                     <span class="item-query" ng-repeat="item in TimeList" ng-click="setQuery('time', item)">{{item.value}}</span>
@@ -39,6 +43,7 @@
                     <label class="label label-success mr10" ng-show="Query.id">订单编号：{{Query.id}}</label>
                     <label class="label label-success mr10" ng-show="Query.type">订单类型：{{Query.type.value}}</label>
                     <label class="label label-success mr10" ng-show="Query.status">订单状态：{{Query.status.value}}</label>
+                    <label class="label label-success mr10" ng-show="Query.kind">支付状态：{{Query.payStatus.value}}</label>
                     <label class="label label-success mr10" ng-show="Query.time">创建时间：{{Query.time.value}}</label>
                     <button class="btn btn-sm btn-primary pull-right" ng-click="listOrder(true)">查询</button>
                 </div>
@@ -82,10 +87,11 @@
         </div>
     </div>
     <div class="row text-center">
-        <div class="col-lg-4 col-lg-offset-4">
-            <button type="button" class="btn btn-primary btn-block" ng-click="newModal()">新&nbsp;建</button>
-            <button type="button" class="btn btn-success btn-block" ng-click="exportExcel()">批量导出[行邮]</button>
-            <button type="button" class="btn btn-success btn-block" ng-click="exportExcelBS()">批量导出[包税]</button>
+        <div class="col-lg-12">
+            <button type="button" class="btn btn-primary" ng-click="newModal()">新&nbsp;建</button>
+            <!--<button type="button" class="btn btn-warning" ng-click="batchPrint()">批量打印</button>-->
+            <button type="button" class="btn btn-success" ng-click="exportExcel()">批量导出[行邮]</button>
+            <button type="button" class="btn btn-success" ng-click="exportExcelBS()">批量导出[包税]</button>
         </div>
         <div class="col-lg-1"><div id="downloader"></div></div>
     </div>
@@ -171,7 +177,7 @@
                         <div class="row row-line">
                             <div class="col-lg-4">
                                 <div class="input-group input-group-sm">
-                                    <span class="input-group-addon"><b>是否加固</b></span>
+                                    <span class="input-group-addon"><b>是否加固(填充物)</b></span>
                                     <select class="form-control" ng-model="isFixed" ng-options="choice.value for choice in isOrNot"></select>
                                 </div>
                             </div>
@@ -185,6 +191,46 @@
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>是否保价</b></span>
                                     <select class="form-control" ng-model="isProtected" ng-options="choice.value for choice in isOrNot"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>取出发票/宣传资料</b></span>
+                                    <select class="form-control" ng-model="flagRemovePages" ng-options="choice.value for choice in isOrNot"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>电子设备强制险</b></span>
+                                    <select class="form-control" ng-model="flagElec" ng-options="choice.value for choice in isOrNot"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>仓储服务</b></span>
+                                    <select class="form-control" ng-model="flagStore" ng-options="period.value for period in StorePeriod"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>专用包装箱</b></span>
+                                    <select class="form-control" ng-model="flagBox" ng-options="choice.value for choice in isOrNot"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>内件清点</b></span>
+                                    <select class="form-control" ng-model="flagDetailProduct" ng-options="choice.value for choice in isOrNot"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>退换货服务</b></span>
+                                    <select class="form-control" ng-model="flagReturnProduct" ng-options="choice.value for choice in isOrNot"></select>
                                 </div>
                             </div>
                         </div>
@@ -235,7 +281,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <label class="label label-primary fs12">总金额(美元)</label>
-                                <label class="control-label text-success fs12">{{amount * _exchange||0}}</label>
+                                <label class="control-label text-success fs12">{{amount * _exchange||0|currency:"$ "}}</label>
                             </div>
                         </div>
                     </div>
@@ -248,11 +294,10 @@
                         <div ng-hide="products.length > 0"><span class="label label-danger">产品详情至少需要存在一条记录</span></div>
                         <table class="table table-hover">
                             <tr>
-                                <th class="info" style="width:12%;">名称</th>
+                                <th class="info" style="width:15%;">名称</th>
                                 <th class="info" style="width:12%;">品牌</th>
                                 <th class="info" style="width:14%;">单价(元)</th>
-                                <th class="info" style="width:11%;">数量</th>
-                                <th class="info" style="width:6%;">单位</th>
+                                <th class="info" style="width:14%;">数量</th>
                                 <th class="info" style="width:11%;">重量(kg)</th>
                                 <th class="info" style="width:18%;">总价(元)</th>
                                 <th class="info" style="width:6%;"><span class="glyphicon glyphicon-trash"></span></th>
@@ -262,18 +307,16 @@
                                 <td><input name="pBrand" type="text" name="pBrand" ng-model="product.pBrand" class="form-control" required/></td>
                                 <td><input name="pAmount" type="number" name="pAmount" ng-model="product.pAmount" class="form-control" required/></td>
                                 <td><input name="pNum" type="number" name="pNum" ng-model="product.pNum" class="form-control" required/></td>
-                                <td><input name="pUnit" type="text" name="pUnit" ng-model="product.pUnit" class="form-control" required/></td>
                                 <td><input name="pWeight" type="number" name="pWeight" ng-model="product.pWeight" class="form-control" required/></td>
                                 <td ng-bind="product.pTotalAmount = product.pNum * product.pAmount"></td>
                                 <td><span class="glyphicon glyphicon-remove text-danger cursor" ng-click="removeProduct($index)"></span></td>
                             </tr>
                         </table>
-                        <div class="font-size-12" ng-show="addOrderForm.pName.$invalid || addOrderForm.pBrand.$invalid || addOrderForm.pAmount.$invalid || addOrderForm.pNum.$invalid || addOrderForm.pUnit.$invalid || addOrderForm.pWeight.$invalid">
+                        <div class="font-size-12" ng-show="addOrderForm.pName.$invalid || addOrderForm.pBrand.$invalid || addOrderForm.pAmount.$invalid || addOrderForm.pNum.$invalid || addOrderForm.pWeight.$invalid">
                             <span class="label label-danger" ng-show="addOrderForm.pName.$invalid">名称</span>
                             <span class="label label-danger" ng-show="addOrderForm.pBrand.$invalid">品牌</span>
                             <span class="label label-danger" ng-show="addOrderForm.pAmount.$invalid">单价</span>
                             <span class="label label-danger" ng-show="addOrderForm.pNum.$invalid">数量</span>
-                            <span class="label label-danger" ng-show="addOrderForm.pUnit.$invalid">单位</span>
                             <span class="label label-danger" ng-show="addOrderForm.pWeight.$invalid">重量</span>
                             <span class="label label-success">不能为空/格式错误</span>
                         </div>
@@ -514,6 +557,15 @@
                                     <!--<input type="text" ng-model="Order.status" class="form-control" placeholder="订单状态" readonly />-->
                                 </div>
                             </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>支付状态</b></span>
+                                    <span class="form-control">
+                                        <b ng-show="Order.kind == 0" class="text-danger">{{Order.payStatus|dict:"PayStatus"}}</b>
+                                        <b ng-show="Order.kind == 1" class="text-success">{{Order.payStatus|dict:"PayStatus"}}</b>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                         <div class="row row-line">
                             <div class="col-lg-6">
@@ -572,6 +624,46 @@
                             </div>
                         </div>
                         <div class="row row-line">
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>取出发票/宣传资料</b></span>
+                                    <select class="form-control" ng-model="Order.flagRemovePages" ng-options="choice.value for choice in isOrNot"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>电子设备强制险</b></span>
+                                    <select class="form-control" ng-model="Order.flagElec" ng-options="choice.value for choice in isOrNot"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>仓储服务</b></span>
+                                    <select class="form-control" ng-model="Order.flagStore" ng-options="period.value for period in StorePeriod"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>专用包装箱</b></span>
+                                    <select class="form-control" ng-model="Order.flagBox" ng-options="choice.value for choice in isOrNot"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>内件清点</b></span>
+                                    <select class="form-control" ng-model="Order.flagDetailProduct" ng-options="choice.value for choice in isOrNot"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>退换货服务</b></span>
+                                    <select class="form-control" ng-model="Order.flagReturnProduct" ng-options="choice.value for choice in isOrNot"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
                             <div class="col-lg-6">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>运费(元)</b></span>
@@ -614,7 +706,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <label class="label label-primary">总金额(美元)</label>
-                                <label class="control-label text-success fs12">{{Order.amount * _exchange||0}}</label>
+                                <label class="control-label text-success fs12">{{Order.amount * _exchange||0|currency:"$ "}}</label>
                             </div>
                         </div>
                     </div>
@@ -632,11 +724,12 @@
                             <tr>
                                 <th class="info" style="width:12%;">名称</th>
                                 <th class="info" style="width:12%;">品牌</th>
-                                <th class="info" style="width:14%;">单价(元)</th>
-                                <th class="info" style="width:11%;">数量</th>
-                                <th class="info" style="width:6%;">单位</th>
-                                <th class="info" style="width:11%;">重量(kg)</th>
-                                <th class="info" style="width:18%;">总价(元)</th>
+                                <th class="info" style="width:12%;">单价(元)</th>
+                                <th class="info" style="width:8%;">数量</th>
+                                <th class="info" style="width:8%;">重量(kg)</th>
+                                <th class="info" style="width:8%;">物流商</th>
+                                <th class="info" style="width:12%;">单号</th>
+                                <th class="info" style="width:12%;">总价(元)</th>
                                 <th class="info" style="width:6%;"><span class="glyphicon glyphicon-trash"></span></th>
                             </tr>
                             <tr ng-repeat="product in Order.products track by $index" >
@@ -644,18 +737,18 @@
                                 <td><input type="text" name="pBrand" ng-model="product.pBrand" class="form-control" required/></td>
                                 <td><input type="number" name="pAmount" ng-model="product.pAmount" class="form-control" required/></td>
                                 <td><input type="number" name="pNum" ng-model="product.pNum" class="form-control" required/></td>
-                                <td><input type="text" name="pUnit" ng-model="product.pUnit" class="form-control" required/></td>
                                 <td><input type="number" name="pWeight" ng-model="product.pWeight" class="form-control" required/></td>
-                                <td ng-bind="product.pTotalAmount = product.pNum * product.pAmount"></td>
+                                <td><input type="text" name="pTransName" ng-model="product.pTransName" class="form-control"/></td>
+                                <td><input type="text" name="pTransId" ng-model="product.pTransId" class="form-control"/></td>
+                                <td>{{product.pTotalAmount = product.pNum * product.pAmount|currency:"￥"}}</td>
                                 <td><span class="glyphicon glyphicon-remove text-danger cursor" ng-click="removeProduct($index)"></span></td>
                             </tr>
                         </table>
-                        <div class="font-size-12" ng-show="editOrderForm.pName.$invalid || editOrderForm.pBrand.$invalid || editOrderForm.pAmount.$invalid || editOrderForm.pNum.$invalid || editOrderForm.pUnit.$invalid || editOrderForm.pWeight.$invalid">
+                        <div class="font-size-12" ng-show="editOrderForm.pName.$invalid || editOrderForm.pBrand.$invalid || editOrderForm.pAmount.$invalid || editOrderForm.pNum.$invalid || editOrderForm.pWeight.$invalid">
                             <span class="label label-danger" ng-show="editOrderForm.pName.$invalid">名称</span>
                             <span class="label label-danger" ng-show="editOrderForm.pBrand.$invalid">品牌</span>
                             <span class="label label-danger" ng-show="editOrderForm.pAmount.$invalid">单价</span>
                             <span class="label label-danger" ng-show="editOrderForm.pNum.$invalid">数量</span>
-                            <span class="label label-danger" ng-show="editOrderForm.pUnit.$invalid">单位</span>
                             <span class="label label-danger" ng-show="editOrderForm.pWeight.$invalid">重量</span>
                             <span class="label label-success">不能为空/格式错误</span>
                         </div>

@@ -1,14 +1,22 @@
 ﻿<!DOCTYPE html>
-<html>
+<html ng-app="print">
 <head lang="en">
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" type="text/css" href="../themes/default/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="../themes/default/css/base.css"/>
     <script type="text/javascript" src="../js/dev/lib/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="../js/dev/lib/jquery-qrcode/jquery.qrcode.min.js"></script>
+    <script type="text/javascript" src="../js/dev/lib/angular/angular.min.js"></script>
+    <script type="text/javascript" src="../js/dev/lib/angular-qrcode/qrcode.js"></script>
+    <script type="text/javascript" src="../js/dev/lib/angular-qrcode/qrcode-base.js"></script>
+    <script type="text/javascript" src="../js/dev/lib/angular-qrcode/qrcode-utf8.js"></script>
+
+    <style type="text/css">
+        .table-border{border: solid 1px #ddd !important;}
+    </style>
 </head>
 <body>
-    <table class="table table-hover fs12" style="border: solid 1px #ddd;">
+    <div ng-repeat="item in _items">
+    <table class="table table-hover fs12" style="border: solid 1px #ddd;" >
         <tr>
             <th colspan="6" class="text-left"><img src="../themes/default/img/logo.jpg" height="40"></th>
             <td class="text-right fs10">
@@ -17,72 +25,67 @@
             </td>
         </tr>
         <tr>
-            <td rowspan="3" colspan="2" style="border-right:solid 1px #ddd"><div id="qrcode" class="text-left"></div></td>
+            <td rowspan="3" colspan="2" style="border-right:solid 1px #ddd">
+                <qrcode version="7" data="http://www.brother-express.com/wechat.html#/?OrderId={{item.id}}"></qrcode>
+            </td>
             <td><span class="control-label text-center"><b class="labels fs16">订单编号</b></span></td>
-            <td colspan="4"><span id="orderId" class="control-label fs16"></span></td>
+            <td colspan="4"><span id="orderId" class="control-label fs16">{{item.id}}</span></td>
         </tr>
-        <!--<tr>
-            <td><span class="control-label text-center"><b class="labels">订单编号</b></span></td>
-            <td><span id="orderId" class="control-label fs12">S1299234830000229910</span></td>
-        </tr>-->
         <tr>
             <td><span class="control-label text-center"><b class="labels">订单名称</b></span></td>
-            <td colspan="4"><span id="orderName" class="control-label fs12"></span></td>
+            <td colspan="4"><span id="orderName" class="control-label fs12">{{item.name}}</span></td>
         </tr>
         <tr>
             <td><span class="control-label text-center"><b class="labels">日&emsp;&emsp;期</b></span></td>
-            <td style="border-right:solid 1px #ddd"><span id="orderDate" class="control-label fs12"></span></td>
+            <td style="border-right:solid 1px #ddd"><span id="orderDate" class="control-label fs12">{{item.createDate|date:'yyyy 年 MM 月 dd 日'}}</span></td>
             <td><span class="control-label text-center"><b class="labels">重&emsp;&emsp;量</b></span></td>
-            <td colspan="2"><span id="productWeight" class="control-label fs12"></span>&emsp;kg</td>
+            <td colspan="2"><span id="productWeight" class="control-label fs12">{{item.productWeight}}</span>&emsp;kg</td>
         </tr>
         <tr>
             <td><span class="control-label text-center"><b class="labels">寄&nbsp;件&nbsp;人</b></span></td>
-            <td colspan="3" style="border-right:solid 1px #ddd"><span id="sendName" class="control-label fs12"></span></td>
+            <td colspan="3" style="border-right:solid 1px #ddd"><span id="sendName" class="control-label fs12">{{item.sendName}}</span></td>
             <td><span class="control-label text-center"><b class="labels">寄件电话</b></span></td>
-            <td colspan="2"><span id="sendPhone" class="control-label fs12"></span></td>
+            <td colspan="2"><span id="sendPhone" class="control-label fs12">{{item.sendPhone}}</span></td>
         </tr>
         <tr>
             <td><span class="control-label text-center"><b class="labels">寄件地址</b></span></td>
-            <td colspan="3" style="border-right:solid 1px #ddd"><span id="sendAddress" class="control-label fs12"></span></td>
+            <td colspan="3" style="border-right:solid 1px #ddd"><span id="sendAddress" class="control-label fs12">{{item.sendAddress}}</span></td>
             <td><span class="control-label text-center"><b class="labels">签&emsp;&emsp;名</b></span></td>
             <td colspan="2"><span id="sendSign" class="control-label fs12"></span></td>
         </tr>
         <tr>
             <td><span class="control-label text-center"><b class="labels">收&nbsp;件&nbsp;人</b></span></td>
-            <td colspan="3" style="border-right:solid 1px #ddd"><span id="receiveName" class="control-label fs12"></span></td>
+            <td colspan="3" style="border-right:solid 1px #ddd"><span id="receiveName" class="control-label fs12">{{item.receiveName}}</span></td>
             <td><span class="control-label text-center"><b class="labels">收件电话</b></span></td>
-            <td colspan="2"><span id="receivePhone" class="control-label fs12"></span></td>
+            <td colspan="2"><span id="receivePhone" class="control-label fs12">{{item.receivePhone}}</span></td>
         </tr>
         <tr>
             <td><span class="control-label text-center"><b class="labels">收件地址</b></span></td>
-            <td colspan="6"><span id="receiveAddress" class="control-label fs12"></span></td>
+            <td colspan="6"><span id="receiveAddress" class="control-label fs12">{{item.receiveAddress}}</span></td>
         </tr>
         <tr style="height:80px;">
             <td colspan="5" style="border-right:solid 1px #ddd"><span class="control-label">备注:</span></td>
             <td colspan="2"><div>目的地：中国</div></span></td>
         </tr>
     </table>
+    </div>
 </body>
 </html>
 <script>
     $(document).ready(function(){
-
     })
     var doSettingValues = function(order){
-        if(order){
-            $('#qrcode').html("");
-            var qrText = "http://www.brother-express.com/wechat.html#/?OrderId=" + order.id;
-            $('#qrcode').qrcode({width: 90,height: 90,text: qrText});
-            $('#orderId').text(order.id);
-            $('#orderName').text(order.name);
-            $('#orderDate').text(order.createTime);
-            $('#productWeight').text(order.productWeight);
-            $('#sendName').text(order.sendName);
-            $('#sendPhone').text(order.sendPhone);
-            $('#sendAddress').text(order.sendAddress);
-            $('#receiveName').text(order.receiveName);
-            $('#receivePhone').text(order.receivePhone);
-            $('#receiveAddress').text(order.receiveAddress);
-        }
+        var scope = $(document).scope();
+        scope.setOrders(order);
+        scope.$apply();
     }
+    var module = angular.module("print", ["monospaced.qrcode"]);
+    module.run(['$rootScope',
+        function($rootScope) {
+            $rootScope.setOrders = function(orders){
+                $rootScope._items = orders;
+                console.log(orders);
+            }
+        }
+    ]);
 </script>

@@ -27,7 +27,7 @@ exports.add = function (req, res) {
         var order = new orderModel({
             id: req.body.id,
             type: 0,                //基本订单
-            kind: 1,                //已审核
+            payStatus: 1,                //已支付
             amount: req.body.amount,
             name: req.body.name,
             creater: req.body.creater,
@@ -64,7 +64,13 @@ exports.add = function (req, res) {
             otherAmount: req.body.otherAmount,
             isFixed: req.body.isFixed||0,
             isFast: req.body.isFast||0,
-            isProtected: req.body.isProtected||0
+            isProtected: req.body.isProtected||0,
+            flagBox: req.body.flagBox||0,
+            flagDetailProduct: req.body.flagDetailProduct||0,
+            flagElec: req.body.flagElec||0,
+            flagRemovePages: req.body.flagRemovePages||0,
+            flagReturnProduct: req.body.flagReturnProduct||0,
+            flagStore: req.body.flagStore||0
         });
 
         order.save(function (err, doc) {
@@ -139,13 +145,47 @@ exports.list = function (req, res) {
         queryStr.gateMode = req.body.gateMode;
     }
 
-    orderModel.find(time).find(queryStr).skip(skipSize).limit(pageSize).exec(function(err, doc){
+    orderModel.find(time).find(queryStr).skip(skipSize).limit(pageSize).sort({createTime: -1}).exec(function(err, doc){
         if (err) {
             res.status(400).send(err.message);
             return;
         }
         res.json(doc);
     });
+};
+
+exports.batchDelete = function (req, res) {
+    var queryStr = {};
+    var time = {};
+    if(req.body.idBatch){
+        queryStr.idBatch = req.body.idBatch;
+    }
+    if(req.body.id){
+        queryStr.id = req.body.id;
+    }
+    if(req.body.type){
+        queryStr.type = req.body.type;
+    }
+    if(req.body.status){
+        queryStr.status = req.body.status;
+    }
+    if(req.body.time){
+        var now = new Date();
+        var begin = new Date();
+        begin.setDate(begin.getDate()  - req.body.time);
+        time = {"$and":[{"createTime":{"$gt": begin}},{"createTime":{"$lt": now}}]};
+    }
+    if(req.body.gateMode){
+        queryStr.gateMode = req.body.gateMode;
+    }
+
+    /*orderModel.find(time).find(queryStr).exec(function(err, doc){
+        if (err) {
+            res.status(400).send(err.message);
+            return;
+        }
+        res.json(doc);
+    });*/
 };
 
 exports.detail = function (req, res) {
@@ -205,7 +245,13 @@ exports.edit = function (req, res) {
         otherAmount: req.body.otherAmount,
         isFixed: req.body.isFixed||0,
         isFast: req.body.isFast||0,
-        isProtected: req.body.isProtected||0
+        isProtected: req.body.isProtected||0,
+        flagBox: req.body.flagBox||0,
+        flagDetailProduct: req.body.flagDetailProduct||0,
+        flagElec: req.body.flagElec||0,
+        flagRemovePages: req.body.flagRemovePages||0,
+        flagReturnProduct: req.body.flagReturnProduct||0,
+        flagStore: req.body.flagStore||0
     };
     orderModel.findByIdAndUpdate(req.body.dbId, update, undefined, function (err, doc) {
         if (err) {

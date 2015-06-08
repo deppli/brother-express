@@ -171,6 +171,12 @@ angularFileUpload.directive('ngFileSelect', [ '$parse', '$timeout', '$compile', 
 		}else{
 		handleFileSelect(scope, elem, attr, ngModel, $parse, $timeout, $compile);
 	}
+	}
+	//compile: function(tElement, tAttrs, transclude) {
+	//	return function postLink(scope, iElement, iAttrs, controller) {
+	//		handleFileSelect(scope, iElement, iAttrs, iElement.ngModel, $parse, $timeout, $compile);
+	//	}
+	//}
 }}]);
 
 function handleFileSelect(scope, elem, attr, ngModel, $parse, $timeout, $compile) {

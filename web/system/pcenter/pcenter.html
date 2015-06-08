@@ -1,0 +1,269 @@
+<div class="container-fluid">
+    <div class="row bg-pcenter">
+        <div class="head-pcenter">
+            <img height="20" src="themes/default/img/item_pcenter.png" />
+            <img height="25" class="pull-right" src="themes/default/img/logo_white.png" />
+        </div>
+        <tabset class="fs12 tab-pcenter">
+            <tab heading="基本信息" select="tabSelect(0)" active="true">
+                <div class="reg-panel">
+                    <div>
+                        <form name="customerInfo" class="my-form" novalidate>
+                            <div class="col-sm-12 bg-net">
+                                <div class="webBox no-border">
+                                    <div class="box-heading">
+                                        <div><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>基本信息</b></div>
+                                    </div>
+                                    <div class="box-body" >
+                                        <div class="row row-line">
+                                            <div class="col-lg-6">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon"><b>姓名</b></span>
+                                                    <input type="text" name="name" ng-model="Customer.name" class="form-control" maxlength="40" readonly/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row row-line">
+                                            <div class="col-lg-6">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon"><b>联系方式</b></span>
+                                                    <input type="text" name="phone" ng-model="Customer.phone" class="form-control" readonly/>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon"><b>邮编</b></span>
+                                                    <input type="text" name="zipCode" ng-model="Customer.zipCode" class="form-control" readonly/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row row-line">
+                                            <div class="col-lg-6">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon"><b>证件类型</b></span>
+                                                    <input type="text" name="idType" ng-model="Customer.idType" class="form-control" readonly/>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon"><b>证件号码</b></span>
+                                                    <input type="text" name="idNo" ng-model="Customer.idNo" class="form-control" required readonly/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row row-line">
+                                            <div class="col-lg-12">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon"><b>地址</b></span>
+                                                    <input type="text" name="address" ng-model="Customer.address" class="form-control" maxlength="60" required readonly/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row row-line" id="idDiv">
+                                            <div class="col-lg-4">
+                                                <div class="input-group input-group-sm">
+                                                    <div class="input-group-addon"><b>身份证正面</b></div>
+                                                    <!--<div ng-file-select ng-model="idImgA" accept=".jpg" class="cursor" in-tabset="true">-->
+                                                        <div class="img-add">
+                                                            <div ng-hide="idAUrl">+ 身份证正面</div>
+                                                            <img width="100%" height="140" src="{{idAUrl}}" ng-show="idAUrl">
+                                                        </div>
+                                                    <!--</div>-->
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="input-group input-group-sm">
+                                                    <div class="input-group-addon"><b>身份证反面</b></div>
+                                                    <!--<div ng-file-select ng-model="idImgB" accept=".jpg" class="cursor" in-tabset="true">-->
+                                                        <div class="img-add">
+                                                            <div ng-hide="idBUrl">+ 身份证反面</div>
+                                                            <img width="100%" height="140" src="{{idBUrl}}" ng-show="idBUrl">
+                                                        </div>
+                                                    <!--</div>-->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="webBox no-border">
+                                    <div class="box-heading">
+                                        <div><span class="glyphicon glyphicon-usd padding-width-space-sm"></span><b>账户信息</b></div>
+                                    </div>
+                                    <div class="box-body" >
+                                        <div class="row row-line">
+                                            <div class="col-lg-6">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon"><b>会员等级</b></span>
+                                                    <span class="input-group-addon value">{{Customer.level|dict:"CustomerLevel"}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon"><b>账户余额</b></span>
+                                                    <span class="input-group-addon value">
+                                                        <span class="text-success sp-line cursor" ng-click="tabCheck(2)">充值</span>
+                                                        <b class="text-danger mr10">(9折优惠)</b>
+                                                        {{Customer.balance|currency:"￥"}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row row-line">
+                                            <div class="col-lg-6">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon"><b>累积充值金额</b></span>
+                                                    <span class="input-group-addon value">{{Customer.totalPay|currency:"￥"}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon"><b>账户创建时间</b></span>
+                                                    <span class="input-group-addon value">{{Customer.createDate|date:"yyyy-MM-dd hh:mm:ss"}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--TODO 后续业务预留-->
+                                        <div class="row row-line" ng-show="0==1">
+                                            <div class="col-lg-6">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon"><b>积分</b></span>
+                                                    <span class="input-group-addon value">{{Customer.point|number}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-addon"><b>成长值</b></span>
+                                                    <span class="input-group-addon value">{{Customer.exp|number}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </tab>
+            <tab heading="订单信息" select="tabSelect(1)">
+                <div class="reg-panel bg-net">
+                    <div class="col-sm-12 bg-net">
+                        <div class="webBox no-border">
+                            <div class="box-heading">
+                                <div><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>订单记录</b></div>
+                            </div>
+                            <div class="box-body" >
+                                <table class="table table-hover">
+                                    <tr>
+                                        <th class="default" style="width:16%;">订单号</th>
+                                        <th class="default" style="width:14%;">下单时间</th>
+                                        <th class="default" style="width:14%;">订单描述</th>
+                                        <th class="default" style="width:10%;">订单金额</th>
+                                        <th class="default" style="width:10%;">包裹价值</th>
+                                        <th class="default" style="width:10%;">保价金额</th>
+                                        <th class="default" style="width:8%;">支付状态</th>
+                                        <th class="default" style="width:18%;">操作</th>
+                                    </tr>
+                                    <tr ng-repeat="order in orders track by $index" class="text-dark">
+                                        <td class="cursor" ng-click="detailOrder(order)"><span class="link-line">{{order.id}}</span></td>
+                                        <td>{{order.createTime|date:'yyyy-MM-dd hh:mm:ss'}}</td>
+                                        <td>{{order.name}}</td>
+                                        <td>{{order.amount|currency:"￥"}}</td>
+                                        <td>{{order.productAmount|currency:"￥"}}</td>
+                                        <td>{{order.safeAmount|currency:"￥"}}</td>
+                                        <td>{{order.payStatus|dict:"PayStatus"}}</td>
+                                        <td>
+                                            <span class="text-success cursor sp-line" ng-show="order.payStatus == 0" ng-click="goPay(order)">支付</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+            <tab heading="账户充值" select="tabSelect(2)">
+                <div class="reg-panel">
+                    <div ng-show="balanceOrder.showMode == 0">
+                        <div class="col-sm-12 bg-net" >
+                            <div class="webBox">
+                                <div class="box-heading">
+                                    <div>
+                                        <span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>账户充值</b>
+                                    </div>
+                                </div>
+                                <div class="box-body" >
+                                    <div class="row row-line">
+                                        <div class="col-lg-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>充值序列号</b></span>
+                                                <span class="input-group-addon value text-success">{{balanceOrder.payId}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-line">
+                                        <div class="col-lg-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>账户余额</b></span>
+                                                <span class="input-group-addon value">{{balanceOrder.balance|currency:"￥"}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row row-line">
+                                        <div class="col-lg-12">
+                                            <div class="input-group input-group-sm">
+                                                <span class="input-group-addon"><b>充值金额</b></span>
+                                                <input type="text" name="balanceOrder.payAmt" ng-model="balanceOrder.payAmt" class="form-control value" placeholder="请输入充值金额" maxlength="10" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="webBox">
+                                <div class="box-heading">
+                                    <div><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>支付方式</b></div>
+                                </div>
+                                <div class="box-body" >
+                                    <div class="row row-line">
+                                        <div class="col-lg-6 pay-channel">
+                                            <img src="/images/alipay.gif" height=40 class="cursor pay-channel-selected"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <form id="acctPay" name="orderCommit" method="POST" action="/alipay/create_direct_pay_by_user" target="_blank">
+                                <input type="hidden" name="alipayId" value="{{balanceOrder.payId}}"/>
+                                <input type="hidden" name="alipayName" value="仲良速递账户充值"/>
+                                <input type="hidden" name="alipayAmount" value="{{balanceOrder.payAmt}}"/>
+                                <input type="hidden" name="alipayDesc" value="{{webInfo.loginId}}"/>
+                                <input type="hidden" name="alipayItem" value="http://www.brother-express.com"/>
+                                <div class="col-sm-12 bg-white">
+                                    <div class="sp-line"></div>
+                                    <div class="reg-input-group">
+                                        <div class="btn btn-success pull-right" ng-click="goBalancePay()">充值</div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </div>
+                            </form>
+                    </div>
+                    <div class="col-sm-12 bg-net" ng-show="balanceOrder.showMode == 1">
+                        <div class="webBox">
+                            <div class="box-heading">
+                                <div>
+                                    <span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>充值成功</b>
+                                </div>
+                            </div>
+                            <div class="box-body" >
+                                <div class="row row-line">
+                                    <div class="col-lg-12">
+                                        <h1 class="text-success text-center">您的充值已完成!</h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </tab>
+        </tabset>
+    </div>
+</div>

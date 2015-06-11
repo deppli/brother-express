@@ -34,7 +34,7 @@
                     $remote.post("/customer/detail", postData, function(data){
                         $scope.Customer = data;
                         $scope.idAUrl = data.idNoImgA;
-                        $scope.idBUrl = data.idNoImgB;
+                        //$scope.idBUrl = data.idNoImgB;
                         $scope.detailModal();
                     });
                 }
@@ -174,7 +174,7 @@
                         sex: $scope.CustomerSex.key||0,
                         idNo: $scope.CustomerIdNo|"",
                             idNoImgA: $scope.idAUrl,
-                            idNoImgB: $scope.idBUrl,
+                            //idNoImgB: $scope.idBUrl,
                         birthday: $scope.CustomerBirthday||"",
                         phone: $scope.CustomerPhone||"",
                             address: $scope.CustomerAddress||"",
@@ -259,7 +259,7 @@
                         sex: $scope.Customer.sex.key||0,
                         idNo: $scope.Customer.idNo||"",
                         idNoImgA: $scope.idAUrl,
-                        idNoImgB: $scope.idBUrl,
+                        //idNoImgB: $scope.idBUrl,
                         birthday: $scope.Customer.birthday||"",
                         phone: $scope.Customer.phone||"",
                         address: $scope.Customer.address||"",

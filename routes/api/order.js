@@ -30,6 +30,7 @@ exports.add = function (req, res) {
             payStatus: 1,                //已支付
             amount: req.body.amount,
             name: req.body.name,
+            description: req.body.description,
             creater: req.body.creater,
             gateMode: req.body.gateMode || 0,
             worldTransId:  req.body.worldTransId,
@@ -212,6 +213,8 @@ exports.edit = function (req, res) {
         gateMode: req.body.gateMode,
         amount: req.body.amount,
         name: req.body.name,
+        description: req.body.description,
+        createTime: req.body.createTime,
         status:  req.body.status,
         worldTransId:  req.body.worldTransId,
         worldTransName:  req.body.worldTransName,

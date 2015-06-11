@@ -40,7 +40,7 @@ define(["bootstrap-icheck"], function() {
             }
         });
 
-        $scope.$watch("idImgB", function(){
+       /* $scope.$watch("idImgB", function(){
             var file = $scope.idImgB;
             if(file) {
                 $scope.ProgressB = {};
@@ -61,7 +61,7 @@ define(["bootstrap-icheck"], function() {
                     });
                 }
             }
-        });
+        });*/
 
         var nowTime = new Date();
         $scope.orderId = $scope.initJnl("S");
@@ -264,7 +264,7 @@ define(["bootstrap-icheck"], function() {
                                 $scope.payerIdNo = data.idNo;
                                 $scope.payerAddress = data.address;
                                 $scope.idAUrl = data.idNoImgA;
-                                $scope.idBUrl = data.idNoImgB;
+                                //$scope.idBUrl = data.idNoImgB;
                             })
                             //$scope.payerName = $rootScope.webInfo.name;
                             //$scope.payerPhone = $rootScope.webInfo.phone;
@@ -323,7 +323,7 @@ define(["bootstrap-icheck"], function() {
                         + $scope.orderStoreAmt + $scope.orderReturnProductAmt + $scope.orderElecAmt + $scope.orderDetailProductAmt + $scope.orderRemovePagesAmt;
 
                         $scope.orderTotalAmt = $scope.orderTransportAmt + $scope.orderRateAmt + $scope.orderServiceAmt - $scope.orderDiscountAmt;
-                        if($scope.idAUrl && $scope.idBUrl){
+                        if($scope.idAUrl){
                             $scope.STEP++;
                         }else{
                             var msg = {type:$constants.MESSAGE_DIALOG_TYPE_CONF, text:$constants.MESSAGE_NEXT_STEP_WITHOUT_IDIMG, confCallback:function(){
@@ -347,7 +347,7 @@ define(["bootstrap-icheck"], function() {
                         creater: "管理员",
                         gateMode: 0,
                         idAUrl: $scope.idImgA,
-                        idBUrl: $scope.idImgB,
+                        //idBUrl: $scope.idImgB,
                         amount: $scope.orderTotalAmt || 0,
                         worldTransId: $scope.worldTransId || $scope.orderId,
                         worldTransName: $constants.worldTransName || $constants.NAME_COMPANY_NAME,

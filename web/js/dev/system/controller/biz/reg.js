@@ -113,7 +113,7 @@ define(["cryptojs-sha256","thenjs"], function(crypto, then) {
                     });
                     break;
                 case 3:
-                    if($scope.idAUrl && $scope.idBUrl){
+                    if($scope.idAUrl){
                         var password = crypto.SHA256($scope.password).toString();
                         var encPassword = crypto.HmacSHA256(password, $config.encrySeed).toString();
                         var postData = {

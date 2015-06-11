@@ -178,6 +178,7 @@
                     templateUrl: 'addOrder',
                     controller: 'NewOrderCtrl',
                     size: "lg",
+                    backdrop: 'static',
                     scope: $scope
                 });
             }
@@ -187,6 +188,7 @@
                     templateUrl: 'editOrder',
                     controller: 'EditOrderCtrl',
                     size: "lg",
+                    backdrop: 'static',
                     scope: $scope
                 });
             }
@@ -196,6 +198,7 @@
                     templateUrl: 'pathOrder',
                     controller: 'PathOrderCtrl',
                     size: "lg",
+                    backdrop: 'static',
                     scope: $scope
                 });
             }
@@ -575,6 +578,7 @@
                             id: $scope.orderId,
                             //type: $constants.TYPE_ORDER_SINGLE,        //后台新建订单
                             name: $scope.orderName,
+                            description: $scope.orderDescription,
                             creater: $rootScope.backInfo.loginId || "",
                             gateMode: $scope.gateMode.key || 0,
                             amount: $scope.amount || 0,
@@ -634,6 +638,12 @@
                 if(!$scope.Order.products){
                     $scope.Order.products = [];
                 }
+
+                $scope.open = function($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                    $scope.opened = true;
+                };
 
                 $scope.$watch(function(){
                     var totalNum = 0;
@@ -725,6 +735,8 @@
                             idGate: $scope.Order.idGate || "",
                             gateMode: $scope.Order.gateMode.key || 0,
                             name: $scope.Order.name || "",
+                            description: $scope.Order.description,
+                            createTime: $scope.Order.createTime,
                             status:  $scope.Order.status.key,
                             updateInfo: $scope.Order.updateInfo,
                             amount: $scope.Order.amount || 0,

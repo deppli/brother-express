@@ -141,6 +141,14 @@
                         <div class="row row-line">
                             <div class="col-lg-6">
                                 <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>备注</b></span>
+                                    <input type="text" name="orderDescription" ng-model="orderDescription" class="form-control" placeholder="备注"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>产品统称</b></span>
                                     <input type="text" name="productName" ng-model="productName" class="form-control" placeholder="产品统称" required/>
                                     <span class="input-group-addon tipInvalid" ng-show="addOrderForm.productName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
@@ -546,6 +554,23 @@
                                 <div class="input-group input-group-sm">
                                     <span class="label label-success mr10"><b>币种 - </b>{{Order.currency}}</span>
                                     <span class="label label-primary"><b>汇率(美元) - </b>{{_exchange}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-line">
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm"  ng-click="open($event)">
+                                    <span class="input-group-addon"><b>创建时间</b></span>
+                                    <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="Order.createTime" is-open="opened" min-date="minDate" max-date="'2020-01-01'" show-weeks="false" show-button-bar="false" readonly required/>
+                                    <div class="input-group-addon cursor">
+                                        <i class="glyphicon glyphicon-calendar" ></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>备注</b></span>
+                                    <input type="text" name="editDescription" ng-model="Order.description" class="form-control" placeholder="备注"/>
                                 </div>
                             </div>
                         </div>

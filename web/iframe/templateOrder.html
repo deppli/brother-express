@@ -37,7 +37,7 @@
         </tr>
         <tr>
             <td><span class="control-label text-center"><b class="labels">日&emsp;&emsp;期</b></span></td>
-            <td style="border-right:solid 1px #ddd"><span id="orderDate" class="control-label fs12">{{item.createDate|date:'yyyy 年 MM 月 dd 日'}}</span></td>
+            <td style="border-right:solid 1px #ddd"><span id="orderDate" class="control-label fs12">{{item.createTime|date:'yyyy 年 MM 月 dd 日'}}</span></td>
             <td><span class="control-label text-center"><b class="labels">重&emsp;&emsp;量</b></span></td>
             <td colspan="2"><span id="productWeight" class="control-label fs12">{{item.productWeight}}</span>&emsp;kg</td>
         </tr>
@@ -62,6 +62,16 @@
         <tr>
             <td><span class="control-label text-center"><b class="labels">收件地址</b></span></td>
             <td colspan="6"><span id="receiveAddress" class="control-label fs12">{{item.receiveAddress}}</span></td>
+        </tr>
+        <tr>
+            <td><span class="control-label text-center"><b class="labels">内件明细</b></span></td>
+            <td colspan="6">
+                <span id="productsDetail" class="control-label fs12">
+                    <span ng-repeat="product in item.products">
+                        {{product.pName}} {{product.pNum}},
+                    </span>
+                </span>
+            </td>
         </tr>
         <tr style="height:80px;">
             <td colspan="5" style="border-right:solid 1px #ddd"><span class="control-label">备注:</span></td>

@@ -201,6 +201,12 @@
                         <span ng-show="Order.chinaTransId" class="btn btn-info btn-sm" ng-click="queryExpress()">查询</span>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-sm-2 data-name">报关人：</div>
+                    <div class="col-sm-4 data-value">{{Order.payerName}}</div>
+                    <div class="col-sm-2 data-name">报关证件号码：</div>
+                    <div class="col-sm-4 data-value">{{Order.payerIdNo}}</div>
+                </div>
                 <div class="row row-line">
                     <span class="label label-warning">收件人信息</span>
                 </div>

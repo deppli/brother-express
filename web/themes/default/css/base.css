@@ -1078,7 +1078,8 @@ body {
 }
 .padding10-left{
     padding-left: 10px;
-}.item-idno-title{
+}
+.item-idno-title{
     position: absolute;
     width: 210px;
     height:20px;

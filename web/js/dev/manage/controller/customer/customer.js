@@ -131,7 +131,7 @@
                     }
                 });
 
-                $scope.$watch("idImgB", function(){
+                /*$scope.$watch("idImgB", function(){
                     var file = $scope.idImgB;
                     if(file) {
                         $scope.ProgressB = {};
@@ -152,7 +152,7 @@
                             });
                         }
                     }
-                });
+                });*/
 
                 $scope.CustomerSex = $scope.SexList[0];
 
@@ -214,7 +214,7 @@
                     }
                 });
 
-                $scope.$watch("idImgB", function(){
+                /*$scope.$watch("idImgB", function(){
                     var file = $scope.idImgB;
                     if(file) {
                         $scope.ProgressB = {};
@@ -235,7 +235,7 @@
                             });
                         }
                     }
-                });
+                });*/
 
                 var result = $scope.initOptions("Sex", $scope.Customer.sex);
                 $scope.SexList = result[0];

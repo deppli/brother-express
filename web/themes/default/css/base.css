@@ -916,8 +916,9 @@ body {
 .img-add{
     color: #ADADAD;
     font-size:16px;
-    line-height: 140px;
-    height:140px;
+    width:210px;
+    line-height: 240px;
+    height:240px;
     font-weight: bold;
     text-align: center;
     border:solid 2px #888888;
@@ -1077,4 +1078,13 @@ body {
 }
 .padding10-left{
     padding-left: 10px;
+}.item-idno-title{
+    position: absolute;
+    width: 210px;
+    height:20px;
+    line-height:20px;
+    background: rgba(0,0,0,.5);
+    color:white;
+    font-weight: bold;
+    text-align: center;
 }

@@ -57,6 +57,7 @@ exports.logout = function (req, res) {
     req.session.destroy();
     return res.json("success");
 };
+
 //会员新建订单
 exports.createOrder = function (req, res) {
     then(function (cont) {

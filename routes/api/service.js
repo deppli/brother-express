@@ -550,6 +550,7 @@ exports.checkValidateEmail = function(req, res){
     }
 }
 
+
 exports.forgetPassword = function(req, res){
     var toEmail = req.body.loginId;
 

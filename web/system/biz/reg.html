@@ -136,19 +136,24 @@
                         <label class="portal-title">证件上传</label>
                     </div>
                     <div class="row row-line">
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
                             <div class="img-add cursor" ng-file-select ng-model="idImgA" accept=".jpg">
-                                <div ng-hide="idAUrl">+ 身份证正面</div>
+                                <div class="item-idno-title" ng-show="idAUrl">身份证照片</div>
+                                <div ng-hide="idAUrl">+ 身份证</div>
                                 <img ng-src="{{idAUrl}}" ng-show="idAUrl"/>
                             </div>
                             <progressbar class="progress-striped active" value="ProgressA.dynamic" type="success"><i>{{ProgressA.dynamic}} %</i></progressbar>
                         </div>
-                        <div class="col-lg-4">
-                            <div class="img-add cursor" ng-file-select ng-model="idImgB" accept=".jpg">
-                                <div ng-hide="idBUrl">+ 身份证反面</div>
-                                <img ng-src="{{idBUrl}}" ng-show="idBUrl"/>
+                        <div class="col-lg-3">
+                            <div>
+                                <div class="item-idno-title">样例图片</div>
+                                <img width="210" height="240" ng-src="themes/default/img/item_idno.jpg"/>
                             </div>
-                            <progressbar class="progress-striped active" value="ProgressB.dynamic" type="success"><i>{{ProgressB.dynamic}} %</i></progressbar>
+                            <!--<div class="img-add cursor" ng-file-select ng-model="idImgB" accept=".jpg">-->
+                                <!--<div ng-hide="idBUrl">+ 身份证反面</div>-->
+                                <!--<img ng-src="{{idBUrl}}" ng-show="idBUrl"/>-->
+                            <!--</div>-->
+                            <!--<progressbar class="progress-striped active" value="ProgressB.dynamic" type="success"><i>{{ProgressB.dynamic}} %</i></progressbar>-->
                         </div>
                     </div>
                     <div class="row-line"><b class="fs12 text-dark">备注：<span class="text-danger">单张图片大小限制500K</span></b></div>

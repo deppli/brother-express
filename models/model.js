@@ -1,5 +1,5 @@
-var mongoose = require("mongoose"),
-    db = require("../db"),
+var mongoose = require('mongoose'),
+    db = require('../db'),
     Schema = mongoose.Schema;
 
 //{'paramsId' : '0A001', 'paramsName' : '美元', 'paramsGroup' : '0A', 'paramsGroupName' : '汇率', 'paramsValue' : '0.16'}

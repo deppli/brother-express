@@ -74,6 +74,12 @@
 				resolve: {
 					ctrl: lazyCtrl("portal")
 				}
+			}).when("/msg", {
+                    templateUrl: "system/portal/msg.html",
+                    controller: "MsgCtrl",
+                    resolve: {
+                        ctrl: lazyCtrl("portal")
+                    }
 			}).when("/contact", {
                 templateUrl: "system/portal/contact.html",
                 controller: "ContactCtrl",
@@ -225,6 +231,19 @@
 
 	.controller("BaseCtrl", ["$scope", "$rootScope", "$cookies", "$location", "$remote", "$modal",
     function ($scope, $rootScope, $cookies, $location, $remote, $modal) {
+        $(".online-service-top").click(function(){
+            var os=$(this).children();
+            if(os.hasClass("arrowUp")){
+                $(".online-service").css("zoom",0.5)
+                os.removeClass().addClass("arrowDown")
+            }
+            else{
+                $(".online-service").css("zoom",1)
+                os.removeClass().addClass("arrowUp")
+            }
+            $(".onlineService").slideToggle("500");
+        })
+
         $rootScope.webInfo = JSON.parse($cookies.webInfo || "{}");
 
         $scope.menuList = [
@@ -233,6 +252,7 @@
             {name: "公司介绍", link: "#/company", role: function() {return true}},
             {name: "常见问题", link: "#/questions", role: function() {return true}},
             {name: "业务介绍", link: "#/business", role: function() {return true}},
+            {name: "最新公告", link: "#/msg", role: function() {return true}},
             {name: "联系方式", link: "#/contact", role: function() {return true}},
             {name: "合作伙伴", link: "#/links", role: function() {return true}}
         ];

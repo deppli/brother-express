@@ -4,9 +4,9 @@
             <div class="pull-right left-fixed">
                 <a  class="left-tab" ng-click="switch(1)" ng-class="{'left-tab-active': entry==1}">操作指引</a>
                 <div ng-show="entry==1">
-                    <div class="left-tab-item" ng-click="goAnchor('reg')">如何注册?</div>
-                    <div class="left-tab-item" ng-click="goAnchor('pay')">如何下单?</div>
-                    <div class="left-tab-item" ng-click="goAnchor('abroad')">如何海外购物?</div>
+                    <div class="left-tab-item" ng-click="goArea(1)">如何注册?</div>
+                    <div class="left-tab-item" ng-click="goArea(2)">如何下单?</div>
+                    <div class="left-tab-item" ng-click="goArea(3)">如何海外购物?</div>
                 </div>
                 <div class="clear"></div>
                 <a class="left-tab" ng-click="switch(2)" ng-class="{'left-tab-active': entry==2}">服务资费说明</a>
@@ -17,68 +17,74 @@
                 <div class="clear"></div>
             </div>
         </div>
-        <div class="col-lg-10 reg-panel fs12 bg-net shadow-div">
+        <div class="col-lg-10 reg-panel fs16 bg-net shadow-div">
             <div class="padding30">
                 <!-- 操作指引 -->
                 <div ng-show="entry == 1">
-                    <div id="reg" class="portal-title "><i class="glyphicon glyphicon-book mr10"></i><b>如何注册?</b></div>
-                    <div class="row-line fs14">
-                        <p>1.通过主页右上角入口点击进入注册流程</p>
-                        <p><img width="80%" class="pic-img" src="themes/default/img/item_reg_01.jpg"></p>
-                        <p>2.正确填写基本信息后，点击“下一步”</p>
-                        <p><img width="80%" class="pic-img" src="themes/default/img/item_reg_02.jpg"></p>
-                        <p>3.仲良速递会往您的注册邮箱发送确认邮件，请前往注册邮箱查看并点击验证</p>
-                        <p><img width="80%" class="pic-img" src="themes/default/img/item_reg_03.jpg"></p>
-                        <p>4.邮箱认证成功如下图所示</p>
-                        <p><img width="80%" class="pic-img" src="themes/default/img/item_reg_04.jpg"></p>
-                        <p>5.上传身份证正反面照片，点击下一步，完成账户创建</p>
-                        <p><img width="80%" class="pic-img" src="themes/default/img/item_reg_05.jpg"></p>
-                        <p>6.完成账户注册</p>
-                        <p><img width="80%" class="pic-img" src="themes/default/img/item_reg_06.jpg"></p>
+                    <div ng-show="area == 1">
+                        <div id="reg" class="portal-title "><i class="glyphicon glyphicon-book mr10"></i><b>如何注册?</b></div>
+                        <div class="row-line fs16">
+                            <p>1.通过主页右上角入口点击进入注册流程</p>
+                            <p><img width="80%" class="pic-img" src="themes/default/img/item_reg_01.jpg"></p>
+                            <p>2.正确填写基本信息后，点击“下一步”</p>
+                            <p><img width="80%" class="pic-img" src="themes/default/img/item_reg_02.jpg"></p>
+                            <p>3.仲良速递会往您的注册邮箱发送确认邮件，请前往注册邮箱查看并点击验证</p>
+                            <p><img width="80%" class="pic-img" src="themes/default/img/item_reg_03.jpg"></p>
+                            <p>4.邮箱认证成功如下图所示</p>
+                            <p><img width="80%" class="pic-img" src="themes/default/img/item_reg_04.jpg"></p>
+                            <p>5.上传身份证正反面照片，点击下一步，完成账户创建</p>
+                            <p><img width="80%" class="pic-img" src="themes/default/img/item_reg_05.jpg"></p>
+                            <p>6.完成账户注册</p>
+                            <p><img width="80%" class="pic-img" src="themes/default/img/item_reg_06.jpg"></p>
+                        </div>
                     </div>
-                    <div id="pay" class="portal-title "><i class="glyphicon glyphicon-link mr10"></i><b>如何下单?</b></div>
-                    <div class="row-line fs14">
-                        <p>1.通过主页浮窗或菜单进入下单入口</p>
-                        <p><img width="80%" class="pic-img" src="themes/default/img/item_order_01.jpg"></p>
-                        <p>2.根据是否为仲良速递会员,选择相应入口,建议注册会员享受更多优惠</p>
-                        <p><img width="80%" class="pic-img" src="themes/default/img/item_order_02.jpg"></p>
-                        <p>3.进入订单基本信息录入页面,填写需要运送的货物基本信息,填写确认无误点击[下一步]</p>
-                        <p><img width="80%" class="pic-img" src="themes/default/img/item_order_03.jpg"></p>
-                        <p>4.在客户信息界面填写正确的客户信息,建议上传身份证照片,并选择个人化的增值服务,点击[下一步]进入订单确认页面</p>
-                        <p><img width="80%" class="pic-img" src="themes/default/img/item_order_04.jpg"></p>
-                        <p>5.再次确认订单信息,确认无误点击[订单确认],生成订单并进入订单支付页面</p>
-                        <p><img width="80%" class="pic-img" src="themes/default/img/item_order_05.jpg"></p>
-                        <p>6.根据登录方式和个人喜好选择支付宝或余额支付</p>
-                        <p><img width="80%" class="pic-img" src="themes/default/img/item_order_06.jpg"></p>
-                        <p>7.支付完成后,订单创建并完成,等待仲良速递后续流程,您可以通过订单号查询订单实时状态</p>
-                        <p><img width="80%" class="pic-img" src="themes/default/img/item_order_07.jpg"></p>
+                    <div ng-show="area == 2">
+                        <div id="pay" class="portal-title "><i class="glyphicon glyphicon-link mr10"></i><b>如何下单?</b></div>
+                        <div class="row-line fs16">
+                            <p>1.通过主页浮窗或菜单进入下单入口</p>
+                            <p><img width="80%" class="pic-img" src="themes/default/img/item_order_01.jpg"></p>
+                            <p>2.根据是否为仲良速递会员,选择相应入口,建议注册会员享受更多优惠</p>
+                            <p><img width="80%" class="pic-img" src="themes/default/img/item_order_02.jpg"></p>
+                            <p>3.进入订单基本信息录入页面,填写需要运送的货物基本信息,填写确认无误点击[下一步]</p>
+                            <p><img width="80%" class="pic-img" src="themes/default/img/item_order_03.jpg"></p>
+                            <p>4.在客户信息界面填写正确的客户信息,建议上传身份证照片,并选择个人化的增值服务,点击[下一步]进入订单确认页面</p>
+                            <p><img width="80%" class="pic-img" src="themes/default/img/item_order_04.jpg"></p>
+                            <p>5.再次确认订单信息,确认无误点击[订单确认],生成订单并进入订单支付页面</p>
+                            <p><img width="80%" class="pic-img" src="themes/default/img/item_order_05.jpg"></p>
+                            <p>6.根据登录方式和个人喜好选择支付宝或余额支付</p>
+                            <p><img width="80%" class="pic-img" src="themes/default/img/item_order_06.jpg"></p>
+                            <p>7.支付完成后,订单创建并完成,等待仲良速递后续流程,您可以通过订单号查询订单实时状态</p>
+                            <p><img width="80%" class="pic-img" src="themes/default/img/item_order_07.jpg"></p>
+                        </div>
                     </div>
-                    <div id="abroad" class="portal-title "><i class="glyphicon glyphicon-eye-open mr10"></i><b>如何海外购物?</b></div>
-                    <div class="row-line">
-                        <p>1.访问美国亚马逊网站，点击页面顶部注册链接。（如果你已经注册过，这一步就可以跳过了）</p>
-                        <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_01.jpg"></p>
-                        <p>2.输入电子邮件地址，并选择“No, I am a new customer.（我是一个新顾客）”。</p>
-                        <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_02.jpg"></p>
-                        <p>3.设置用户昵称，重新输入邮件地址，设置密码，提交创建用户</p>
-                        <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_03.jpg"></p>
-                        <p>4.注册亚马逊完成，开始购物啦！可以在搜索栏中输入想购买的商品，或者点击旁边的分类目录查看商品，
-                            当然也可以直接访问淘者提供的优惠商品页面购买商品。本例搜索非常著名的“费雪小海马”。</p>
-                        <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_04.jpg"></p>
-                        <p>5.在费雪小海马详情页，我们选择购买数量并加入购物车。由美国亚马逊负责配送的商品可以享受购物满$25美元免费送货。</p>
-                        <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_05.jpg"></p>
-                        <p>6.我们直接进行结算，您可以选择多样商品后在购物车页面选择进行结算。</p>
-                        <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_06.jpg"></p>
-                        <p>7.首先我们输入收货地址，这里姓名、地址、城市、州、电话等信息都按转运公司提供的填写。</p>
-                        <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_07.jpg"></p>
-                        <p>8.选择运输方式。由美国亚马逊负责配送的商品可以享受购物满$25美元免费送货。这里我们选择这个Free Super Saver Shipping免费送货。</p>
-                        <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_08.jpg"></p>
-                        <p>9.输入支付信息，我们首先添加一张信用卡，输入卡号、姓名、截止日期，并确认进行下一步。
-                            （这里的信用卡需要是双币信用卡，Visa、Master、American Express都可以。信用卡第一次使用时，会预授权1美元用来测试信用卡的有效性，不必担心，这1美元不会体现在账单中。）</p>
-                        <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_09.jpg"></p>
-                        <p>10.最后是整个订单的详情，我们可以检查所购商品及数量、收货地址、支付方式、运输方式和订单金额等信息。如果没有问题，就可以下单了！</p>
-                        <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_10.jpg"></p>
-                        <p>11.到此在亚马逊下单完成了，我们现在就等亚马逊发货，并发送到转运公司了。</p>
-                        <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_11.jpg"></p>
+                    <div ng-show="area == 3">
+                        <div id="abroad" class="portal-title "><i class="glyphicon glyphicon-eye-open mr10"></i><b>如何海外购物?</b></div>
+                        <div class="row-line">
+                            <p>1.访问美国亚马逊网站，点击页面顶部注册链接。（如果你已经注册过，这一步就可以跳过了）</p>
+                            <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_01.jpg"></p>
+                            <p>2.输入电子邮件地址，并选择“No, I am a new customer.（我是一个新顾客）”。</p>
+                            <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_02.jpg"></p>
+                            <p>3.设置用户昵称，重新输入邮件地址，设置密码，提交创建用户</p>
+                            <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_03.jpg"></p>
+                            <p>4.注册亚马逊完成，开始购物啦！可以在搜索栏中输入想购买的商品，或者点击旁边的分类目录查看商品，
+                                当然也可以直接访问淘者提供的优惠商品页面购买商品。本例搜索非常著名的“费雪小海马”。</p>
+                            <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_04.jpg"></p>
+                            <p>5.在费雪小海马详情页，我们选择购买数量并加入购物车。由美国亚马逊负责配送的商品可以享受购物满$25美元免费送货。</p>
+                            <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_05.jpg"></p>
+                            <p>6.我们直接进行结算，您可以选择多样商品后在购物车页面选择进行结算。</p>
+                            <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_06.jpg"></p>
+                            <p>7.首先我们输入收货地址，这里姓名、地址、城市、州、电话等信息都按转运公司提供的填写。</p>
+                            <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_07.jpg"></p>
+                            <p>8.选择运输方式。由美国亚马逊负责配送的商品可以享受购物满$25美元免费送货。这里我们选择这个Free Super Saver Shipping免费送货。</p>
+                            <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_08.jpg"></p>
+                            <p>9.输入支付信息，我们首先添加一张信用卡，输入卡号、姓名、截止日期，并确认进行下一步。
+                                （这里的信用卡需要是双币信用卡，Visa、Master、American Express都可以。信用卡第一次使用时，会预授权1美元用来测试信用卡的有效性，不必担心，这1美元不会体现在账单中。）</p>
+                            <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_09.jpg"></p>
+                            <p>10.最后是整个订单的详情，我们可以检查所购商品及数量、收货地址、支付方式、运输方式和订单金额等信息。如果没有问题，就可以下单了！</p>
+                            <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_10.jpg"></p>
+                            <p>11.到此在亚马逊下单完成了，我们现在就等亚马逊发货，并发送到转运公司了。</p>
+                            <p><img width="60%" class="pic-img" src="themes/default/img/item_abroad_11.jpg"></p>
+                        </div>
                     </div>
                 </div>
                 <!-- 资费说明 -->
@@ -86,7 +92,7 @@
                     <div class="portal-title "><i class="glyphicon glyphicon-eye-open mr10"></i><b>资费说明</b></div>
                     <div class="row-line">
                         <h5 class="text-skyblue">基本收费</h5>
-                        <table class="table table-hover webBox">
+                        <table class="table table-hover webBox fs14">
                             <tr class="bg-orange text-white no-border">
                                 <th class="default" style="width:25%;">计费项目</th>
                                 <th class="default" style="width:60%;">说明</th>
@@ -94,68 +100,68 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <div class="input-group-addon fixed-width-120 text-left fs12">
+                                    <div class="input-group-addon fixed-width-120 text-left">
                                         <span class="glyphicon glyphicon-globe"></span>
                                         <b>运费首重500克</b>
                                     </div>
                                 </td>
                                 <td class="text-warning">货品不超过500克获取货品重量500克以内部分重量，按照首重运费收取</td>
                                 <td class="text-center">
-                                    <span class="fs12 text-danger"><b>￥49</b></span>
+                                    <span class=" text-danger"><b>￥49</b></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <div class="input-group-addon fixed-width-120 text-left fs12">
+                                    <div class="input-group-addon fixed-width-120 text-left">
                                         <span class="glyphicon glyphicon-globe"></span>
                                         <b>运费续重100克</b>
                                     </div>
                                 </td>
                                 <td class="text-warning">超过首重500克以外的货品重量，按照每100克的阶梯收取续重费用.货品重量不能超过3千克</td>
                                 <td class="text-center">
-                                    <span class="fs12 text-danger"><b>￥49</b></span>
+                                    <span class=" text-danger"><b>￥49</b></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <div class="input-group-addon fixed-width-120 text-left fs12">
+                                    <div class="input-group-addon fixed-width-120 text-left">
                                         <span class="glyphicon glyphicon-globe"></span>
                                         <b>免税州收货</b>
                                     </div>
                                 </td>
                                 <td class="text-warning">可免去美国国内消费税的免税州地方政策扶植</td>
                                 <td class="text-center">
-                                    <span class="fs12 text-danger"><b>免费</b></span>
+                                    <span class=" text-danger"><b>免费</b></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <div class="input-group-addon fixed-width-120 text-left fs12">
+                                    <div class="input-group-addon fixed-width-120 text-left">
                                         <span class="glyphicon glyphicon-globe"></span>
                                         <b>海外仓库免费保管</b>
                                     </div>
                                 </td>
                                 <td class="text-warning">包裹在转运仓库储存费用.包裹30天内仓储费用全免,超过90天视作弃货处理</td>
                                 <td class="text-center">
-                                    <span class="fs12 text-danger"><b>30天</b></span>
+                                    <span class=" text-danger"><b>30天</b></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <div class="input-group-addon fixed-width-120 text-left fs12">
+                                    <div class="input-group-addon fixed-width-120 text-left">
                                         <span class="glyphicon glyphicon-globe"></span>
                                         <b>税费</b>
                                     </div>
                                 </td>
                                 <td class="text-warning">部分货品需要缴纳关税，关税由仲良速递代收</td>
                                 <td class="text-center">
-                                    <span class="fs12 text-danger"><b>-</b></span>
+                                    <span class=" text-danger"><b>-</b></span>
                                 </td>
                             </tr>
                         </table>
 
                         <h5 class="text-skyblue margin-height-space-sm">增值服务</h5>
-                        <table class="table table-hover webBox">
+                        <table class="table table-hover webBox fs14">
                             <tr class="bg-orange text-white">
                                 <th class="default" style="width:25%;">增值服务名称</th>
                                 <th class="default" style="width:60%;">说明</th>
@@ -163,110 +169,110 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <div class="input-group-addon fixed-width-120 text-left fs12">
+                                    <div class="input-group-addon fixed-width-120 text-left">
                                         <span class="glyphicon glyphicon-globe"></span>
                                         <b>仓储服务</b>
                                     </div>
                                 </td>
                                 <td class="text-warning">包裹在转运仓库储存费用.包裹30天内仓储费用全免,超过90天视作弃货处理</td>
                                 <td class="text-center">
-                                    <span class="fs12 text-danger"><b>{{config.onlineOrderFixedCost|currency:"￥"}}</b></span>
+                                    <span class=" text-danger"><b>{{config.onlineOrderFixedCost|currency:"￥"}}</b></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <div class="input-group-addon fixed-width-120 text-left fs12">
+                                    <div class="input-group-addon fixed-width-120 text-left">
                                         <span class="glyphicon glyphicon-log-in"></span>
                                         <b>加固包裹</b>
                                     </div>
                                 </td>
                                 <td class="text-warning">采用泡沫或填充物对易碎品进行加固处理,防止货物破损,但不能保证运输意外受损</td>
                                 <td class="text-center">
-                                    <span class="fs12 text-danger"><b>{{config.onlineOrderFixedCost|currency:"￥"}}</b></span>
+                                    <span class=" text-danger"><b>{{config.onlineOrderFixedCost|currency:"￥"}}</b></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <div class="input-group-addon fixed-width-120 text-left fs12">
+                                    <div class="input-group-addon fixed-width-120 text-left">
                                         <span class="glyphicon glyphicon-compressed"></span>
                                         <b>专业包装箱</b>
                                     </div>
                                 </td>
                                 <td class="text-warning">使用全新的货物包装箱对包裹进行全新加固封箱,进一步保证包裹完整性</td>
                                 <td class="text-center">
-                                    <span class="fs12 text-danger"><b>{{config.onlineOrderBoxCost|currency:"￥"}}</b></span>
+                                    <span class=" text-danger"><b>{{config.onlineOrderBoxCost|currency:"￥"}}</b></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <div class="input-group-addon fixed-width-120 text-left fs12">
+                                    <div class="input-group-addon fixed-width-120 text-left">
                                         <span class="glyphicon glyphicon-send"></span>
                                         <b>加急处理</b>
                                     </div>
                                 </td>
                                 <td class="text-warning">选择直通绿色通道,大幅缩短货物转运清关物流时间</td>
                                 <td class="text-center">
-                                    <span class="fs12 text-danger"><b>{{config.onlineOrderFastCost|currency:"￥"}}</b></span>
+                                    <span class=" text-danger"><b>{{config.onlineOrderFastCost|currency:"￥"}}</b></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <div class="input-group-addon fixed-width-120 text-left fs12">
+                                    <div class="input-group-addon fixed-width-120 text-left">
                                         <span class="glyphicon glyphicon-credit-card"></span>
                                         <b>货品保价</b>
                                     </div>
                                 </td>
                                 <td class="text-warning">按照货品总价,收取2%的保价费用,若产生货品丢失等问题全额赔偿</td>
                                 <td class="text-center">
-                                    <span class="fs12 text-danger"><b>2%</b></span>
+                                    <span class=" text-danger"><b>2%</b></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <div class="input-group-addon fixed-width-120 text-left fs12">
+                                    <div class="input-group-addon fixed-width-120 text-left">
                                         <span class="glyphicon glyphicon-phone"></span>
                                         <b>电子产品保险</b>
                                     </div>
                                 </td>
                                 <td class="text-warning">若货品为电子产品,收取2%的电子产品强制保险费用,并在此基础上增收20人民币材料费</td>
                                 <td class="text-center">
-                                    <span class="fs12 text-danger"><b>2% + ￥20</b></span>
+                                    <span class=" text-danger"><b>2% + ￥20</b></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <div class="input-group-addon fixed-width-120 text-left fs12">
+                                    <div class="input-group-addon fixed-width-120 text-left">
                                         <span class="glyphicon glyphicon-transfer"></span>
                                         <b>退换货服务</b>
                                     </div>
                                 </td>
                                 <td class="text-warning">退换货服务费,运费买家自行承担</td>
                                 <td class="text-center">
-                                    <span class="fs12 text-danger"><b>{{config.onlineOrderReturnCost|currency:"￥"}}</b></span>
+                                    <span class=" text-danger"><b>{{config.onlineOrderReturnCost|currency:"￥"}}</b></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <div class="input-group-addon fixed-width-120 text-left fs12">
+                                    <div class="input-group-addon fixed-width-120 text-left">
                                         <span class="glyphicon glyphicon-hand-up"></span>
                                         <b>内件清点</b>
                                     </div>
                                 </td>
                                 <td class="text-warning">按照用户订单中货品明细进行详细清点,避免商家漏发或货品遗漏</td>
                                 <td class="text-center">
-                                    <span class="fs12 text-danger"><b>{{config.onlineOrderDetailProductCost|currency:"￥"}}</b></span>
+                                    <span class=" text-danger"><b>{{config.onlineOrderDetailProductCost|currency:"￥"}}</b></span>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <div class="input-group-addon fixed-width-120 text-left fs12">
+                                    <div class="input-group-addon fixed-width-120 text-left">
                                         <span class="glyphicon glyphicon-gift"></span>
                                         <b>取出发票/宣传资料</b>
                                     </div>
                                 </td>
                                 <td class="text-warning">馈赠、礼物等需要对商品价格保密情况下,提供取出内件发票或宣传资料服务</td>
                                 <td class="text-center">
-                                    <span class="fs12 text-danger"><b>{{config.onlineOrderRemovePagesCost|currency:"￥"}}</b></span>
+                                    <span class=" text-danger"><b>{{config.onlineOrderRemovePagesCost|currency:"￥"}}</b></span>
                                 </td>
                             </tr>
                         </table>
@@ -370,11 +376,11 @@
                     <div class="row-line padding30">
                         <div>
                             <img class="bottom-img" width="25px" src="themes/default/img/icon-word.png">
-                            <b class="ml5 cursor fs14 text-skyblue"><a href="files/完税价格表.doc">完税价格表.doc</a></b>
+                            <b class="ml5 cursor fs16 text-skyblue"><a href="files/完税价格表.doc">完税价格表.doc</a></b>
                         </div>
                         <div class="margin-height-space-sm">
                             <img class="bottom-img" width="25px" src="themes/default/img/icon-word.png">
-                            <b class="ml5 cursor fs14 text-skyblue"><a href="files/免责条款与服务说明.docx">免责条款与服务说明.docx</a></b>
+                            <b class="ml5 cursor fs16 text-skyblue"><a href="files/免责条款与服务说明.docx">免责条款与服务说明.docx</a></b>
                         </div>
                     </div>
                 </div>

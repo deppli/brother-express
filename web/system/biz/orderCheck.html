@@ -5,8 +5,34 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="row row-line">
-                            <a href="#/orderGuest" class="col-sm-5 col-sm-offset-1 order-entry order-entry-guest"></a>
-                            <a class="col-sm-5 col-sm-offset-2 order-entry order-entry-customer" ng-click="goCustomer()"></a>
+                    <div class="col-sm-6 text-center">
+                        <div class="order-entry" ng-click="goCustomer()">
+                            <div class="order-entry-float">
+                                <img src="themes/default/img/item_customer.png">
+                            </div>
+                            <div class="order-entry-content text-left text-orange">
+                                <p><i class="glyphicon glyphicon-ok-circle text-orange mr10"></i>注册会员赠送账户余额</p>
+                                <p><i class="glyphicon glyphicon-ok-circle text-orange mr10"></i>全景图展示订单/交易信息</p>
+                                <p><i class="glyphicon glyphicon-ok-circle text-orange mr10"></i>定期充值返现活动</p>
+                                <p><i class="glyphicon glyphicon-ok-circle text-orange mr10"></i>累积会员等级制度</p>
+                                <img height="100" width="100%"  src="themes/default/img/item_company_06_6.jpg">
+                            </div>
+                            <div class="order-entry-footer bg-orange">会员入口</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 text-center">
+                        <div class="order-entry" ng-click="go('orderGuest')">
+                            <div class="order-entry-float">
+                                <img src="themes/default/img/item_guest.png">
+                            </div>
+                            <div class="order-entry-content text-left text-skyblue">
+                                <p><i class="glyphicon glyphicon-ok-circle text-skyblue mr10"></i>首次使用在线订单系统，流程试用</p>
+                                <p><i class="glyphicon glyphicon-ok-circle text-skyblue mr10"></i>订单信息不会保存，需手动记录</p>
+                                <p><i class="glyphicon glyphicon-ok-circle text-skyblue mr10"></i>不累计积分等级等会员福利</p>
+                                <p><i class="glyphicon glyphicon-ok-circle text-skyblue mr10"></i>使用会员入口，首次注册立即返现</p>
+                                <img height="100" width="100%"  src="themes/default/img/item_company_06_8.jpg">
+                            </div>
+                            <div class="order-entry-footer bg-skyblue">游客入口</div>
                         </div>
                     </div>
                 </div>

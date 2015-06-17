@@ -2,11 +2,21 @@
 	return [["BusinessCtrl", ["$scope", "$rootScope", "$remote", "$modal",
 	function($scope, $rootScope, $remote, $modal) {
         $scope.entry = 1;
+        $scope.area = 1;
 
         $scope.switch = function(index){
             $scope.entry = index;
+            $(document).scrollTop(0);
+        }
+
+        $scope.goArea = function(index){
+            $scope.area = index;
+            $(document).scrollTop(0);
         }
         console.log("业务介绍");
+	}]],["MsgCtrl", ["$scope", "$rootScope", "$remote", "$modal",
+    function($scope, $rootScope, $remote, $modal) {
+        console.log("最新公告");
 	}]], ["QuestionsCtrl", ["$scope", "$rootScope", "$remote", "$modal",
     function ($scope, $rootScope, $remote, $modal) {
         console.log("常见问题");

@@ -102,14 +102,23 @@
         $rootScope.config = $config;
 
         $rootScope.initJnl = function(prefix){
+            var formatArr = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
             var nowTime = new Date();
+            /*
+             //生成3位数字随机序列
             var random = Math.ceil(Math.random()*999);
             if(random < 10){
                 random = "00" + random;
             }else if(random < 100 && random >= 10){
                 random = "0" + random;
+             }*/
+            var random = "";
+            //生成4位英文随机串
+            for(var i=1;i<=4;i++){
+                var currentIndex = Math.floor(Math.random() * formatArr.length);
+                random += formatArr[currentIndex];
             }
-            return prefix + nowTime.format("yyMMddhhmmss") + random;
+            return prefix  + random + nowTime.format("yyMMddhhmmss");
         }
 
         $rootScope.goAnchor = function (id) {

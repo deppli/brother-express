@@ -1218,4 +1218,36 @@ body {
 .bg-entry{
     background:url("../img/bg_entry.jpg");
     height: 560px;
+}.connect {
+    /*background: #efeeee;*/
+    padding: 30px 0;
+    width: 1000px;
+    margin:auto;
+}
+.connect dl {
+    float: left;
+    padding: 5px 30px 0 65px;
+    height: 49px;
+    color: #848382;
+    border-right: 3px solid #c2c1c1;
+}
+.connect dl.connect01 {
+    margin-left: 50px;
+    background: url(../img/sprite.png) no-repeat 0 0px;
+}
+.connect dl.connect02 {
+    position: relative;
+    margin-left: 30px;
+    padding-left: 70px;
+    background: url(../img/sprite.png) no-repeat 0 -49px;
+}
+.connect dl.connect03 {
+    margin-left: 30px;
+    padding-left: 70px;
+    background: url(../img/sprite.png) no-repeat 0 -98px;
+}
+.connect dl.connect04 {
+    margin-left: 30px;
+    padding-left: 70px;
+    background: url(../img/sprite.png) no-repeat 0 -147px;
 }

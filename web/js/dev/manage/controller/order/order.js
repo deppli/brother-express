@@ -290,14 +290,23 @@
 
 
                 var seq = 0;
-                var postData = {
-                        time: 1,
-                        gateMode: 0         //行邮
+                    var postData = {};
+                    postData.idBatch = $scope.Query.idBatch||null
+                    postData.id = $scope.Query.id||null
+                    if($scope.Query.type){
+                        postData.type = $scope.Query.type.key
+                    }
+                    if($scope.Query.status){
+                        postData.status = $scope.Query.status.key
+                    }
+                    if($scope.Query.time){
+                        postData.time = $scope.Query.time.key
                 }
+                    postData.gateMode = 0         //行邮
                 //遍历后端返回数据，解析原有[{key1:value1,key2:value2}]形式为[value,value]
                 $remote.post("/order/list", postData, function(orders){
                     orders.forEach(function(order){
-                        if(order.status == $constants.STATUS_ORDER_CLEARANCE && order.products && order.products.length > 0){
+                            if(order.products && order.products.length > 0){
                             order.products.forEach(function(product){
                                 var row = [];
                                 /*var seqCol = {metadata: {style: bodyer.id}};
@@ -413,14 +422,23 @@
                 ];
 
                     var seq = 1;
-                var postData = {
-                        time: 1,        //一天内
-                        gateMode: 1     //包税
+                    var postData = {};
+                    postData.idBatch = $scope.Query.idBatch||null
+                    postData.id = $scope.Query.id||null
+                    if($scope.Query.type){
+                        postData.type = $scope.Query.type.key
                 }
+                    if($scope.Query.status){
+                        postData.status = $scope.Query.status.key
+                    }
+                    if($scope.Query.time){
+                        postData.time = $scope.Query.time.key
+                    }
+                    postData.gateMode = 1         //包税
                 //遍历后端返回数据，解析原有[{key1:value1,key2:value2}]形式为[value,value]
                 $remote.post("/order/list", postData, function(orders) {
                     orders.forEach(function(order){
-                        if(order.status == $constants.STATUS_ORDER_CLEARANCE && order.products && order.products.length > 0){
+                            if(order.products && order.products.length > 0){
                                 var productName = "";
                                 var productBrand = ""
                                 order.products.forEach(function(product, index){

@@ -141,6 +141,7 @@ exports.upload = function (req, res) {
                     res.json(files);
                     __logger.info("文件上传成功:" + newPath);
                 }else{
+                    res.status(400).send(err.message);
                     __logger.error("文件上传失败:" + err);
                 }
             });

@@ -32,6 +32,9 @@
                 if($scope.Query.status){
                     postData.status = $scope.Query.status.key
                 }
+                if($scope.Query.payStatus){
+                    postData.payStatus = $scope.Query.payStatus.key
+                }
                 if($scope.Query.time){
                     postData.time = $scope.Query.time.key
                 }
@@ -89,6 +92,9 @@
                 }
                 if($scope.Query.status){
                     postData.status = $scope.Query.status.key
+                }
+                if($scope.Query.payStatus){
+                    postData.payStatus = $scope.Query.payStatus.key
                 }
                 if($scope.Query.time){
                     postData.time = $scope.Query.time.key

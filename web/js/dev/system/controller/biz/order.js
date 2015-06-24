@@ -346,7 +346,7 @@ define(["bootstrap-icheck"], function() {
                         name: $scope.orderName,
                         creater: "管理员",
                         gateMode: 0,
-                        idAUrl: $scope.idImgA,
+                        idAUrl: $scope.idAUrl,
                         //idBUrl: $scope.idImgB,
                         amount: $scope.orderTotalAmt || 0,
                         worldTransId: $scope.worldTransId || $scope.orderId,

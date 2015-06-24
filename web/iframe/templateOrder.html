@@ -9,6 +9,7 @@
     <script type="text/javascript" src="../js/dev/lib/angular-qrcode/qrcode.js"></script>
     <script type="text/javascript" src="../js/dev/lib/angular-qrcode/qrcode-base.js"></script>
     <script type="text/javascript" src="../js/dev/lib/angular-qrcode/qrcode-utf8.js"></script>
+    <script type="text/javascript" src="../js/dev/lib/jquery-barcode.js"></script>
 
     <style type="text/css">
         .table-border{border: solid 1px #ddd !important;}
@@ -73,6 +74,10 @@
                 </span>
             </td>
         </tr>
+        <tr>
+            <td><span class="control-label text-center"><b class="labels">条形码</b></span></td>
+            <td colspan="6"><span class="control-label fs12" ng-bar="{{item.id}}"></span></td>
+        </tr>
         <tr style="height:80px;">
             <td colspan="5" style="border-right:solid 1px #ddd"><span class="control-label">备注:</span></td>
             <td colspan="2"><div>目的地：中国</div></span></td>
@@ -97,5 +102,10 @@
                 console.log(orders);
             }
         }
-    ]);
+    ]).directive("ngBar", function(){
+        return function(scope, element, attrs) {
+            var code = attrs.ngBar;
+            $(element).barcode(code, "code39",{barWidth:1, barHeight:40,showHRI:false});
+        }
+    });
 </script>

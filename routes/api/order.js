@@ -101,6 +101,9 @@ exports.count = function (req, res) {
     if(req.body.status){
         queryStr.status = req.body.status;
     }
+    if(req.body.payStatus){
+        queryStr.payStatus = req.body.payStatus;
+    }
     if(req.body.time){
         var now = new Date();
         var begin = new Date();
@@ -132,6 +135,9 @@ exports.list = function (req, res) {
     }
     if(req.body.type){
         queryStr.type = req.body.type;
+    }
+    if(req.body.payStatus){
+        queryStr.payStatus = req.body.payStatus;
     }
     if(req.body.status){
         queryStr.status = req.body.status;

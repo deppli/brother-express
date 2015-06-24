@@ -28,7 +28,7 @@
                 </tab>
                 <tab heading="支付状态">
                     <span class="item-query" ng-click="setQuery('payStatus', null)">全部</span>
-                    <span class="item-query" ng-repeat="payStatus in QueryOrderPayStatus" ng-click="setQuery('payStatus', payStatus)">{{payStatus.value}}</span>
+                    <span class="item-query" ng-repeat="orderPayStatus in QueryOrderPayStatus" ng-click="setQuery('payStatus', orderPayStatus)">{{orderPayStatus.value}}</span>
                 </tab>
                 <tab heading="创建时间">
                     <span class="item-query" ng-click="setQuery('time', null)">全部</span>
@@ -43,7 +43,7 @@
                     <label class="label label-success mr10" ng-show="Query.id">订单编号：{{Query.id}}</label>
                     <label class="label label-success mr10" ng-show="Query.type">订单类型：{{Query.type.value}}</label>
                     <label class="label label-success mr10" ng-show="Query.status">订单状态：{{Query.status.value}}</label>
-                    <label class="label label-success mr10" ng-show="Query.kind">支付状态：{{Query.payStatus.value}}</label>
+                    <label class="label label-success mr10" ng-show="Query.payStatus">支付状态：{{Query.payStatus.value}}</label>
                     <label class="label label-success mr10" ng-show="Query.time">创建时间：{{Query.time.value}}</label>
                     <button class="btn btn-sm btn-primary pull-right" ng-click="listOrder(true)">查询</button>
                 </div>
@@ -89,7 +89,7 @@
     <div class="row text-center">
         <div class="col-lg-12">
             <button type="button" class="btn btn-primary" ng-click="newModal()">新&nbsp;建</button>
-            <!--<button type="button" class="btn btn-warning" ng-click="batchPrint()">批量打印</button>-->
+            <button type="button" class="btn btn-warning" ng-click="batchPrint()">批量打印</button>
             <button type="button" class="btn btn-success" ng-click="exportExcel()">批量导出[行邮]</button>
             <button type="button" class="btn btn-success" ng-click="exportExcelBS()">批量导出[包税]</button>
         </div>
@@ -781,7 +781,9 @@
                 </div>
                 <div class="box box-info">
                     <div class="box-heading">
-                        <h5><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>付款人信息</b></h5>
+                        <h5><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>付款人信息</b>
+                            <a class="pull-right fs12 text-white" target="_blank" href="{{Order.idNoImgA}}" ng-show="Order.idNoImgA">查看证件照</a>
+                        </h5>
                     </div>
                     <div class="box-body" >
                         <div class="row row-line">

@@ -1207,6 +1207,13 @@ body {
     color: #F16441;
     font-size: 18px;
 }
+.usa-hotline{
+    background: white;
+    margin-left: 15px;
+    line-height: 25px;
+    color: gray;
+    font-size: 13px;
+}
 .msg-line{
     font-size:12px;
     padding-left:20px;
@@ -1218,7 +1225,8 @@ body {
 .bg-entry{
     background:url("../img/bg_entry.jpg");
     height: 560px;
-}.connect {
+}
+.connect {
     /*background: #efeeee;*/
     padding: 30px 0;
     width: 1000px;

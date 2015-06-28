@@ -1,7 +1,6 @@
 ﻿var express = require("express"),
     bodyParser = require("body-parser"),
     log4js = require("log4js"),
-    logger = require("./util/logger").logger,
     path = require("path"),
     hooks = require("./hooks/hooks").hooks,
     app = express(),
@@ -31,7 +30,8 @@ if (process.argv.indexOf("install") > 0) {
     return;
 }
 
-app.use(log4js.connectLogger(logger, {level: "auto", format:':method :url'}));
+//var HTTP_LOG_FORMAT_DEV = ':method :url :status :response-time ms';
+//app.use(log4js.connectLogger(__logger, {level: "auto", format: HTTP_LOG_FORMAT_DEV}));
 
 var circle = 36000*1000
 app.use(session({
@@ -129,6 +129,7 @@ app.post("/service/createOrder", service.createOrder);
 app.post("/service/queryOrder", service.queryOrder);
 app.post("/service/thirdPath", service.thirdPath);
 app.post("/service/updateOrder", service.updateOrder);
+app.post("/service/updateOrderIdno", service.updateOrderIdno);
 app.post("/service/listMenus", service.listMenus);
 app.post("/service/listProvinces", service.listProvinces);
 app.post("/service/listCitys", service.listCitys);
@@ -166,4 +167,4 @@ app.post('/alipay/create_direct_pay_by_user', alipayApi.create_direct_pay_by_use
 
 app.set("port", 4001);
 app.listen(app.get("port"));
-logger.info("logistics_server start at " + app.get("port"));
+__logger.info("logistics_server start at " + app.get("port"));

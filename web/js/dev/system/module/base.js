@@ -355,6 +355,20 @@
             modalInstance.result.then(function() {
             });
         }
+
+        //上传证件照
+        $scope.uploadId = function(){
+            var modalInstance = $modal.open({
+                templateUrl: 'uploadModal',
+                controller: 'UploadCtrl',
+                size: "sm",
+                scope:$scope
+            });
+            modalInstance.opened.then(function(){
+            });
+            modalInstance.result.then(function() {
+            });
+        }
 	}]).controller("WelcomeCtrl", ["$scope", "$rootScope", "$location", "$remote", "$modal",
     function ($scope, $rootScope, $location, $remote, $modal) {
         $scope.displayMode = 0;
@@ -433,6 +447,76 @@
     }]).controller("ExpressCtrl", ["$scope", "$rootScope", "$location",
     function ($scope, $rootScope, $location) {
 
+    }]).controller("UploadCtrl", ["$scope", "$rootScope", "$config", "$constants", "$upload", "$remote", "$modalInstance",
+    function ($scope, $rootScope, $config, $constants, $upload, $remote, $modalInstance) {
+        $scope.idAUrl = null;
+        $scope.idBUrl = null;
+
+        $scope.$watch("idImgA", function(){
+            var file = $scope.idImgA;
+            if(file){
+                $scope.ProgressA = {};
+                $scope.idAUrl = null;
+                if(file[0].size > $config.maxIdFileSize) {
+                    var msg = {text: $constants.MESSAGE_FILE_TOO_BIG};  //200K
+                    $scope.showMessage(msg);
+                }else{
+                    $upload.upload({
+                        url: '/service/upload?type=1&file=' + $scope.Order.id + '_A',
+                        file: file[0]
+                    }).progress(function (evt) {
+                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                        $scope.ProgressA.dynamic = progressPercentage;
+                    }).success(function (data, status, headers, config) {
+                        $scope.ProgressA.dynamic = 100;
+                        $scope.idAUrl = $config.idCardPath + $scope.Order.id + '_A.jpg'
+                    });
+                }
+            }
+        });
+
+        $scope.$watch("idImgB", function(){
+            var file = $scope.idImgB;
+            if(file) {
+                $scope.ProgressB = {};
+                $scope.idBUrl = null;
+                if(file[0].size > $config.maxIdFileSize) {
+                    var msg = {text: $constants.MESSAGE_FILE_TOO_BIG};  //200K
+                    $scope.showMessage(msg);
+                }else{
+                    $upload.upload({
+                        url: '/service/upload?type=1&file=' + $scope.Order.id + '_B',
+                        file: file[0]
+                    }).progress(function (evt) {
+                        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+                        $scope.ProgressB.dynamic = progressPercentage;
+                    }).success(function (data, status, headers, config) {
+                        $scope.ProgressB.dynamic = 100;
+                        $scope.idBUrl = $config.idCardPath + $scope.Order.id + '_B.jpg'
+                    });
+                }
+            }
+        });
+
+        $scope.updateOrder = function(){
+            if($scope.idAUrl && $scope.idBUrl){
+                var postData = {
+                    id: $scope.Order._id,
+                    orderId: $scope.Order.id,
+                    idAUrl: $scope.idAUrl,
+                    idBUrl: $scope.idBUrl
+                }
+
+                $remote.post("/service/updateOrderIdno", postData, function(data){
+                    var msg = {text:$constants.MESSAGE_ORDER_IDNOIMG_UPDATED};
+                    $rootScope.showMessage(msg);
+                    $modalInstance.close();
+                })
+            }else{
+                var msg = {text:$constants.MESSAGE_MUST_UPLOAD_IDNO};
+                $rootScope.showMessage(msg);
+            }
+        }
     }]).controller('LoadingCtrl', ["$scope", "$rootScope", "$modalInstance",
     function ($scope, $rootScope, $modalInstance) {
         $rootScope.closeLoading = function(){

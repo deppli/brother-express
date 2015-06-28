@@ -12,9 +12,11 @@ exports.add = function (req, res) {
     });
     group.save(function (err, doc) {
         if (err) {
+            __logger.error("新增分组(" + req.body.name + ")失败:" + err.message)
             res.status(400).send(err.message);
             return;
         }
+        __logger.info("新增分组(" + req.body.name + ")成功")
         res.json("success");
     });
 };
@@ -47,9 +49,11 @@ exports.edit = function (req, res) {
     };
     groupModel.findByIdAndUpdate(req.body.id, update, undefined, function (err, doc) {
         if (err) {
+            __logger.error("修改分组(" + req.body.id + ")失败:" + err.message);
             res.status(400).send(err.message);
             return;
         }
+        __logger.info("修改分组(" + req.body.id + ")成功");
         res.json("success");
     });
 };
@@ -65,9 +69,11 @@ exports.delete = function (req, res) {
 
         groupModel.findByIdAndRemove(req.body.id, undefined, function (err, doc) {
             if (err) {
+                __logger.error("删除分组(" + req.body.id + ")失败:" + err.message);
                 res.status(400).send(err.message);
                 return;
             }
+            __logger.info("删除分组(" + req.body.id + ")成功");
             res.json("success");
         });
     })

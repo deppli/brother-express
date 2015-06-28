@@ -7,10 +7,12 @@ var http = require('http');
 var qs = require('querystring');
 
 exports.add = function (req, res) {
+    var orderId = req.body.id
     then(function (cont) {
         var order = {
             id: req.body.id
         };
+        __logger.info("开始新建订单,订单编号[" + orderId + "]");
 
         orderModel.findOne(order).exec(function(err, doc) {
             if (err) {
@@ -82,8 +84,10 @@ exports.add = function (req, res) {
             cont(null, doc);
         });
     }).then(function(cont, doc) {
+        __logger.info("新建订单[" + orderId + "]成功");
         res.json("success");
     }).fail(function (cont, error) {
+        __logger.error("新建订单[" + orderId + "]失败[" + error.message + "]");
         res.status(400).send(error.message);
     });
 
@@ -264,9 +268,11 @@ exports.edit = function (req, res) {
     };
     orderModel.findByIdAndUpdate(req.body.dbId, update, undefined, function (err, doc) {
         if (err) {
+            __logger.error("修改订单[" + req.body.dbId + "]失败,错误信息[" + err.message + "]");
             res.status(400).send(err.message);
             return;
         }
+        __logger.info("修改订单[" + req.body.dbId + "]成功");
         res.json("success");
     });
 };
@@ -280,17 +286,21 @@ exports.pathUpdate = function (req, res) {
     if(idBatch){
         orderModel.update({idBatch:idBatch}, update, {safe: false, multi: true}, function (err, doc) {
             if (err) {
+                __logger.error("批量轨迹更新[" + idBatch + "]失败[" + err.message + "]");
                 res.status(400).send(err.message);
                 return;
             }
+            __logger.info("批量轨迹更新[" + idBatch + "]成功");
             res.json("success");
         });
     }else{
     orderModel.findByIdAndUpdate(req.body.dbId, update, undefined, function (err, doc) {
         if (err) {
+                __logger.error("轨迹更新[" + req.body.dbId + "]失败[" + err.message + "]");
             res.status(400).send(err.message);
             return;
         }
+            __logger.info("轨迹更新[" + req.body.dbId + "]成功");
         res.json("success");
     });
     }

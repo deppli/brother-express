@@ -72,7 +72,7 @@ define(["cryptojs-sha256","thenjs"], function(crypto, then) {
             }
         });
 
-        /*$scope.$watch("idImgB", function(){
+        $scope.$watch("idImgB", function(){
             var file = $scope.idImgB;
             if(file) {
                 $scope.ProgressB = {};
@@ -93,7 +93,7 @@ define(["cryptojs-sha256","thenjs"], function(crypto, then) {
                     });
                 }
             }
-        });*/
+        });
 
         $scope.nextStep = function(step){
             switch(step){
@@ -124,7 +124,7 @@ define(["cryptojs-sha256","thenjs"], function(crypto, then) {
                             sex: $scope.sex.key||0,
                             idNo: $scope.idNo||"",
                             idNoImgA: $scope.idAUrl,      //.jpg
-                            //idNoImgB: $scope.idBUrl,      //.jpg
+                            idNoImgB: $scope.idBUrl,      //.jpg
                             birthday: $scope.birthday||"",
                             phone: $scope.phone||"",
                             address: $scope.address||""

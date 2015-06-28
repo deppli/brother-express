@@ -62,6 +62,7 @@ exports.login = function (req, res) {
             role: user.role
         });
     }).fail(function (cont, error) {
+        __logger.error("用户(" + req.body.loginId + ")登录失败:" + error.message);
         res.status(400).send(error.message);
     });
 };

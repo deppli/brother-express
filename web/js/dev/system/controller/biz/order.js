@@ -40,7 +40,7 @@ define(["bootstrap-icheck"], function() {
             }
         });
 
-       /* $scope.$watch("idImgB", function(){
+        $scope.$watch("idImgB", function(){
             var file = $scope.idImgB;
             if(file) {
                 $scope.ProgressB = {};
@@ -61,7 +61,7 @@ define(["bootstrap-icheck"], function() {
                     });
                 }
             }
-        });*/
+        });
 
         var nowTime = new Date();
         $scope.orderId = $scope.initJnl("S");
@@ -347,10 +347,10 @@ define(["bootstrap-icheck"], function() {
                         creater: "管理员",
                         gateMode: 0,
                         idAUrl: $scope.idAUrl,
-                        //idBUrl: $scope.idImgB,
+                        idBUrl: $scope.idBUrl,
                         amount: $scope.orderTotalAmt || 0,
-                        worldTransId: $scope.worldTransId || $scope.orderId,
-                        worldTransName: $constants.worldTransName || $constants.NAME_COMPANY_NAME,
+                        worldTransId: $scope.orderId,
+                        worldTransName: $constants.NAME_COMPANY_NAME,
                         chinaTransId: $scope.chinaTransId || "",
                         chinaTransName: $scope.chinaTransName || "",
                         payerName: $scope.payerName || "",

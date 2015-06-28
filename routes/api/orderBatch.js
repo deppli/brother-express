@@ -18,6 +18,7 @@ exports.commitExcel = function (req, res) {
 
     var excelData;
 
+    __logger.info("开始进行批量数据导入操作,批次号[" + idBatch + "]");
     then(function(sequence){
         try{
             excelData = excel.parse(file);
@@ -135,8 +136,10 @@ exports.commitExcel = function (req, res) {
             sequence(err)
         })
     }).then(function (sequence, doc) {
+        __logger.info("批量导入数据成功,批次号[" + idBatch + "]");
         res.json("success");
     }).fail(function (sequence, err) {
+        __logger.error("批量导入数据失败,批次号[" + idBatch + "],错误信息[" + err.message + "]");
         res.status(400).send(err.message);
     });
 }
@@ -147,10 +150,12 @@ exports.processExcel = function (req, res) {
         var data = excel.parse(file);
         res.json(data);
     }catch(ex){
+        __logger.error("处理Excel文件失败,错误信息[" + ex + "]");
         res.status(400).send("parse error");
     }
 };
 
+//批量文件导入,暂不使用
 exports.commitBatch = function (req, res) {
     var ordersData = req.body.batchOrders;
     var productsData = req.body.batchProducts;
@@ -161,6 +166,7 @@ exports.commitBatch = function (req, res) {
     var orderLine = 0;
     var productLine = 0;
 
+    __logger.info("开始进行批量数据导入操作,批次号[" + idBatch + "]");
     then.eachSeries(ordersData, function(next, orderData, index) {
         then(function(cont) {
             var order = {
@@ -255,8 +261,10 @@ exports.commitBatch = function (req, res) {
             next(err, doc);
         });
     }).then(function(next, doc){
+        __logger.info("批量导入数据成功,批次号[" + idBatch + "]");
         res.json("success");
     }).fail(function(next, err) {
+        __logger.error("批量导入数据失败,批次号[" + idBatch + "],错误信息[" + err.message + "]");
         res.status(400).send(err.message);
     });
 };

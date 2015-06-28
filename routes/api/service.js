@@ -35,6 +35,7 @@ exports.checkCustomer = function(req, res) {
 
     customerModel.findOne(customer).exec(function(err, doc) {
         if (err) {
+            __logger.error("用户校验失败[" + err.message + "]")
             res.status(400).send(err.message);
             return;
         }
@@ -51,6 +52,7 @@ exports.addCustomer = function(req, res) {
         var customer = {
             loginId: req.body.loginId
         };
+        __logger.info("又一个土豪来注册了,注册邮箱[" + customer.loginId + "]")
 
         customerModel.findOne(customer).exec(function(err, doc) {
             if (err) {
@@ -103,10 +105,11 @@ exports.addCustomer = function(req, res) {
                 cont(new Error(err));
                 return;
             }
-            __logger.info(doc)
+            __logger.info("土豪注册成功了,撒花欢迎[" + doc.loginId + "]")
             res.json(doc);
         });
     }).fail(function (cont, error) {
+        __logger.error("又一个土豪[" + req.body.loginId + "]注册失败了[" + error.message + "]")
         res.status(400).send(error.message);
     });
 
@@ -152,6 +155,7 @@ exports.upload = function (req, res) {
 exports.listMenus = function (req, res) {
     menuModel.find({level: '0'}).populate('subMenu').exec(function (err, doc) {
         if (err) {
+            __logger.error("我去,拉个菜单列表都能失败，不想活了[" + err.message + "]")
             res.status(400).send(err.message);
             return;
         }
@@ -166,6 +170,7 @@ exports.listProvinces = function (req, res) {
     }
     provinceModel.find().exec(function (err, doc) {
         if (err) {
+            __logger.error("我去,拉个省份列表都能失败，你TM逗我呢[" + err.message + "]")
             res.status(400).send(err.message);
             return;
         }
@@ -183,6 +188,7 @@ exports.listCitys = function (req, res) {
     }
     cityModel.find(queryString).exec(function (err, doc) {
         if (err) {
+            __logger.error("我去,拉个城市列表都能失败，你TM逗我呢[" + err.message + "]")
             res.status(400).send(err.message);
             return;
         }
@@ -192,10 +198,13 @@ exports.listCitys = function (req, res) {
 
 exports.queryOrder = function (req, res) {
     var order = {id : req.body.id}
+    var random = Math.floor(Math.random() * 1000)
+    __logger.info("某个土豪(" + random + ")又开始查询订单啦，订单编号[" + order.id + "]")
 
     //TODO 增加关联查询
     orderModel.findOne(order).exec(function(err, doc) {
         if (err) {
+            __logger.error("这丫的(" + random + ")订单查询失败[" + err.message + "]")
             res.status(400).send(err.message);
             return;
         }
@@ -224,6 +233,7 @@ exports.thirdPath = function(req, res) {
     };
 
     var body = "";
+
     var request = http.request(options, function (response) {
         response.setEncoding('utf8');
         response.on('data', function (chunk) {
@@ -232,7 +242,7 @@ exports.thirdPath = function(req, res) {
             res.send(body);
         });
     }).on('error', function (err) {
-        console.log('problem with request: ' + err.message);
+        __logger.error("注意啦!清关接口又调用失败啦,什么破系统[" + err.message + "]")
         res.status(400).json(msg.ORDER.orderPathSyncError);
     })
 
@@ -294,14 +304,13 @@ exports.fullPath = function(req, res) {
                 cont(null, path)
             });
         }).on('error', function (err) {
-            console.log('problem with request: ' + err.message);
+            __logger.error("注意啦!清关接口又调用失败啦,什么破系统[" + err.message + "]")
             cont(new Error(msg.ORDER.orderPathSyncError));
         })
         request.end();
     }).then(function(cont, path){
         res.send(path);
     }).fail(function (cont, error) {
-        console.log(error);
         res.status(400).send(error);
     });
 };
@@ -342,6 +351,8 @@ exports.updateSettings = function(req, res) {
         settings = req.body.settings;
     }
 
+    var random = Math.floor(Math.random() * 1000)
+    __logger.info("某个高层人员(" + random + ")开始更新参数配置")
     async.eachSeries(settings, function(param, callback) {
         var queryString = {paramsId: param.paramsId};
         var updateString = {
@@ -354,7 +365,8 @@ exports.updateSettings = function(req, res) {
     },function(err, result){
         // if any of the file processing produced an error, err would equal that error
         if( err ) {
-            res.status(400).send(error.message);
+            __logger.error("某个高层人员(" + random + ")更新参数配置失败了[" + err.message + "]")
+            res.status(400).send(err.message);
         }else{
             res.json("success")
         }
@@ -363,10 +375,12 @@ exports.updateSettings = function(req, res) {
 
 //游客新建订单
 exports.createOrder = function (req, res) {
+    var random = Math.floor(Math.random() * 1000)
     then(function (cont) {
         var order = {
             id: req.body.id
         };
+        __logger.info("某个注册都懒得做的家伙(" + random + ")开始下单了,订单编号[" + order.id + "]")
 
         orderModel.findOne(order).exec(function(err, doc) {
             if (err) {
@@ -439,11 +453,37 @@ exports.createOrder = function (req, res) {
             cont(null, doc);
         });
     }).then(function(cont, doc) {
+        __logger.info("某个注册都懒得做的家伙(" + random + ")下单成功")
         res.json("success");
     }).fail(function (cont, error) {
+        __logger.error("某个注册都懒得做的家伙(" + random + ")果然下单失败了[" + error.message + "]")
         res.status(400).send(error.message);
     });
 
+};
+
+//上传证件照
+exports.updateOrderIdno = function(req, res) {
+    var _id = req.body.id;
+    var orderId = req.body.orderId;
+    var idA = req.body.idAUrl;
+    var idB = req.body.idBUrl;
+
+    __logger.info("(" + orderId + ")订单的主人/非主人正在更新证件照")
+
+    then(function (cont) {
+        orderModel.findByIdAndUpdate(_id, {idNoImgA:idA, idNoImgB:idB}, null, function(err, doc){
+            if (err) {
+                cont(new Error(msg.ORDER.orderUpdateFail));
+                return;
+            }
+            __logger.info("(" + orderId + ")订单更新证件照成功")
+            res.json("success");
+        })
+    }).fail(function (cont, error) {
+        __logger.error("(" + orderId + ")订单更新证件照失败,错误信息[" + error.message + "]")
+        res.status(400).send(error.message);
+    })
 };
 
 //微信、外部渠道更新订单信息
@@ -451,6 +491,8 @@ exports.updateOrder = function(req, res) {
     var loginId = req.body.loginId;
     var orderId = req.body.orderId; //db id
     var status = req.body.status;
+
+    __logger.info("咱们的人(" + loginId + ")开始更新订单信息,订单编号[" + orderId + "]")
 
     then(function (cont) {
         if(!loginId){
@@ -486,9 +528,11 @@ exports.updateOrder = function(req, res) {
                 cont(new Error(msg.ORDER.orderUpdateFail));
                 return;
             }
+            __logger.info("咱们的人(" + loginId + ")更新订单信息成功,订单编号[" + orderId + "]")
             res.json("success");
         })
     }).fail(function (cont, error) {
+        __logger.error("咱们的人(" + loginId + ")更新订单信息失败,订单编号[" + orderId + "],错误信息[" + error.message + "]")
         res.status(400).send(error.message);
     })
 };
@@ -516,7 +560,7 @@ exports.sendMail = function(req, res){
     }
     transporter.sendMail(mail, function(err, info){
         if(err){
-            __logger.error("账号注册邮件(" + toEmail +")发送失败：" + err)
+            __logger.error("账号注册邮件(" + toEmail +")发送失败：" + err.message)
             res.status(400).send(err.message);
         }else{
             __logger.info("账号注册邮件(" + toEmail +")发送成功")
@@ -534,8 +578,10 @@ exports.validateEmail = function(req, res){
     if(token && sessionToken && token == sessionToken){
         req.session.token = null;
         req.session.emailCheck = true;
+        __logger.info("邮箱校验成功(" + token + ")")
         res.setHeader("Location", "/email.html");
     }else{
+        __logger.error("邮箱校验失败(" + token + ")")
         res.setHeader("Location", "/error.html");
     }
     res.end();
@@ -584,7 +630,7 @@ exports.forgetPassword = function(req, res){
             }
             transporter.sendMail(mail, function(err, info){
                 if(err){
-                    __logger.error("密码重置邮件(" + toEmail +")发送失败：" + err)
+                    __logger.error("密码重置邮件(" + toEmail +")发送失败：" + err.message)
                     res.status(400).send(err);
                 }else{
                     __logger.info("密码重置邮件(" + toEmail +")发送成功")
@@ -602,21 +648,20 @@ exports.resetPassword = function(req, res){
     var loginId = req.session.loginId;
     var password = req.body.password;
     var sessionToken = req.session.token;
-    console.log(loginId)
-    console.log(token)
-    console.log(password)
-    console.log(sessionToken)
     if(token && sessionToken && token == sessionToken && loginId){
         req.session.token = null;
         req.session.loginId = null;
         customerModel.findOneAndUpdate({loginId: loginId}, {password: password}, function (err, doc) {
             if (err) {
+                __logger.error("密码重置(" + loginId +")失败：" + err.message)
                 res.status(400).send(err.message);
                 return;
             }
+            __logger.error("密码重置(" + loginId +")成功")
             res.json("success");
         });
     }else{
+        __logger.error("密码重置(" + loginId +")失败")
         res.status(400).send("error");
     }
 }
@@ -630,7 +675,7 @@ exports.queryPayStatus = function (req, res) {
             return;
         }
         if (!doc) {
-            __logger.info("订单(" + req.body.orderId + ")不存在");
+            __logger.info("查询订单状态,订单(" + req.body.orderId + ")不存在");
             res.status(400).send(msg.USER.userNone);
             return;
         }

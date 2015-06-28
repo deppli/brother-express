@@ -58,8 +58,6 @@
                 <dt class="icon ico-weibo"></dt>
                 <dd>官方微信</dd>
                 <dd>brother-express</dd>
-                <dd><div class="tip-arrow" style="display: none;"></div></dd>
-                <dd class="qrcode" style="display: none;"><img src="/images/qr-code.png" alt=""></dd>
             </dl>
             <dl class="connect03 fs12">
                 <dt class="icon ico-weibo"></dt>
@@ -210,7 +208,8 @@
     <div class="panel panel-info sys-panel">
         <div class="panel-heading">
             <span class="glyphicon glyphicon-align-justify padding-width-space-sm"></span><span>订单详情</span>
-            <!--<span class="glyphicon glyphicon-remove pull-right"></span>-->
+            <!--ng-hide="Order.idNoImgA && Order.idNoImgB"-->
+            <span class="glyphicon glyphicon-open pull-right cursor" ng-click="uploadId()">上传证件照</span>
         </div>
         <div class="panel-body">
             <div class="container-fluid">
@@ -316,6 +315,28 @@
     </div>
     <div class="modal-body">
         <iframe name="kuaidi100" src="http://www.kuaidi100.com/frame/app/index2.html" width="800" height="400" marginwidth="0" marginheight="0" hspace="0" vspace="0" frameborder="0" scrolling="no"></iframe>
+    </div>
+</script>
+<script type="text/ng-template" id="uploadModal">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <span class="glyphicon glyphicon-open padding-width-space-sm"></span><span>上传证件照</span>
+        </div>
+        <div class="panel-body">
+            <div ng-file-select ng-model="idImgA" accept=".jpg" class="row-line cursor">
+                <div class="img-add">
+                    <div ng-hide="idAUrl">+ 身份证正面</div>
+                    <img width="100%" height="140" src="{{idAUrl}}" ng-show="idAUrl">
+                </div>
+            </div>
+            <div ng-file-select ng-model="idImgB" accept=".jpg" class="row-line cursor">
+                <div class="img-add">
+                    <div ng-hide="idBUrl">+ 身份证反面</div>
+                    <img width="100%" height="140" src="{{idBUrl}}" ng-show="idBUrl">
+                </div>
+            </div>
+            <button class="btn btn-block btn-success" ng-click="updateOrder()">提交</button>
+        </div>
     </div>
 </script>
 

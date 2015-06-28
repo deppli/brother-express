@@ -1,8 +1,6 @@
 var model = require("../../models/model"),
     customerModel = model.Customer,
     orderModel = model.Order,
-    groupModel = model.Group,
-    menuModel = model.Menu,
     msg = require("../../resource/msg"),
     tools = require("../../util/tools"),
     then = require("thenjs");
@@ -49,6 +47,7 @@ exports.login = function (req, res) {
         req.session.orders = {};
         res.json(customer);
     }).fail(function (cont, error) {
+        __logger.error("用户(" + req.body.loginId + ")登录失败:" + error.message);
         res.status(400).send(error.message);
     });
 };
@@ -130,7 +129,7 @@ exports.createOrder = function (req, res) {
 
         order.save(function (err, doc) {
             if (err) {
-                __logger.info("用户(" + req.session.customer.loginId + ")订单创建失败:" + err);
+                __logger.error("用户(" + req.session.customer.loginId + ")订单创建失败:" + err);
                 cont(new Error(err));
                 return;
             }
@@ -148,7 +147,7 @@ exports.createOrder = function (req, res) {
 exports.queryCustomer = function (req, res) {
     customerModel.findById(req.session.customer._id).exec(function(err, doc) {
         if (err) {
-            __logger.info("用户(" + req.session.customer.loginId + ")信息查询失败:" + err);
+            __logger.error("用户(" + req.session.customer.loginId + ")信息查询失败:" + err);
             res.status(400).send(err);
             return;
         }
@@ -163,7 +162,7 @@ exports.queryCustomer = function (req, res) {
 exports.queryBalance = function (req, res) {
     customerModel.findById(req.session.customer._id).exec(function(err, doc) {
         if (err) {
-            __logger.info("用户(" + req.session.customer.loginId + ")余额查询失败:" + err);
+            __logger.error("用户(" + req.session.customer.loginId + ")余额查询失败:" + err);
             res.status(400).send(err);
             return;
         }
@@ -178,7 +177,7 @@ exports.queryBalance = function (req, res) {
 exports.listOrder = function (req, res) {
     orderModel.find({creater: req.session.customer.loginId, type: '2'}).exec(function(err, doc) {
         if (err) {
-            __logger.info("用户(" + req.session.customer.loginId + ")订单列表查询失败:" + err);
+            __logger.error("用户(" + req.session.customer.loginId + ")订单列表查询失败:" + err);
             res.status(400).send(err);
             return;
         }
@@ -194,14 +193,14 @@ exports.payOrder = function (req, res) {
             var balance = doc.balance;
             var cost = req.body.payAmount;
             if(balance - cost < 0 ){
-                __logger.info("用户(" + req.session.customer.loginId + ")余额不足,订单号:" + req.body.orderId + "支付失败");
+                __logger.error("用户(" + req.session.customer.loginId + ")余额不足,订单号:" + req.body.orderId + "支付失败");
                 res.status(400).send(msg.MAIN.balanceNotEnough);
                 return;
             }else{
                 customerModel.findByIdAndUpdate(doc._id, {balance: balance - cost}, null, function(err, doc){
                     orderModel.findOneAndUpdate({id: req.body.orderId}, {payStatus : 1}, null, function(err, doc){
                         if(err){
-                            __logger.info("用户(" + req.session.customer.loginId + "),订单号:" + req.body.orderId + "支付失败:" + err);
+                            __logger.error("用户(" + req.session.customer.loginId + "),订单号:" + req.body.orderId + "支付失败:" + err);
                             return;
                         }
                         __logger.info("用户(" + req.session.customer.loginId + "),订单号:" + req.body.orderId + "支付成功");
@@ -210,7 +209,7 @@ exports.payOrder = function (req, res) {
                 });
             }
         }else{
-            __logger.info("用户(" + req.session.customer.loginId + ")登录状态失效,订单号:" + req.body.orderId + "支付失败");
+            __logger.error("用户(" + req.session.customer.loginId + ")登录状态失效,订单号:" + req.body.orderId + "支付失败");
             res.status(400).send(msg.USER.userNone);
             return;
         }

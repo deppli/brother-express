@@ -42,7 +42,7 @@ define(["thenjs", "xlsx", "iscroll"], function(then, xlsx) {
                 }
             }
 
-            $scope.commitBatch = function(){
+            /*$scope.commitBatch = function(){
                 var postData = {
                     batchOrders:  $scope.ordersData,
                     batchProducts:  $scope.productsData,
@@ -56,7 +56,7 @@ define(["thenjs", "xlsx", "iscroll"], function(then, xlsx) {
                     $scope.isUploaded = false;
                     $scope.ProgressBar = null;
                 });
-            }
+            }*/
 
             $scope.commitExcel = function(data){
                 var postData = {
@@ -96,7 +96,6 @@ define(["thenjs", "xlsx", "iscroll"], function(then, xlsx) {
                                 $scope.ProgressBar.dynamic = progressPercentage;
                             }).success(function (data, status, headers, config) {
                                 $scope.ProgressBar.dynamic = 100;
-                                console.log(data);
                                 //$scope.processExcel(data);
                                 $scope.commitExcel(data);
                             });

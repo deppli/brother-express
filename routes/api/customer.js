@@ -61,6 +61,7 @@ exports.add = function(req, res) {
                 cont(new Error(err));
                 return;
             }
+            __logger.info("新增客户信息(" + req.body.loginId + ")成功");
             cont(null, doc);
         });
     }).then(function(cont, doc) {
@@ -72,6 +73,7 @@ exports.add = function(req, res) {
             res.json(doc);
         });
     }).fail(function (cont, error) {
+        __logger.error("新增客户信息(" + req.body.loginId + ")失败:" + error.message);
         res.status(400).send(error.message);
     });
 
@@ -120,9 +122,11 @@ exports.edit = function (req, res) {
     }
     customerModel.findByIdAndUpdate(req.body.id, customer, function (err, doc) {
         if (err) {
+            __logger.error("修改客户信息(" + req.body.id + ")失败:" + err.message);
             res.status(400).send(err.message);
             return;
         }
+        __logger.info("修改客户信息(" + req.body.id + ")成功");
         res.json("success");
     });
 };
@@ -130,9 +134,11 @@ exports.edit = function (req, res) {
 exports.delete = function (req, res) {
     customerModel.findByIdAndRemove(req.body.id, function (err, doc) {
         if (err) {
+            __logger.error("删除客户信息(" + req.body.id + ")失败:" + err.message);
             res.status(400).send(err.message);
             return;
         }
+        __logger.info("删除客户信息(" + req.body.id + ")成功");
         res.json("success");
     });
 };

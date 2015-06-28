@@ -26,7 +26,7 @@ define(["cryptojs-sha256"], function(crypto) {
 			}
 		});
 
-		/*$scope.$watch("idImgB", function(){
+		$scope.$watch("idImgB", function(){
 			var file = $scope.idImgB;
 			if(file) {
 				$scope.ProgressB = {};
@@ -47,7 +47,7 @@ define(["cryptojs-sha256"], function(crypto) {
 					});
 				}
 			}
-		});*/
+		});
 
 		$scope.queryCustomer = function(){
 			$remote.post("/customerBiz/queryCustomer", null, function(data){

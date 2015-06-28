@@ -18,6 +18,12 @@ define(["bootstrap-icheck"], function() {
     function($scope, $rootScope, $remote, $modal, $dict, $constants, $config, $upload) {
 
         $scope.$watch("idImgA", function(){
+            var filename;
+            if($scope.payerIdNo && $scope.payerIdNo.length > 10){
+                filename = $scope.payerIdNo + "_A";
+            }else{
+                filename = $scope.orderId + "_A";
+            }
             var file = $scope.idImgA;
             if(file){
                 $scope.ProgressA = {};
@@ -27,20 +33,26 @@ define(["bootstrap-icheck"], function() {
                     $scope.showMessage(msg);
                 }else{
                     $upload.upload({
-                        url: '/service/upload?type=1&file=' + $scope.payerIdNo + '_A',
+                        url: '/service/upload?type=1&file=' + filename,
                         file: file[0]
                     }).progress(function (evt) {
                         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                         $scope.ProgressA.dynamic = progressPercentage;
                     }).success(function (data, status, headers, config) {
                         $scope.ProgressA.dynamic = 100;
-                        $scope.idAUrl = $config.idCardPath + $scope.payerIdNo + '_A.jpg'
+                        $scope.idAUrl = $config.idCardPath + filename + ".jpg"
                     });
                 }
             }
         });
 
         $scope.$watch("idImgB", function(){
+            var filename;
+            if($scope.payerIdNo && $scope.payerIdNo.length > 10){
+                filename = $scope.payerIdNo + "_B";
+            }else{
+                filename = $scope.orderId + "_B";
+            }
             var file = $scope.idImgB;
             if(file) {
                 $scope.ProgressB = {};
@@ -50,14 +62,14 @@ define(["bootstrap-icheck"], function() {
                     $scope.showMessage(msg);
                 }else{
                     $upload.upload({
-                        url: '/service/upload?type=1&file=' + $scope.payerIdNo + '_B',
+                        url: '/service/upload?type=1&file=' + filename,
                         file: file[0]
                     }).progress(function (evt) {
                         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                         $scope.ProgressB.dynamic = progressPercentage;
                     }).success(function (data, status, headers, config) {
                         $scope.ProgressB.dynamic = 100;
-                        $scope.idBUrl = $config.idCardPath + $scope.payerIdNo + '_B.jpg'
+                        $scope.idBUrl = $config.idCardPath + filename + ".jpg"
                     });
                 }
             }

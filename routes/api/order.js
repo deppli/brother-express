@@ -309,6 +309,7 @@ exports.pathUpdate = function (req, res) {
 exports.delete = function (req, res) {
     orderModel.findByIdAndRemove(req.body.id, undefined, function (err, doc) {
         if (err) {
+            __logger.error("删除订单[" + req.body.id + "]失败[" + err.message + "]");
             res.status(400).send(err.message);
             return;
         }

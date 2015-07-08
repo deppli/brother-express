@@ -153,7 +153,7 @@ var OrderSchema = new Schema({
             pAmount: {type: Number},
             pTotalAmount: {type: Number},
             pWeight: {type: Number},
-            pRemark: {type: Number},
+            pRemark: {type: String},
             pTransName: {type: String, default:''},
             pTransId: {type: String, default:''}
         }

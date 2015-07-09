@@ -105,11 +105,11 @@ app.post("/order/list", hooks.role(),  order.list);
 app.post("/order/detail", hooks.role(),  order.detail);
 app.post("/order/edit", hooks.role(),  order.edit);
 app.post("/order/delete", hooks.role(),  order.delete);
+app.post("/order/batchDelete", hooks.role(),  order.batchDelete);
 app.post("/order/count", hooks.role(),  order.count);
 app.post("/order/pathUpdate", hooks.role(),  order.pathUpdate);
 
 app.post("/orderBatch/processExcel", hooks.role(), orderBatch.processExcel);
-app.post("/orderBatch/commitBatch", hooks.role(), orderBatch.commitBatch);
 app.post("/orderBatch/commitExcel", hooks.role(), orderBatch.commitExcel);
 
 app.post("/news/add", hooks.role(),  news.add);

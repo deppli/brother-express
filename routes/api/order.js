@@ -190,13 +190,13 @@ exports.batchDelete = function (req, res) {
         queryStr.gateMode = req.body.gateMode;
     }
 
-    /*orderModel.find(time).find(queryStr).exec(function(err, doc){
+    orderModel.find(time).find(queryStr).remove({}, function(err, doc){
         if (err) {
             res.status(400).send(err.message);
             return;
         }
         res.json(doc);
-    });*/
+    });
 };
 
 exports.detail = function (req, res) {

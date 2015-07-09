@@ -83,6 +83,33 @@
             $scope.maxSize = 5;
             $scope.pageSize = 15;
 
+            $scope.batchDeleteOrder = function(){
+                var postData = {};
+                postData.idBatch = $scope.Query.idBatch||null
+                postData.id = $scope.Query.id||null
+                if($scope.Query.type){
+                    postData.type = $scope.Query.type.key
+                }
+                if($scope.Query.status){
+                    postData.status = $scope.Query.status.key
+                }
+                if($scope.Query.payStatus){
+                    postData.payStatus = $scope.Query.payStatus.key
+                }
+                if($scope.Query.time){
+                    postData.time = $scope.Query.time.key
+                }
+
+                var msg = {type:$constants.MESSAGE_DIALOG_TYPE_CONF, text:$constants.MESSAGE_CONF_DEL_ORDER, confCallback:function(){
+                    $remote.post("/order/batchDelete", postData, function(data){
+                        $scope.listOrder(true);
+                        $scope.selectedOrder = null;
+                    })
+                }};
+                $scope.showMessage(msg);
+
+            }
+
             $scope.listOrder = function(init){
                 var postData = {};
                 postData.idBatch = $scope.Query.idBatch||null

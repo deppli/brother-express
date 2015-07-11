@@ -47,15 +47,23 @@ app.use(express.static(path.join(__dirname, "/web")));
 app.set('views', __dirname + '/web');
 app.set('view engine', 'ejs');
 
-var wechat = require('wechat');
-var config = {
-    token: 'brother-express',
-    appid: 'wx7aae9121e7cab6f0',
-    encodingAESKey: '1KwxH9lqocwDgfnJJvWniLFv0gwAVgDgPbHayZHtaHQ'
-};
+//var wechat = require('wechat');
+//var config = {
+//    token: 'brother-express',
+//    appid: 'wx7aae9121e7cab6f0',
+//    encodingAESKey: '1KwxH9lqocwDgfnJJvWniLFv0gwAVgDgPbHayZHtaHQ'
+//};
+
 var model = require('./models/model'),
     orderModel = model.Order;
 app.use(express.query()); // Or app.use(express.query());
+
+var wechat = require('wechat');
+var config = {
+    token: 'brother',
+    appid: 'wxa2a078db087a036e',
+    encodingAESKey: '1KwxH9lqocwDgfnJJvWniLFv0gwAVgDgPbHayZHtaHQ'
+};
 app.use('/wxtoken', wechat(config, function (req, res, next) {
     orderModel.find().exec(function(err, doc) {
         if (err) {

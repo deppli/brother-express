@@ -99,7 +99,8 @@
             user: "manage/controller/basic/user",
             order: "manage/controller/order/order",
             orderBatch: "manage/controller/order/orderBatch"
-        }
+        },
+        waitSeconds: 0
     });
 
     require(["angular", "base"], function(angular, base) {

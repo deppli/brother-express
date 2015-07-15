@@ -58,7 +58,8 @@
             /**
              * controller
              */
-        }
+        },
+        waitSeconds: 0
     });
 
     require(["angular", "base"], function(angular, base) {

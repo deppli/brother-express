@@ -80,7 +80,8 @@
             reg: "system/controller/biz/reg",
             order: "system/controller/biz/order",
             pcenter: "system/controller/pcenter/pcenter"
-		}
+		},
+        waitSeconds: 0
 	});
 
 	require(["angular", "base"], function(angular, base) {

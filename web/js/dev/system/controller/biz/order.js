@@ -330,12 +330,17 @@ define(["bootstrap-icheck"], function() {
                         if($scope.FlagRemovePages == 1){
                             $scope.orderRemovePagesAmt = $config.onlineOrderRemovePagesCost;
                         }
-                        debugger
                         $scope.orderServiceAmt = $scope.orderFastAmt + $scope.orderFixedAmt + $scope.orderProtectedAmt + $scope.orderBoxAmt
                         + $scope.orderStoreAmt + $scope.orderReturnProductAmt + $scope.orderElecAmt + $scope.orderDetailProductAmt + $scope.orderRemovePagesAmt;
 
+                        //产品价值高于2500元才计算报税费用
+                        if($scope.productAmount > 2500){
                         $scope.orderTotalAmt = $scope.orderTransportAmt + $scope.orderRateAmt + $scope.orderServiceAmt - $scope.orderDiscountAmt;
-                        if($scope.idAUrl){
+                        }else{
+                            $scope.orderTotalAmt = $scope.orderTransportAmt + $scope.orderServiceAmt - $scope.orderDiscountAmt;
+                            $scope.noRate = true;
+                        }
+                        if($scope.idAUrl && $scope.idBUrl){
                             $scope.STEP++;
                         }else{
                             var msg = {type:$constants.MESSAGE_DIALOG_TYPE_CONF, text:$constants.MESSAGE_NEXT_STEP_WITHOUT_IDIMG, confCallback:function(){

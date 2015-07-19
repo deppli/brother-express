@@ -17,7 +17,7 @@
 			onlineOrderLimit: 1000,
 			onlineOrderFastCost: 20,
 			onlineOrderFixedCost: 10,
-			onlineOrderTransportBasicCost: 49,
+			onlineOrderTransportBasicCost: 40,
 			onlineOrderTransportStepCost: 7,
 			onlineOrderBoxCost: 10,
 			onlineOrderReturnCost: 20,

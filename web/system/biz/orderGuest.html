@@ -48,7 +48,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="fs12 text-danger"><b>￥49</b></span>
+                                            <span class="fs12 text-danger"><b>￥40</b></span>
                                         </td>
                                         <td class="text-warning">货品不超过500克获取货品重量500克以内部分重量，按照首重运费收取</td>
                                     </tr>
@@ -98,7 +98,7 @@
                                         <td>
                                             <span class="fs12 text-danger"><b>-</b></span>
                                         </td>
-                                        <td class="text-warning">部分货品需要缴纳关税，关税由仲良速递代收</td>
+                                        <td class="text-warning">部分货品需要缴纳关税，关税由仲良速递代收.<b class="text-danger">货品总值2500元(含)免征税费</b></td>
                                     </tr>
                                 </table>
                                 <div class="row-line fs12">
@@ -755,7 +755,8 @@
                                         <div class="col-lg-12">
                                             <div class="input-group input-group-sm">
                                                 <span class="input-group-addon"><b>税费</b></span>
-                                                <span class="input-group-addon value text-success">- {{orderRateAmt|currency:"￥"}}</span>
+                                                <span class="input-group-addon value text-success"  ng-hide="noRate">- {{orderRateAmt|currency:"￥"}}</span>
+                                                <span class="input-group-addon value text-danger" ng-show="noRate">产品总价2500元内免税费</span>
                                             </div>
                                         </div>
                                     </div>

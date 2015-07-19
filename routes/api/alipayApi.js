@@ -34,7 +34,7 @@ alipay.on('verify_fail', function(){
 				return;
 			}else{
 				//充值折扣
-				var level = Math.floor(amount/10)
+				var level = Math.floor(amount/5)	//赠送20%
 				var balance = parseFloat(amount) + parseInt(level);
 
 				customerModel.findOneAndUpdate({loginId: req.session.customer.loginId}, {$inc: {balance: balance, totalPay: amount}}, null, function(err, doc){

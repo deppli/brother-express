@@ -31,7 +31,7 @@
                     <div class="col-sm-12 bg-net">
                         <div class="webBox">
                             <div class="box-heading">
-                                <div><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>货品信息</b><span class="glyphicon glyphicon-plus pull-right text-skyblue cursor fs12" ng-click="addProduct()"><b>新增</b></span></div>
+                                <div><span class="glyphicon glyphicon-check padding-width-space-sm"></span><b>货品信息</b></div>
                             </div>
                             <div class="box-body" >
                                 <table class="table table-hover webBox">
@@ -96,16 +96,25 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <span class="fs12 text-danger"><b>-</b></span>
+                                            <span class="fs12 text-success">以下类别货品免征关税(￥1,000内)
+                                            <br><b class="text-danger">1.食品、饮料</b>
+                                            <br><b class="text-danger">2.纺织品及其制成品</b>
+                                            <br><b class="text-danger">3.皮革服装及配饰</b>
+                                            <br><b class="text-danger">4.箱包和鞋靴</b>
+                                            <br><b class="text-danger">5.表、钟及其配件、附件</b>
+                                            <br><b class="text-danger">6.化妆品</b></span>
                                         </td>
-                                        <td class="text-warning">部分货品需要缴纳关税，关税由仲良速递代收.<b class="text-danger">货品总值2500元(含)免征税费</b></td>
+                                        <td class="text-warning">部分货品需要缴纳关税，关税由仲良速递代收.
+                                        </td>
                                     </tr>
                                 </table>
                                 <div class="row-line fs12">
-                                    <p class="text-danger">备注：</p>
-                                    <p>一个快件包含超过一件以上的物品：物品总价值不高于人民币1,000 (约美金$150)；</p>
-                                    <p>一个快件只包含一件物品：物品价值可高于人民币1,000 (约美金$150)</p>
+                                    <p><b class="text-danger mr10">注意</b></p>
+                                    <p><i class="text-danger glyphicon glyphicon-exclamation-sign mr10"></i><label class=" label label-default">包含超过一件以上的物品，物品总价值不高于￥1,000 (约美金$150)；</label></p>
+                                    <p><i class="text-danger glyphicon glyphicon-exclamation-sign mr10"></i><label class=" label label-default">仅包含一件物品，不限制物品价值</label></p>
                                 </div>
+                                <label class="btn btn-success btn-sm"><span class="glyphicon glyphicon-plus cursor fs16" ng-click="addProduct()"><b>新增</b></span></label>
+                                <div class="margin-height-space-sm sp-line"></div>
                                 <table class="table table-hover">
                                     <tr>
                                         <th class="default" style="width:14%;">分类</th>
@@ -126,7 +135,7 @@
                                         <td><input name="pAmount" type="number" ng-model="product.pAmount" class="form-control" required/></td>
                                         <td><input name="pNum" type="number" ng-model="product.pNum" class="form-control" required/></td>
                                         <td><input name="pWeight" type="number" ng-model="product.pWeight" class="form-control" required/></td>
-                                        <td class="middle-lh">{{product.pTotalAmount = product.pNum * product.pAmount|currency:"￥"}}</td>
+                                        <td class="middle-lh">{{product.pTotalAmount = product.pNum * product.pAmount|currency:"￥"}}<span ng-show="rateReduce == 1 && product.pReduce == 1" class="fs12 text-danger">-免税<i class="glyphicon glyphicon-arrow-down"></i></span></td>
                                         <td><input name="pTransName" type="text" ng-model="product.pTransName" class="form-control" required/></td>
                                         <td><input name="pTransId" type="text" ng-model="product.pTransId" class="form-control" required/></td>
                                         <td><span class="text-danger cursor" ng-click="removeProduct($index)">删除</span></td>

@@ -149,26 +149,41 @@ define(["bootstrap-icheck"], function() {
             $scope.STEP = 4;
         }
 
-        $scope.$watch(function(){
+        $scope.$watch("products", function(){
             var totalNum = 0;
             var totalAmount = 0;
             var totalWeight = 0;
             var productNames = "";
             var pRate = 0;
             var pRateAmt = 0;
+            var mRateAmt = 0;   //减税税额
             $scope.products.forEach(function(each){
                 totalNum += each.pNum||0;
                 totalAmount += each.pTotalAmount||0;
                 totalWeight += each.pWeight||0;
                 productNames += each.pName||"";
                 pRate = $dict.get("GateRate")[each.pType.key]||0;
-                pRateAmt += each.pTotalAmount * pRate;
+                var rates = each.pTotalAmount * pRate;
+                pRateAmt += rates;
+                if(each.pType.key == "1000000" || each.pType.key == "4000000" || each.pType.key == "5000000"
+                    || each.pType.key == "6000000" || each.pType.key == "7000000" || each.pType.key == "9000000"){
+                    each.pReduce = 1;
+                }else{
+                    each.pReduce = 0;
+                    mRateAmt += rates;
+                }
             })
             $scope.productNum = totalNum;
             $scope.productAmount = totalAmount;
             $scope.productWeight = totalWeight;
             $scope.productName = productNames;
+            if($scope.productAmount > 1000){
             $scope.orderRateAmt = pRateAmt||0;
+                $scope.rateReduce = 0;
+            }else{
+                $scope.orderRateAmt = mRateAmt||0;
+                $scope.rateReduce = 1;
+            }
             if($scope.orderRateAmt > 0){
                 $scope.orderRateAmt = Math.round($scope.orderRateAmt * 100)/100;
             }
@@ -190,7 +205,7 @@ define(["bootstrap-icheck"], function() {
             }else{
                 $scope.Check.isOverAmt = false;
             }
-        })
+        },true);
 
         $scope.getProvinces(function(){
             var provinces = $scope.initOptions("Provinces");

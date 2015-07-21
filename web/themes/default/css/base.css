@@ -256,6 +256,9 @@ body {
     border:none;
     box-shadow:none;
 }
+.text-gray{
+    color:#AAAAAA;
+}
 .text-orange{
     color:#f16441;
 }

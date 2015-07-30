@@ -349,12 +349,12 @@ define(["bootstrap-icheck"], function() {
                         + $scope.orderStoreAmt + $scope.orderReturnProductAmt + $scope.orderElecAmt + $scope.orderDetailProductAmt + $scope.orderRemovePagesAmt;
 
                         //产品价值高于2500元才计算报税费用
-                        if($scope.productAmount > 2500){
+                        //if($scope.productAmount > 2500){
                         $scope.orderTotalAmt = $scope.orderTransportAmt + $scope.orderRateAmt + $scope.orderServiceAmt - $scope.orderDiscountAmt;
-                        }else{
-                            $scope.orderTotalAmt = $scope.orderTransportAmt + $scope.orderServiceAmt - $scope.orderDiscountAmt;
-                            $scope.noRate = true;
-                        }
+                        //}else{
+                        //    $scope.orderTotalAmt = $scope.orderTransportAmt + $scope.orderServiceAmt - $scope.orderDiscountAmt;
+                        //    $scope.noRate = true;
+                        //}
                         if($scope.idAUrl && $scope.idBUrl){
                             $scope.STEP++;
                         }else{

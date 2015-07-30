@@ -52,7 +52,7 @@
                     var postData = {
                         id: $scope.selectedOrder.id
                     }
-
+                    $scope.selectCancel();
                     $remote.post("/order/detail", postData, function(data){
                         var orders = [];
                         orders.push(data)
@@ -110,7 +110,12 @@
 
             }
 
+            $scope.selectCancel = function(){
+                $scope.selectedOrder = null;
+            }
+
             $scope.listOrder = function(init){
+                $scope.selectCancel();
                 var postData = {};
                 postData.idBatch = $scope.Query.idBatch||null
                 postData.id = $scope.Query.id||null
@@ -170,6 +175,7 @@
                     var postData = {
                         id: $scope.selectedOrder.id
                     }
+                    $scope.selectCancel();
 
                     $remote.post("/order/detail", postData, function(data){
                         $scope.Order = data;
@@ -183,6 +189,7 @@
                     var postData = {
                         id: $scope.selectedOrder.id
                     }
+                    $scope.selectCancel();
 
                     $remote.post("/order/detail", postData, function(data){
                         $scope.Order = data;
@@ -196,6 +203,7 @@
                     var postData = {
                         id: $scope.selectedOrder._id
                     }
+                    $scope.selectCancel();
                     var msg = {type:$constants.MESSAGE_DIALOG_TYPE_CONF, text:$constants.MESSAGE_CONF_DEL_ORDER, confCallback:function(){
                         $remote.post("/order/delete", postData, function(data){
                             $scope.listOrder();

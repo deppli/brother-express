@@ -304,6 +304,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <progressbar class="progress-striped active" value="ProgressA.dynamic" type="danger"><i>{{ProgressA.dynamic}} %</i></progressbar>
                                     </div>
                                     <div class="col-lg-3">
                                         <div class="input-group input-group-sm">
@@ -315,8 +316,10 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <progressbar class="progress-striped active" value="ProgressB.dynamic" type="danger"><i>{{ProgressB.dynamic}} %</i></progressbar>
                                     </div>
                                 </div>
+                                <div class="fs12 text-danger"><i class="text-danger glyphicon glyphicon-exclamation-sign mr10"></i><b>上传照片类型需为jpg，最大不超过500K</b></div>
                             </div>
                         </div>
                         <div class="webBox">
@@ -764,8 +767,8 @@
                                         <div class="col-lg-12">
                                             <div class="input-group input-group-sm">
                                                 <span class="input-group-addon"><b>税费</b></span>
-                                                <span class="input-group-addon value text-success"  ng-hide="noRate">- {{orderRateAmt|currency:"￥"}}</span>
-                                                <span class="input-group-addon value text-danger" ng-show="noRate">产品总价2500元内免税费</span>
+                                                <span class="input-group-addon value text-success">- {{orderRateAmt|currency:"￥"}}</span>
+                                                <!--<span class="input-group-addon value text-danger" ng-show="noRate">产品总价2500元内免税费</span>-->
                                             </div>
                                         </div>
                                     </div>

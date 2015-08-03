@@ -367,7 +367,8 @@
                                     row.push({value: order.productAmount||"获取失败", metadata: {style: bodyer.id}});
                                 row.push({value: order.productWeight||0, metadata: {style: bodyer.id}});
                                 row.push({value: "", metadata: {style: bodyer.id}});
-                                    row.push({value: product.pName + " " + product.pNum + product.pUnit||"", metadata: {style: bodyer.id}});
+                                    var unit = product.pUnit||"";
+                                    row.push({value: product.pName + " " + product.pNum + unit, metadata: {style: bodyer.id}});
                                 row.push({value: product.pBrand||"", metadata: {style: bodyer.id}});
                                 row.push({value: product.pNum||0, metadata: {style: bodyer.id}});
                                 row.push({value: product.pUnit||"", metadata: {style: bodyer.id}});
@@ -790,7 +791,7 @@
                     if($scope.checkForm($scope.editOrderForm)) {
                         var postData = {
                             idBatch: $scope.Order.idBatch || "",
-                            dbId: $scope.selectedOrder._id,
+                            dbId: $scope.Order._id,
                             idGate: $scope.Order.idGate || "",
                             gateMode: $scope.Order.gateMode.key || 0,
                             name: $scope.Order.name || "",
@@ -895,7 +896,7 @@
                 var method = $scope.UpdateMethod;
                 if(method == 0){
                     postData = {
-                    dbId: $scope.selectedOrder._id,
+                        dbId: $scope.Order._id,
                     status: $scope.Order.status.key,
                     updateInfo: $scope.Order.updateInfo
                 }

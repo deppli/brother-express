@@ -65,19 +65,19 @@
                     </div>
                     <div class="pull-left info">
                         <p class="text-nowrap">你好, <span ng-bind="backInfo.name"></span></p>
-                        <a href="#">控制台</a>
+                        <p class="fs12">欢迎使用仲良管理系统</p>
                     </div>
                     <div class="clearfix"></div>
                 </div>
                 <!-- search form -->
-                <div class="input-group sidebar-form">
+                <!--<div class="input-group sidebar-form">
                     <input type="text" ng-model="_search" class="form-control input-sm" placeholder="搜索..." />
                     <span class="input-group-btn">
                         <button type="button" name="search" id="search-btn" class="btn btn-success btn-sm">
                             <span class="glyphicon glyphicon-search"></span>
                         </button>
                     </span>
-                </div>
+                </div>-->
                 <!-- sidebar menu -->
                 <ul class="sidebar-menu">
                     <li ng-repeat="item in menuList | filter: _search" ng-class="{'active': item.active}">

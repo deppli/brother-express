@@ -329,12 +329,15 @@
                     <img width="100%" height="140" src="{{idAUrl}}" ng-show="idAUrl">
                 </div>
             </div>
+            <progressbar class="progress-striped active" value="ProgressA.dynamic" type="danger"><i>{{ProgressA.dynamic}} %</i></progressbar>
             <div ng-file-select ng-model="idImgB" accept=".jpg" class="row-line cursor">
                 <div class="img-add">
                     <div ng-hide="idBUrl">+ 身份证反面</div>
                     <img width="100%" height="140" src="{{idBUrl}}" ng-show="idBUrl">
                 </div>
             </div>
+            <progressbar class="progress-striped active" value="ProgressB.dynamic" type="danger"><i>{{ProgressB.dynamic}} %</i></progressbar>
+            <div class="fs12 text-danger"><i class="text-danger glyphicon glyphicon-exclamation-sign mr10"></i><b>上传照片类型需为jpg，最大不超过500K</b></div>
             <button class="btn btn-block btn-success" ng-click="updateOrder()">提交</button>
         </div>
     </div>

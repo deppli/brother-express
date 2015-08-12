@@ -58,7 +58,8 @@
             json3: "lib/json3/lib/json3.min",
             spin: "lib/spin/spin",
             jquery: "lib/jquery/dist/jquery.min",
-            "jquery-ui": "lib/jquery-ui/jquery-ui",
+            //"jquery-ui": "lib/jquery-ui/jquery-ui.min",
+            "jquery-ui": "http://cdn.bootcss.com/jqueryui/1.11.4/jquery-ui.min",    //使用cdn优化加载
             angular: "lib/angular/angular.min",
             "angular-route": "lib/angular-route/angular-route.min",
             "angular-cookies": "lib/angular-cookies/angular-cookies.min",

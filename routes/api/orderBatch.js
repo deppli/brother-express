@@ -1,12 +1,14 @@
 var model = require('./../../models/model'),
     orderModel = model.Order,
-    provinceModel = model.Province,
-    cityModel = model.City,
+    provinceModel = model.Provinces,
+    cityModel = model.Citys,
+    areaModel = model.Areas,
     userModel = model.User,
     msg = require("../../resource/msg"),
     then = require("thenjs"),
     excel = require('node-xlsx');
 
+//2015.08.05之前版本，后续批量模板更新
 exports.commitExcel = function (req, res) {
     var creater = req.body.creater;
     var idBatch = req.body.idBatch;
@@ -156,3 +158,35 @@ exports.processExcel = function (req, res) {
         res.status(400).send("parse error");
     }
 };
+
+
+//该方法为更新后批量模板,精简了流程等要素
+exports.batchImport = function (req, res) {
+    var creater = req.body.creater;
+    var idBatch = req.body.idBatch;
+    var orders = req.body.orders;
+
+    __logger.info("开始进行批量数据导入操作,批次号[" + idBatch + "]");
+    then.eachSeries(orders, function (cont, each, index) {
+        var orderId = each.id;
+        orderModel.findOne({id: orderId}).exec(function(err, doc){
+            if(doc){
+                cont(new Error("第" + (index+1) + "行" + msg.ORDER.orderIdExist))
+            }
+            cont(err, doc);
+        })
+    }).eachSeries(orders, function (cont, each, index) {
+        each.creater = creater;
+        each.idBatch = idBatch;
+        __logger.info(each);
+        new orderModel(each).save(function(err, doc){
+            cont(err, doc);
+        })
+    }).then(function (cont, doc) {
+        __logger.info("批量导入数据成功,批次号[" + idBatch + "]");
+        res.json("success");
+    }).fail(function (cont, err) {
+        __logger.error("批量导入数据失败,批次号[" + idBatch + "],错误信息[" + err.message + "]");
+        res.status(400).send(err.message);
+    });
+}

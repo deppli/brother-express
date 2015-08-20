@@ -8,14 +8,32 @@
     <div class="row">
         <div class="panel panel-info panel-right">
             <tabset class="fs12">
+                <div class="middle-lh">
+                    <span class="mr10"></span>
+                    <b class="text-orange mr10" ng-show="Query.idBatch"><label class="label label-default mr3">批次号</label>{{Query.idBatch}}</b>
+                    <b class="text-orange mr10" ng-show="Query.id"><label class="label label-default mr3">订单编号</label>{{Query.id}}</b>
+                    <b class="text-orange mr10" ng-show="Query.receiveName"><label class="label label-default mr3">收件人</label>{{Query.receiveName}}</b>
+                    <b class="text-orange mr10" ng-show="Query.type"><label class="label label-default mr3">订单类型</label>{{Query.type.value}}</b>
+                    <b class="text-orange mr10" ng-show="Query.status"><label class="label label-default mr3">订单状态</label>{{Query.status.value}}</b>
+                    <b class="text-orange mr10" ng-show="Query.payStatus"><label class="label label-default mr3">支付状态</label>{{Query.payStatus.value}}</b>
+                    <b class="text-orange mr10" ng-show="Query.time && Query.time != -1"><label class="label label-default mr3">创建时间</label>{{Query.time.value}}</b>
+                    <b class="text-orange mr10" ng-show="Query.time == -1"><label class="label label-default mr3">创建时间</label>{{_Query.begindate}} - {{_Query.enddate}}</b>
+                    <b class="pull-right text-danger mr10 fs14"><i class="glyphicon glyphicon-trash" ng-click="resetQuery()"></i></b>
+                </div>
+                <div class="sp-line m5"></div>
                 <tab heading="批次号">
                     <div class="form-group form-group-sm">
-                        <input type="text" ng-model="Query.idBatch" class="form-control"/>
+                        <input type="text" ng-model="Query.idBatch" class="form-control" placeholder="请输入待查询的订单批次号"/>
                     </div>
                 </tab>
                 <tab heading="订单编号">
                     <div class="form-group form-group-sm">
-                        <input type="text" ng-model="Query.id" class="form-control"/>
+                        <input type="text" ng-model="Query.id" class="form-control" placeholder="请输入待查询的订单编号"/>
+                    </div>
+                </tab>
+                <tab heading="收件人">
+                    <div class="form-group form-group-sm">
+                        <input type="text" ng-model="Query.receiveName" class="form-control" placeholder="请输入待查询的收件人"/>
                     </div>
                 </tab>
                 <tab heading="订单类型">
@@ -32,28 +50,28 @@
                 </tab>
                 <tab heading="创建时间">
                     <span class="item-query" ng-click="setQuery('time', null)">全部</span>
-                    <span class="item-query" ng-repeat="item in TimeList" ng-click="setQuery('time', item)">{{item.value}}</span>
+                    <span ng-hide="Query.time == -1" class="item-query" ng-repeat="item in TimeList" ng-click="setQuery('time', item)">{{item.value}}</span>
+                    <span class="item-query" ng-click="setQuery('time', -1)">指定时间段</span>
+                    <span class="small-lh" ng-show="Query.time == -1">
+                        <input type="text" class="query-input" name="_begindate" ng-model="_Query.begindate" maxlength="8" placeholder="yyyyMMdd"/> -
+                        <input type="text" class="query-input" name="_enddate" ng-model="_Query.enddate" maxlength="8" placeholder="yyyyMMdd"/>
+                    </span>
                 </tab>
+                <span class="pull-right m5">
+                    <button class="btn btn-sm btn-primary" ng-click="listOrder(true)">查询</button>
+                    <button class="btn btn-sm btn-danger" ng-click="batchDeleteOrder()">删除</button>
+                    <button class="btn btn-sm btn-primary" ng-click="batchPrint()">批量面单</button>
+                    <button class="btn btn-sm btn-primary" ng-click="exportsModal()">批量导出</button>
+                    <span id="downloader" style="float:right;margin-left:3px;"></span>
+                </span>
             </tabset>
-            <div class="sp-line"></div>
-            <div class="row row-line fs12">
-                <div class="col-lg-12">
-                    <span class="mr10"></span>
-                    <label class="label label-success mr10" ng-show="Query.idBatch">批次号：{{Query.idBatch}}</label>
-                    <label class="label label-success mr10" ng-show="Query.id">订单编号：{{Query.id}}</label>
-                    <label class="label label-success mr10" ng-show="Query.type">订单类型：{{Query.type.value}}</label>
-                    <label class="label label-success mr10" ng-show="Query.status">订单状态：{{Query.status.value}}</label>
-                    <label class="label label-success mr10" ng-show="Query.payStatus">支付状态：{{Query.payStatus.value}}</label>
-                    <label class="label label-success mr10" ng-show="Query.time">创建时间：{{Query.time.value}}</label>
-                    <button class="btn btn-sm btn-primary pull-right" ng-click="listOrder(true)">查询</button>
-                </div>
-            </div>
             <table class="table table-hover">
                 <tr>
                     <th class="info" style="width:15%;">订单编号</th>
-                    <th class="info" style="width:20%;">订单名称</th>
-                    <th class="info" style="width:12%;">付款人</th>
-                    <th class="info" style="width:18%;">付款人证件</th>
+                    <th class="info" style="width:15%;">订单名称</th>
+                    <th class="info" style="width:10%;">清关口岸</th>
+                    <th class="info" style="width:15%;">身份证</th>
+                    <th class="info" style="width:10%;">收件人</th>
                     <th class="info" style="width:10%;">重量(kg)</th>
                     <th class="info" style="width:15%;">生成时间</th>
                     <th class="info" style="width:10%;">订单状态</th>
@@ -62,14 +80,19 @@
                 <tr ng-click="selectOrder(item, $index)" class="cursor">
                     <td>{{item.id}}</td>
                     <td>{{item.name}}</td>
-                    <td>{{item.payerName}}</td>
-                    <td>{{item.payerIdNo}}</td>
-                    <td>{{item.productWeight}}</td>
+                    <td>{{item.gateApi|dict:"GateApi"}}</td>
+                    <td>
+                        <a ng-show="item.idNoImgA" href="{{item.idNoImgA}}" target="_blank" class="text-success mr10" download="{{item.payerIdNo}}A">正面</a>
+                        <a ng-show="item.idNoImgB" href="{{item.idNoImgB}}" target="_blank" class="text-orange" download="{{item.payerIdNo}}B">反面</a>
+                        <span ng-hide="item.idNoImgA && item.idNoImgB">未上传</span>
+                    </td>
+                    <td>{{item.receiveName}}</td>
+                    <td>{{item.productWeight|number:2}}</td>
                     <td>{{item.createTime|date:"yyyy-MM-dd hh:mm:ss"}}</td>
                     <td>{{item.status|dict:"OrderStatus"}}</td>
                 </tr>
                 <tr ng-if="selectedOrder && $index == selectedOrder.index" class="bg-warning">
-                    <td colspan="7" >
+                    <td colspan="8" >
                         <button class="btn btn-primary btn-sm" ng-click="detailOrder()">详情</button>
                         <button class="btn btn-primary btn-sm" ng-click="pathOrder()">轨迹更新</button>
                         <button class="btn btn-success btn-sm" ng-click="printOrder()">打印面单</button>
@@ -89,11 +112,10 @@
     <div class="row text-center">
         <div class="col-lg-12">
             <button type="button" class="btn btn-primary" ng-click="newModal()">新&nbsp;建</button>
-            <button type="button" class="btn btn-warning" ng-click="batchPrint()">批量打印</button>
+            <!--<button type="button" class="btn btn-warning" ng-click="batchPrint()">批量打印</button>
             <button type="button" class="btn btn-success" ng-click="exportExcel()">批量导出[行邮]</button>
-            <button type="button" class="btn btn-success" ng-click="exportExcelBS()">批量导出[包税]</button>
+            <button type="button" class="btn btn-success" ng-click="exportExcelBS()">批量导出[包税]</button>-->
         </div>
-        <div class="col-lg-1"><div id="downloader"></div></div>
     </div>
 
     <script type="text/ng-template" id="addOrder">
@@ -105,7 +127,12 @@
                 </h4>
                 <div class="box">
                     <div class="box-heading">
-                        <h5><span class="glyphicon glyphicon-book padding-width-space-sm"></span><b>基本信息</b></h5>
+                        <h5><span class="glyphicon glyphicon-book padding-width-space-sm"></span><b>基本信息</b>
+                            <span class="pull-right">
+                                <span class="text-white fs12 mr10"><b>币种 </b>[CNY]</span>
+                                <span class="text-white fs12"><b>美元汇率 </b>[{{_exchange}}]</span>
+                            </span>
+                        </h5>
                     </div>
                     <div class="box-body" >
                         <div class="row">
@@ -120,25 +147,23 @@
                                     <input type="text" name="orderId" ng-model="orderId" class="form-control" placeholder="订单编号" maxlength="30" />
 
                                 </div>
-                                <div class="input-group input-group-sm">
+                                <div class="margin-height-space-sm input-group input-group-sm">
+                                    <span class="input-group-addon"><b>清关口岸</b></span>
+                                    <select class="form-control" ng-model="gateApi" ng-options="api.value for api in GateApiList"></select>
                                     <span class="input-group-addon"><b>清关方式</b></span>
                                     <select class="form-control" ng-model="gateMode" ng-options="method.value for method in GateModeList"></select>
-                                    <span class="input-group-addon"><b>订单名称</b></span>
-                                    <input type="text" name="orderName" ng-model="orderName" class="form-control" placeholder="订单名称" maxlength="40" required/>
-                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.orderName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
-                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.orderName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
                                 </div>
                             </div>
                         </div>
                         <div class="row row-line">
                             <div class="col-lg-6">
                                 <div class="input-group input-group-sm">
-                                    <span class="label label-success mr10"><b>币种 - </b>CNY</span>
-                                    <span class="label label-primary"><b>汇率(美元) - </b>{{_exchange}}</span>
-                                </div>
+                                    <span class="input-group-addon"><b>订单名称</b></span>
+                                    <input type="text" name="orderName" ng-model="orderName" class="form-control" placeholder="订单名称" maxlength="40" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="addOrderForm.orderName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="addOrderForm.orderName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
                             </div>
                         </div>
-                        <div class="row row-line">
                             <div class="col-lg-6">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>备注</b></span>
@@ -445,16 +470,22 @@
                             </div>
                         </div>
                         <div class="row row-line">
-                            <div class="col-lg-6">
+                            <div class="col-lg-4">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>收件人省份</b></span>
                                     <select class="form-control" ng-model="receiveProvince" ng-options="status.value for status in ProvinceList" ng-change="initCitys()"></select>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-4">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>收件人城市</b></span>
-                                    <select class="form-control" ng-model="receiveCity" ng-options="status.value for status in CityList"></select>
+                                    <select class="form-control" ng-model="receiveCity" ng-options="status.value for status in CityList" ng-change="initAreas()"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>收件人地区</b></span>
+                                    <select class="form-control" ng-model="receiveArea" ng-options="status.value for status in AreaList"></select>
                                 </div>
                             </div>
                         </div>
@@ -525,7 +556,12 @@
                 </h4>
                 <div class="box">
                     <div class="box-heading">
-                        <h5><span class="glyphicon glyphicon-book padding-width-space-sm"></span><b>基本信息</b></h5>
+                        <h5><span class="glyphicon glyphicon-book padding-width-space-sm"></span><b>基本信息</b>
+                            <span class="pull-right">
+                                <span class="text-white fs12 mr10"><b>币种 </b>[{{Order.currency}}]</span>
+                                <span class="text-white fs12"><b>美元汇率 </b>[{{_exchange}}]</span>
+                            </span>
+                        </h5>
                     </div>
                     <div class="box-body" >
                         <div class="row row-line">
@@ -540,25 +576,15 @@
                                     <input type="text" ng-model="Order.id" class="form-control" readonly/>
                                 </div>
                                 <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>清关口岸</b></span>
+                                    <select class="form-control" ng-model="Order.gateApi" ng-options="api.value for api in GateApiList"></select>
                                     <span class="input-group-addon"><b>清关方式</b></span>
                                     <select class="form-control" ng-model="Order.gateMode" ng-options="method.value for method in GateModeList"></select>
-                                    <span class="input-group-addon"><b>订单名称</b></span>
-                                    <input type="text" name="editOrderName" ng-model="Order.name" class="form-control" placeholder="订单名称" maxlength="40" required/>
-                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editOrderName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
-                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editOrderName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
                                 </div>
                             </div>
                         </div>
                         <div class="row row-line">
-                            <div class="col-lg-6">
-                                <div class="input-group input-group-sm">
-                                    <span class="label label-success mr10"><b>币种 - </b>{{Order.currency}}</span>
-                                    <span class="label label-primary"><b>汇率(美元) - </b>{{_exchange}}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row row-line">
-                            <div class="col-lg-6">
+                            <div class="col-lg-4">
                                 <div class="input-group input-group-sm"  ng-click="open($event)">
                                     <span class="input-group-addon"><b>创建时间</b></span>
                                     <input type="text" class="form-control" datepicker-popup="yyyy-MM-dd" ng-model="Order.createTime" is-open="opened" min-date="minDate" max-date="'2020-01-01'" show-weeks="false" show-button-bar="false" readonly required/>
@@ -567,7 +593,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>订单名称</b></span>
+                                    <input type="text" name="editOrderName" ng-model="Order.name" class="form-control" placeholder="订单名称" maxlength="40" required/>
+                                    <span class="input-group-addon tipInvalid" ng-show="editOrderForm.editOrderName.$invalid"><span class="glyphicon glyphicon-remove"></span></span>
+                                    <span class="input-group-addon tipValid" ng-show="editOrderForm.editOrderName.$valid"><span class="glyphicon glyphicon-ok"></span></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>备注</b></span>
                                     <input type="text" name="editDescription" ng-model="Order.description" class="form-control" placeholder="备注"/>
@@ -586,8 +620,8 @@
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>支付状态</b></span>
                                     <span class="form-control">
-                                        <b ng-show="Order.kind == 0" class="text-danger">{{Order.payStatus|dict:"PayStatus"}}</b>
-                                        <b ng-show="Order.kind == 1" class="text-success">{{Order.payStatus|dict:"PayStatus"}}</b>
+                                        <b ng-show="Order.payStatus == 0" class="text-danger">{{Order.payStatus|dict:"PayStatus"}}</b>
+                                        <b ng-show="Order.payStatus == 1" class="text-success">{{Order.payStatus|dict:"PayStatus"}}</b>
                                     </span>
                                 </div>
                             </div>
@@ -769,7 +803,7 @@
                                 <td><span class="glyphicon glyphicon-remove text-danger cursor" ng-click="removeProduct($index)"></span></td>
                             </tr>
                         </table>
-                        <div class="font-size-12" ng-show="editOrderForm.pName.$invalid || editOrderForm.pBrand.$invalid || editOrderForm.pAmount.$invalid || editOrderForm.pNum.$invalid || editOrderForm.pWeight.$invalid">
+                        <div class="fs12" ng-show="editOrderForm.pName.$invalid || editOrderForm.pBrand.$invalid || editOrderForm.pAmount.$invalid || editOrderForm.pNum.$invalid || editOrderForm.pWeight.$invalid">
                             <span class="label label-danger" ng-show="editOrderForm.pName.$invalid">名称</span>
                             <span class="label label-danger" ng-show="editOrderForm.pBrand.$invalid">品牌</span>
                             <span class="label label-danger" ng-show="editOrderForm.pAmount.$invalid">单价</span>
@@ -897,16 +931,22 @@
                             </div>
                         </div>
                         <div class="row row-line">
-                            <div class="col-lg-6">
+                            <div class="col-lg-4">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>收件人省份</b></span>
                                     <select class="form-control" ng-model="Order.receiveProvince" ng-options="status.value for status in ProvinceList" ng-change="initCitys()"></select>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-4">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-addon"><b>收件人城市</b></span>
-                                    <select class="form-control" ng-model="Order.receiveCity" ng-options="status.value for status in CityList"></select>
+                                    <select class="form-control" ng-model="Order.receiveCity" ng-options="status.value for status in CityList" ng-change="initAreas()"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-addon"><b>收件人地区</b></span>
+                                    <select class="form-control" ng-model="Order.receiveArea" ng-options="status.value for status in AreaList"></select>
                                 </div>
                             </div>
                         </div>
@@ -1083,6 +1123,27 @@
             </div>
             </div></div>
         </form>
+    </script>
+    <script type="text/ng-template" id="exports">
+        <div class="modal-body">
+            <p>将导出以下条件订单数据<b class="text-orange fs12">(默认全部)</b></p>
+            <div class="fs12">
+                <p class=" mr10" ng-show="Query.idBatch"><label class="mr3 text-skyblue fw80">批次号</label>{{Query.idBatch}}</p>
+                <p class=" mr10" ng-show="Query.id"><label class="mr3 text-skyblue fw80">订单编号</label>{{Query.id}}</p>
+                <p class=" mr10" ng-show="Query.receiveName"><label class="mr3 text-skyblue fw80">收件人</label>{{Query.receiveName}}</p>
+                <p class=" mr10" ng-show="Query.type"><label class="mr3 text-skyblue fw80">订单类型</label>{{Query.type.value}}</p>
+                <p class=" mr10" ng-show="Query.status"><label class="mr3 text-skyblue fw80">订单状态</label>{{Query.status.value}}</p>
+                <p class=" mr10" ng-show="Query.payStatus"><label class="mr3 text-skyblue fw80">支付状态</label>{{Query.payStatus.value}}</p>
+                <p class=" mr10" ng-show="Query.time && Query.time != -1"><label class="mr3 text-skyblue fw80">创建时间</label>{{Query.time.value}}</p>
+                <p class=" mr10" ng-show="Query.time == -1"><label class="mr3 text-skyblue fw80">创建时间</label>{{_Query.begindate}} - {{_Query.enddate}}</p>
+            </div>
+            <div class="sp-line"></div>
+            <div class="margin-height-space-sm text-center">
+                <button class="btn btn-primary" ng-click="exportExcel()">深圳行邮</button>
+                <button class="btn btn-primary" ng-click="exportExcelBS()">深圳包税</button>
+                <button class="btn btn-success" ng-click="exportExcelTJ()">天津</button>
+            </div>
+        </div>
     </script>
 
 </section>

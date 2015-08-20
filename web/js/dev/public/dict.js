@@ -3,8 +3,11 @@
     .factory("$constants", [function() {
         return {
             NAME_COMPANY_NAME: "仲良速递",
-            NAME_EXPORT_ORDER_EXCEL_TYPEA_NAME: "行邮.xlsx",
-            NAME_EXPORT_ORDER_EXCEL_TYPEB_NAME: "包税.xlsx",
+            NAME_COMPANY_ADDRESS: "(718)690-5565",
+            NAME_COMPANY_TELPHONE: "15-07C College Point Blvd，College Point, New York 11356",
+            NAME_EXPORT_ORDER_EXCEL_TYPEA_NAME: "深圳行邮.xlsx",
+            NAME_EXPORT_ORDER_EXCEL_TYPEB_NAME: "深圳包税.xlsx",
+            NAME_EXPORT_ORDER_EXCEL_TJ_NAME: "天津宜信.xlsx",
             STATUS_ORDER_CLEARANCE:5,        //清关中
             TYPE_ORDER_SINGLE:0,        //默认订单
             TYPE_ORDER_BATCH:1,         //批量订单
@@ -46,7 +49,9 @@
             MESSAGE_NEXT_STEP_WITHOUT_IDIMG:"证件照片尚未上传,可能导致清关不通过或延误，确定不上传提交订单?",
             MESSAGE_PAY_STATUS_FAIL:"订单未支付成功，请确认支付结果或重新支付",
             MESSAGE_PRODUCT_DETAIL_OVER_WEIGHT:"单笔订单货品总重量不能超过3千克",
-            MESSAGE_PRODUCT_DETAIL_OVER_AMOUNT:"单笔订单若货品数量大于1件，总价值不能超过1000元"
+            MESSAGE_PRODUCT_DETAIL_OVER_AMOUNT:"单笔订单若货品数量大于1件，总价值不能超过1000元",
+            MESSAGE_DATE_FORMAT_ERROR:"查询日期格式不正确",
+            MESSAGE_PRINT_BATCH_LIMITED:"一次性批量打印面单超过系统上限(200条),请指定查询条件批量打印"
         };
     }])
 	.factory("$dict", [function() {
@@ -111,9 +116,21 @@
                 "5": "清关中",
                 "9": "完成"
             },
+            GateApi: {
+                "0": "深圳",
+                "1": "天津"
+            },
+            GateApiName: {
+                "深圳": "0",
+                "天津": "1"
+            },
             GateMode: {
                 "0": "行邮",
                 "1": "包税"
+            },
+            GateModeName: {
+                "行邮": "0",
+                "包税": "1"
             },
             ProductType: {
                 "1000000": "食品、饮料",

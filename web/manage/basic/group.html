@@ -10,7 +10,7 @@
                 <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
                 <input type="text" ng-model="_search" class="form-control"/>
             </div>
-            <table class="table table-hover fsize-12">
+            <table class="table table-hover fs12">
                 <tr>
                     <th class="info" style="width:25%;">分组名称</th>
                     <th class="info" style="width:35%;">分组描述</th>
@@ -89,7 +89,7 @@
                                 <td>{{item.name}}</td>
                                 <td>{{item.description}}</td>
                                 <td>
-                                    <span ng-repeat="menu in item.subMenu" class="fsize-12">
+                                    <span ng-repeat="menu in item.subMenu" class="fs12">
                                         <input type="checkbox" ng-icheck="menu"> - {{menu.name}}<br>
                                     </span>
                                 </td>
@@ -154,9 +154,9 @@
                             <td>{{item.name}}</td>
                             <td>{{item.description}}</td>
                             <td>
-                                <span ng-repeat="menu in item.subMenu" class="fsize-12">
+                                <h5 ng-repeat="menu in item.subMenu" class="fs12">
                                     <input type="checkbox" ng-icheck="menu"> - {{menu.name}}<br>
-                                </span>
+                                </h5>
                             </td>
                         </tr>
                     </table>

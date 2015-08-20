@@ -1,6 +1,7 @@
 ﻿var model = require('./../../models/model'),
-    provinceModel = model.Province,
-    cityModel = model.City,
+    provinceModel = model.Provinces,
+    cityModel = model.Citys,
+    areaModel = model.Areas,
     menuModel = model.Menu,
     userModel = model.User,
     customerModel = model.Customer,
@@ -196,6 +197,24 @@ exports.listCitys = function (req, res) {
     });
 };
 
+exports.listAreas = function (req, res) {
+    var queryString = {};
+    if(req.body.cityId){
+        queryString.cityId = req.body.cityId
+    }
+    if(req.body.areaId){
+        queryString.areaId = req.body.areaId
+    }
+    areaModel.find(queryString).exec(function (err, doc) {
+        if (err) {
+            __logger.error("我去,拉个地区列表都能失败，你TM逗我呢[" + err.message + "]")
+            res.status(400).send(err.message);
+            return;
+        }
+        res.json(doc);
+    });
+};
+
 exports.queryOrder = function (req, res) {
     var order = {id : req.body.id}
     var random = Math.floor(Math.random() * 1000)
@@ -216,6 +235,7 @@ exports.queryOrder = function (req, res) {
     });
 };
 
+//深圳清关轨迹查询
 exports.thirdPath = function(req, res) {
 
     var data = {
@@ -243,6 +263,40 @@ exports.thirdPath = function(req, res) {
         });
     }).on('error', function (err) {
         __logger.error("注意啦!清关接口又调用失败啦,什么破系统[" + err.message + "]")
+        res.status(400).json(msg.ORDER.orderPathSyncError);
+    })
+
+    request.end();
+};
+
+//天津宜信清关轨迹查询
+exports.thirdTJPath = function(req, res) {
+
+    var data = {
+        no: req.body.orderId,   //610291500140161
+        cc: "zhongliang"
+    };
+
+    var content = qs.stringify(data);
+
+    var options = {
+        hostname: config.basic.EXPRESS_TJ_API_HOST,
+        port: config.basic.EXPRESS_TJ_API_PORT,
+        path: config.basic.EXPRESS_TJ_API_PATH + content,
+        method: config.basic.EXPRESS_TJ_API_METHOD
+    };
+
+    var body = "";
+
+    var request = http.request(options, function (response) {
+        response.setEncoding('utf8');
+        response.on('data', function (chunk) {
+            body+=chunk;
+        }).on('end', function(){
+            res.send(body);
+        });
+    }).on('error', function (err) {
+        __logger.error("注意啦!天津宜信清关接口又调用失败啦,什么破系统[" + err.message + "]")
         res.status(400).json(msg.ORDER.orderPathSyncError);
     })
 
@@ -560,10 +614,10 @@ exports.sendMail = function(req, res){
     }
     transporter.sendMail(mail, function(err, info){
         if(err){
-            __logger.error("账号注册邮件(" + toEmail +")发送失败：" + err.message)
+            __logger.error("账号注册邮件(" + toEmail + "),随机数(" + token + ")发送失败：" + err.message)
             res.status(400).send(err.message);
         }else{
-            __logger.info("账号注册邮件(" + toEmail +")发送成功")
+            __logger.info("账号注册邮件(" + toEmail + "),随机数(" + token + ")发送成功")
     res.json("success");
 }
     });
@@ -630,10 +684,10 @@ exports.forgetPassword = function(req, res){
             }
             transporter.sendMail(mail, function(err, info){
                 if(err){
-                    __logger.error("密码重置邮件(" + toEmail +")发送失败：" + err.message)
+                    __logger.error("密码重置邮件(" + toEmail + "),随机数(" + token + ")发送失败：" + err.message)
                     res.status(400).send(err);
                 }else{
-                    __logger.info("密码重置邮件(" + toEmail +")发送成功")
+                    __logger.info("密码重置邮件(" + toEmail + "),随机数(" + token + ")发送成功")
                     res.json("success");
                 }
             });

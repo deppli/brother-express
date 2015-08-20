@@ -84,8 +84,6 @@
             //angular: "http://cdn.bootcss.com/angular.js/1.3.8/angular.min",
             //"angular-bootstrap": "http://cdn.bootcss.com/angular-ui-bootstrap/0.13.3/ui-bootstrap-tpls.min",
             //"angular-file-upload":"http://cdn.bootcss.com/angular-file-upload/1.1.6/angular-file-upload.min",
-            //"angular-dragdrop": "lib/angular-dragdrop/src/angular-dragdrop.min",
-
             common: "public/common",
             service: "public/service",
             component: "public/component",

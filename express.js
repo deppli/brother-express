@@ -119,6 +119,7 @@ app.post("/order/pathUpdate", hooks.role(),  order.pathUpdate);
 
 app.post("/orderBatch/processExcel", hooks.role(), orderBatch.processExcel);
 app.post("/orderBatch/commitExcel", hooks.role(), orderBatch.commitExcel);
+app.post("/orderBatch/batchImport", hooks.role(), orderBatch.batchImport);
 
 app.post("/news/add", hooks.role(),  news.add);
 app.post("/news/list", hooks.role(),  news.list);
@@ -136,11 +137,13 @@ app.post("/service/sendMail", service.sendMail);
 app.post("/service/createOrder", service.createOrder);
 app.post("/service/queryOrder", service.queryOrder);
 app.post("/service/thirdPath", service.thirdPath);
+app.post("/service/thirdTJPath", service.thirdTJPath);
 app.post("/service/updateOrder", service.updateOrder);
 app.post("/service/updateOrderIdno", service.updateOrderIdno);
 app.post("/service/listMenus", service.listMenus);
 app.post("/service/listProvinces", service.listProvinces);
 app.post("/service/listCitys", service.listCitys);
+app.post("/service/listAreas", service.listAreas);
 app.post("/service/checkValidateEmail", service.checkValidateEmail);
 app.post("/service/upload", service.upload);
 app.get("/service/validateEmail", service.validateEmail);

@@ -2,6 +2,9 @@
     return [["OrderCtrl", ["$scope", "$rootScope", "$remote", "$modal", "$scopeData", "$config", "$constants",
         function($scope, $rootScope, $remote, $modal, $scopeData, $config, $constants) {
             $scope.payerIdType = "身份证";
+            $scope._Query = {}
+            $scope._Query.begindate = new Date().format("yyyyMMdd");
+            $scope._Query.enddate = new Date().format("yyyyMMdd");
 
             var status = $scope.initOptions("OrderStatus");
             $scope.QueryOrderStatus = status[0];
@@ -18,14 +21,21 @@
                 {key:7, value: '7天'},
                 {key:30, value: '30天'},
                 {key:90, value: '90天'},
-                {key:180, value: '180年'},
+                {key:180, value: '180天'},
                 {key:365, value: '365天'}
             ];
 
-            $scope.batchPrint = function(){
+            $scope.resetQuery = function(){
+                $rootScope.Query = {};
+            }
+
+            $scope.resetQuery();
+
+            $scope.initPageQuery = function(){
                 var postData = {};
                 postData.idBatch = $scope.Query.idBatch||null
                 postData.id = $scope.Query.id||null
+                postData.receiveName = $scope.Query.receiveName||null
                 if($scope.Query.type){
                     postData.type = $scope.Query.type.key
                 }
@@ -36,15 +46,44 @@
                     postData.payStatus = $scope.Query.payStatus.key
                 }
                 if($scope.Query.time){
+                    if($scope.Query.time == -1){
+                        var begin = $scope.checkDate($scope._Query.begindate);
+                        var end = $scope.checkDate($scope._Query.enddate);
+                        if(!begin || !end){
+                            var msg = {text:$constants.MESSAGE_DATE_FORMAT_ERROR};
+                            $scope.showMessage(msg);
+                            return false;
+                        }
+                        postData.time = -1;
+                        postData.timeBegin = begin;
+                        postData.timeEnd = end;
+                    }else{
                     postData.time = $scope.Query.time.key
                 }
+                }
 
+                return postData;
+            }
+
+            $scope.batchPrint = function(){
+                var postData = $scope.initPageQuery();
+
+                //先进行打印数量查询，确保一次性打印笔数过多造成前端假死或崩溃
+                $remote.post("/order/count", postData, function(data){
+                    console.log(data)
+                    if(data && data > 200){
+                        var msg = {text: $constants.MESSAGE_PRINT_BATCH_LIMITED}
+                        $scope.showMessage(msg);
+                        return;
+                    }
                 $remote.post("/order/list", postData, function(data){
                     var iframe = document.getElementById("printPage");
                     iframe.contentWindow.focus();
                     iframe.contentWindow.doSettingValues(data);
                     iframe.contentWindow.print();
                 })
+                })
+
             }
 
             $scope.printOrder = function(){
@@ -84,20 +123,9 @@
             $scope.pageSize = 15;
 
             $scope.batchDeleteOrder = function(){
-                var postData = {};
-                postData.idBatch = $scope.Query.idBatch||null
-                postData.id = $scope.Query.id||null
-                if($scope.Query.type){
-                    postData.type = $scope.Query.type.key
-                }
-                if($scope.Query.status){
-                    postData.status = $scope.Query.status.key
-                }
-                if($scope.Query.payStatus){
-                    postData.payStatus = $scope.Query.payStatus.key
-                }
-                if($scope.Query.time){
-                    postData.time = $scope.Query.time.key
+                var postData = $scope.initPageQuery();
+                if(!postData){
+                    return
                 }
 
                 var msg = {type:$constants.MESSAGE_DIALOG_TYPE_CONF, text:$constants.MESSAGE_CONF_DEL_ORDER, confCallback:function(){
@@ -116,20 +144,9 @@
 
             $scope.listOrder = function(init){
                 $scope.selectCancel();
-                var postData = {};
-                postData.idBatch = $scope.Query.idBatch||null
-                postData.id = $scope.Query.id||null
-                if($scope.Query.type){
-                    postData.type = $scope.Query.type.key
-                }
-                if($scope.Query.status){
-                    postData.status = $scope.Query.status.key
-                }
-                if($scope.Query.payStatus){
-                    postData.payStatus = $scope.Query.payStatus.key
-                }
-                if($scope.Query.time){
-                    postData.time = $scope.Query.time.key
+                var postData = $scope.initPageQuery();
+                if(!postData){
+                    return
                 }
 
                 $remote.post("/order/count", postData, function(data){
@@ -168,6 +185,16 @@
                     $scope.selectedOrder = item;
                     $scope.selectedOrder.index = index;
                 }
+            }
+
+            $scope.exportsModal = function(){
+                var modalDetail = $modal.open({
+                    templateUrl: 'exports',
+                    controller: 'ExportsCtrl',
+                    size: "sm",
+                    //backdrop: 'static',
+                    scope: $scope
+                });
             }
 
             $scope.detailOrder = function(){
@@ -244,28 +271,17 @@
                 });
             }
 
-            //根据数据生成[行邮]Excel文件
-            $scope.exportExcel = function(){
-                var msg = {type:$constants.MESSAGE_DIALOG_TYPE_CONF, text:$constants.MESSAGE_ORDER_EXPORT_HY, confCallback:function(){
-                if(!$scope._exchange){
-                    var msg = {text:$constants.MESSAGE_FILE_EXCEL_EXCHANGE_EMPTY};
-                    $scope.showMessage(msg);
-                    return;
-                }
-                var _exchange = $scope._exchange;
+        }]
+    ],["ExportsCtrl", ["$scope", "$rootScope", "$remote", "$modalInstance", "$scopeData", "$config", "$constants",
+        function($scope, $rootScope, $remote, $modalInstance, $scopeData, $config, $constants) {
 
-                var artistWorkbook = excelBuilder.createWorkbook();
-                var albumList = artistWorkbook.createWorksheet({name: '行邮数据'});
-                var stylesheet = artistWorkbook.getStyleSheet();
+            var exportedExcel = excelBuilder.createWorkbook();
+            var stylesheet = exportedExcel.getStyleSheet();
 
                 var boldDXF = stylesheet.createDifferentialStyle({
                     font: {
                         italic: true
                     }
-                });
-                albumList.setRowInstructions(1, {
-                    height: 30,
-                    style: boldDXF.id
                 });
 
                 //Excel表头样式
@@ -302,6 +318,19 @@
                     }
                 });
 
+            //根据数据生成深圳[行邮]Excel文件
+            $scope.exportExcel = function(){
+                    if(!$scope._exchange){
+                        var msg = {text:$constants.MESSAGE_FILE_EXCEL_EXCHANGE_EMPTY};
+                        $scope.showMessage(msg);
+                        return;
+                    }
+                    var _exchange = $scope._exchange;
+
+                    var albumList = exportedExcel.createWorksheet({name: '行邮数据'});
+
+                    albumList.setRowInstructions(1, {height: 30, style: boldDXF.id});
+
                 //数据体，预先准备数据头
                 var excelData = [
                     [
@@ -331,19 +360,12 @@
 
 
                 var seq = 0;
-                    var postData = {};
-                    postData.idBatch = $scope.Query.idBatch||null
-                    postData.id = $scope.Query.id||null
-                    if($scope.Query.type){
-                        postData.type = $scope.Query.type.key
-                    }
-                    if($scope.Query.status){
-                        postData.status = $scope.Query.status.key
-                    }
-                    if($scope.Query.time){
-                        postData.time = $scope.Query.time.key
+                    var postData = $scope.initPageQuery();
+                    if(!postData){
+                        return
                 }
                     postData.gateMode = 0         //行邮
+                    postData.gateApi = 0
                 //遍历后端返回数据，解析原有[{key1:value1,key2:value2}]形式为[value,value]
                 $remote.post("/order/list", postData, function(orders){
                     orders.forEach(function(order){
@@ -382,67 +404,24 @@
 
                     albumList.setData(excelData); //<-- Here's the important part
 
-                    artistWorkbook.addWorksheet(albumList);
+                        exportedExcel.addWorksheet(albumList);
 
-                    var data = excelBuilder.createFile(artistWorkbook);
+                        var data = excelBuilder.createFile(exportedExcel);
 
                     //var file = new Date().format("yyyyMMddhhmmssS") + '-' + $constants.NAME_EXPORT_ORDER_EXCEL_TYPEA_NAME;
                     var file = $constants.NAME_EXPORT_ORDER_EXCEL_TYPEA_NAME;
                     $scope.download(data, file);
                 })
-                }};
-                $scope.showMessage(msg);
+                $modalInstance.close();
             }
 
-            //根据数据生成[包税]Excel文件
+            //根据数据生成深圳[包税]Excel文件
             $scope.exportExcelBS = function(){
-                var msg = {type:$constants.MESSAGE_DIALOG_TYPE_CONF, text:$constants.MESSAGE_ORDER_EXPORT_BS, confCallback:function(){
-                var artistWorkbook = excelBuilder.createWorkbook();
-                var albumList = artistWorkbook.createWorksheet({name: '包税数据'});
-                var stylesheet = artistWorkbook.getStyleSheet();
+                    var albumList = exportedExcel.createWorksheet({name: '包税数据'});
 
-                var boldDXF = stylesheet.createDifferentialStyle({
-                    font: {
-                        italic: true
-                    }
-                });
                 albumList.setRowInstructions(1, {
                     height: 30,
                     style: boldDXF.id
-                });
-
-                //Excel表头样式
-                var header = stylesheet.createFormat({
-                    font: {
-                        size: 10,
-                        bold: true,
-                        color: '000000'
-                    },
-                    fill: {
-                        type: 'pattern',
-                        patternType: 'solid',
-                        fgColor: '83c6e8'
-                    }
-                });
-
-                //Excel数据样式
-                var border = "A3A3A3";
-                var bodyer = stylesheet.createFormat({
-                    font: {
-                        size: 10,
-                        bold: false,
-                        color: '3A3A3A'
-                    },
-                    fill: {
-                        type: 'pattern',
-                        patternType: 'solid'
-                    },
-                    border: {
-                        bottom: {color: border, style: 'thin'},
-                        top: {color: border, style: 'thin'},
-                        left: {color: border, style: 'thin'},
-                        right: {color: border, style: 'thin'}
-                    }
                 });
 
                 //数据体，预先准备数据头
@@ -464,19 +443,12 @@
                 ];
 
                     var seq = 1;
-                    var postData = {};
-                    postData.idBatch = $scope.Query.idBatch||null
-                    postData.id = $scope.Query.id||null
-                    if($scope.Query.type){
-                        postData.type = $scope.Query.type.key
-                }
-                    if($scope.Query.status){
-                        postData.status = $scope.Query.status.key
-                    }
-                    if($scope.Query.time){
-                        postData.time = $scope.Query.time.key
+                    var postData = $scope.initPageQuery();
+                    if(!postData){
+                        return
                     }
                     postData.gateMode = 1         //包税
+                    postData.gateApi = 0
                 //遍历后端返回数据，解析原有[{key1:value1,key2:value2}]形式为[value,value]
                 $remote.post("/order/list", postData, function(orders) {
                     orders.forEach(function(order){
@@ -485,7 +457,6 @@
                                 var productBrand = ""
                                 order.products.forEach(function(product, index){
                                     var suffix = "/";
-                                    console.log(index);
                                     if(index + 1 == order.products.length){
                                         suffix = "";
                                     }
@@ -511,15 +482,123 @@
 
                     albumList.setData(excelData); //<-- Here's the important part
 
-                    artistWorkbook.addWorksheet(albumList);
+                        exportedExcel.addWorksheet(albumList);
 
-                    var data = excelBuilder.createFile(artistWorkbook);
+                        var data = excelBuilder.createFile(exportedExcel);
 
                     var file = $constants.NAME_EXPORT_ORDER_EXCEL_TYPEB_NAME;
                     $scope.download(data, file);
                 });
-                }};
-                $scope.showMessage(msg);
+
+                $modalInstance.close();
+            }
+
+            //根据数据生成天津宜信清关Excel文件
+            $scope.exportExcelTJ = function(){
+                var orders = exportedExcel.createWorksheet({name: '分运单'});
+                var products = exportedExcel.createWorksheet({name: '分运单内件'});
+
+                orders.setRowInstructions(1, {height: 30,style: boldDXF.id});
+
+                //数据体，预先准备数据头
+                var orderData = [
+                    [
+                        {value:'仓库', metadata: {style: header.id}},
+                        {value:'口岸', metadata: {style: header.id}},
+                        {value:'客户内单号', metadata: {style: header.id}},
+                        {value:'托盘号', metadata: {style: header.id}},
+                        {value:'重量(kg)', metadata: {style: header.id}},
+                        {value:'发货人姓名', metadata: {style: header.id}},
+                        {value:'发货人地址', metadata: {style: header.id}},
+                        {value:'发货人电话', metadata: {style: header.id}},
+                        {value:'原寄地', metadata: {style: header.id}},
+                        {value:'收件人姓名', metadata: {style: header.id}},
+                        {value:'身份证', metadata: {style: header.id}},
+                        {value:'省份', metadata: {style: header.id}},
+                        {value:'城市', metadata: {style: header.id}},
+                        {value:'区/县', metadata: {style: header.id}},
+                        {value:'收件人地址', metadata: {style: header.id}},
+                        {value:'收件人电话', metadata: {style: header.id}},
+                        {value:'邮编', metadata: {style: header.id}}
+                    ]
+                ];
+
+                //数据体，预先准备数据头
+                var productData = [
+                    [
+                        {value:'客户内单号', metadata: {style: header.id}},
+                        {value:'行邮税号', metadata: {style: header.id}},
+                        {value:'物品名称', metadata: {style: header.id}},
+                        {value:'规格', metadata: {style: header.id}},
+                        {value:'品牌', metadata: {style: header.id}},
+                        {value:'申报单价', metadata: {style: header.id}},
+                        {value:'数量', metadata: {style: header.id}},
+                        {value:'单位', metadata: {style: header.id}},
+                        {value:'币种', metadata: {style: header.id}},
+                        {value:'物品总净重', metadata: {style: header.id}},
+                    ]
+                ];
+
+
+                var seq = 0;
+                var postData = $scope.initPageQuery();
+                if(!postData){
+                    return
+                }
+                //postData.gateMode = 0         //行邮
+                postData.gateApi = 1
+                //遍历后端返回数据，解析原有[{key1:value1,key2:value2}]形式为[value,value]
+                $remote.post("/order/list", postData, function(items){
+                    items.forEach(function(order){
+                        var row = [];
+                        row.push({value: "仲良快递纽约", metadata: {style: bodyer.id}});
+                        row.push({value: "天津", metadata: {style: bodyer.id}});
+                        row.push({value: order.id||"", metadata: {style: bodyer.id}});
+                        row.push({value: "", metadata: {style: bodyer.id}});
+                        row.push({value: order.productWeight||"", metadata: {style: bodyer.id}});
+                        row.push({value: "仲良速递", metadata: {style: bodyer.id}});
+                        row.push({value: "1507 College Point Blvd", metadata: {style: bodyer.id}});
+                        row.push({value: "7183530343", metadata: {style: bodyer.id}});
+                        row.push({value: "纽约", metadata: {style: bodyer.id}});
+                        row.push({value: order.receiveName||"", metadata: {style: bodyer.id}});
+                        row.push({value: order.payerIdNo||"", metadata: {style: bodyer.id}});
+                        row.push({value: order.receiveProvinceName||"", metadata: {style: bodyer.id}});
+                        row.push({value: order.receiveCityName||"", metadata: {style: bodyer.id}});
+                        row.push({value: order.receiveAreaName||"", metadata: {style: bodyer.id}});
+                        row.push({value: order.receiveAddress||"", metadata: {style: bodyer.id}});
+                        row.push({value: order.receivePhone||"", metadata: {style: bodyer.id}});
+                        row.push({value: order.receiveZipCode||"", metadata: {style: bodyer.id}});
+                        orderData.push(row);
+
+                        if(order.products && order.products.length > 0){
+                            order.products.forEach(function(product){
+                                var row = [];
+                                row.push({value: order.id||"", metadata: {style: bodyer.id}});
+                                row.push({value: "", metadata: {style: bodyer.id}});
+                                row.push({value: product.pName||"", metadata: {style: bodyer.id}});
+                                row.push({value: product.pUnit||"", metadata: {style: bodyer.id}});
+                                row.push({value: product.pBrand||"", metadata: {style: bodyer.id}});
+                                row.push({value: product.pAmount||"", metadata: {style: bodyer.id}});
+                                row.push({value: product.pNum||"", metadata: {style: bodyer.id}});
+                                row.push({value: product.pUnit||"", metadata: {style: bodyer.id}});
+                                row.push({value: "RMB", metadata: {style: bodyer.id}});
+                                row.push({value: product.pWeight||"", metadata: {style: bodyer.id}});
+                                productData.push(row);
+                            });
+                        }
+                    });
+                    orders.setData(orderData);
+                    exportedExcel.addWorksheet(orders);
+
+                    products.setData(productData);
+                    exportedExcel.addWorksheet(products);
+
+                    var data = excelBuilder.createFile(exportedExcel);
+
+                    var file = $constants.NAME_EXPORT_ORDER_EXCEL_TJ_NAME;
+                    $scope.download(data, file);
+                })
+                $modalInstance.close();
             }
 
             $scope.download = function(data, fileName){
@@ -536,19 +615,17 @@
                         alert("文件保存失败!");
                     },
                     swf: 'js/dev/lib/downloadify/media/downloadify.swf',
-                    downloadImage: 'js/dev/lib/downloadify/images/excel.png',
-                    width: 49,
+                    downloadImage: 'js/dev/lib/downloadify/images/excel2.png',
+                    width: 30,
                     dataType: 'base64',
-                    height: 55,
+                    height: 37.5,
                     transparent: true,
                     append: false
                 });
                 $("#downloader").show();
             }
-
         }]
-    ],
-        ["NewOrderCtrl", ["$scope", "$rootScope", "$remote", "$modalInstance", "$scopeData", "$config", "$constants",
+    ],["NewOrderCtrl", ["$scope", "$rootScope", "$remote", "$modalInstance", "$scopeData", "$config", "$constants",
             function($scope, $rootScope, $remote, $modalInstance, $scopeData, $config, $constants) {
                 $scope.products = [];
 
@@ -565,12 +642,13 @@
                         $scope.productNum = totalNum;
                     }
                     if(totalAmount){
-                        $scope.productAmount = totalAmount;
+                    $scope.productAmount = Math.round(totalAmount * 100) * 0.01
                     }
                     if(totalWeight){
-                        $scope.productWeight = totalWeight;
+                    $scope.productWeight = Math.round(totalWeight * 100) * 0.01
                     }
                     $scope.amount = $scope.transportAmount + $scope.taxAmount + $scope.safeAmount + $scope.otherAmount;
+                $scope.amount = Math.round($scope.amount * 100) * 0.01
                 })
 
                 var isOrNotOptions = $scope.initOptions("IsOrNot");
@@ -592,6 +670,9 @@
                 $scope.GateModeList = gateMode[0];
                 $scope.gateMode = $scope.GateModeList[0];
 
+            $scope.GateApiList = $scope.initOptions("GateApi");
+            $scope.gateApi = $scope.GateApiList[0];
+
                 $scope.getProvinces(function(){
                     var provinces = $scope.initOptions("Provinces");
                     $scope.ProvinceList = provinces[0];
@@ -605,6 +686,17 @@
                             var citys = $scope.initOptions("Citys");
                             $scope.CityList = citys[0];
                             $scope.receiveCity = $scope.CityList[citys[1]];
+                        $scope.initAreas();
+                    });
+                }
+            }
+
+            $scope.initAreas = function(){
+                if($scope.receiveCity){
+                    $scope.getAreas($scope.receiveCity.key, function(){
+                        var areas = $scope.initOptions("Areas");
+                        $scope.AreaList = areas[0];
+                        $scope.receiveArea = $scope.AreaList[areas[1]];
                         });
                     }
                 }
@@ -623,8 +715,8 @@
                 $scope.worldTransId = $scope.orderId;
                 $scope.worldTransName = $constants.NAME_COMPANY_NAME;
                 $scope.sendName = $constants.NAME_COMPANY_NAME;
-                $scope.sendPhone = "(718)690-5565";
-                $scope.sendAddress = "122-08 14th Ave，College Point, New York 11354";
+            $scope.sendPhone = $constants.NAME_COMPANY_TELPHONE;
+            $scope.sendAddress = $constants.NAME_COMPANY_ADDRESS;
 
                 $scope.newOrder = function(){
                     if(!$scope.products || $scope.products.length == 0){
@@ -640,6 +732,7 @@
                             name: $scope.orderName,
                             description: $scope.orderDescription,
                             creater: $rootScope.backInfo.loginId || "",
+                        gateApi: $scope.gateApi.key||0,
                             gateMode: $scope.gateMode.key || 0,
                             amount: $scope.amount || 0,
                             worldTransId: $scope.worldTransId || "",
@@ -660,6 +753,8 @@
                             receiveProvinceName: $scope.receiveProvince.value || "",
                             receiveCity: $scope.receiveCity.key || "",
                             receiveCityName: $scope.receiveCity.value || "",
+                        receiveArea: $scope.receiveArea.key || "",
+                        receiveAreaName: $scope.receiveArea.value || "",
                             receiveAddress: $scope.receiveAddress || "",
                             receivePhone: $scope.receivePhone || "",
                             receiveZipCode: $scope.receiveZipCode || "",
@@ -718,17 +813,22 @@
                         $scope.Order.productNum = totalNum;
                     }
                     if(totalAmount){
-                        $scope.Order.productAmount = totalAmount;
+                    $scope.Order.productAmount = Math.round(totalAmount * 100) * 0.01
                     }
                     if(totalWeight){
-                        $scope.Order.productWeight = totalWeight;
+                    $scope.Order.productWeight = Math.round(totalWeight * 100) * 0.01
                     }
                     $scope.Order.amount = $scope.Order.transportAmount + $scope.Order.taxAmount + $scope.Order.safeAmount + $scope.Order.otherAmount;
+                $scope.Order.amount = Math.round($scope.Order.amount * 100) * 0.01
                 })
 
                 var gateMode = $scope.initOptions("GateMode", $scope.Order.gateMode);
                 $scope.GateModeList = gateMode[0];
                 $scope.Order.gateMode = $scope.GateModeList[gateMode[1]];
+
+            var gateApi = $scope.initOptions("GateApi", $scope.Order.gateApi);
+            $scope.GateApiList = gateApi[0];
+            $scope.Order.gateApi = $scope.GateApiList[gateApi[1]];
 
                 $scope.getProvinces(function(){
                     var provinces = $scope.initOptions("Provinces", $scope.Order.receiveProvince);
@@ -743,6 +843,17 @@
                             var citys = $scope.initOptions("Citys", defaultValue);
                             $scope.CityList = citys[0];
                             $scope.Order.receiveCity = $scope.CityList[citys[1]];
+                        $scope.initAreas($scope.Order.receiveArea);
+                    });
+                }
+            }
+
+            $scope.initAreas = function(defaultValue){
+                if($scope.Order.receiveCity){
+                    $scope.getAreas($scope.Order.receiveCity.key, function(){
+                        var areas = $scope.initOptions("Areas", defaultValue);
+                        $scope.AreaList = areas[0];
+                        $scope.Order.receiveArea = $scope.AreaList[areas[1]];
                         });
                     }
                 }
@@ -793,6 +904,7 @@
                             idBatch: $scope.Order.idBatch || "",
                             dbId: $scope.Order._id,
                             idGate: $scope.Order.idGate || "",
+                        gateApi: $scope.Order.gateApi.key||0,
                             gateMode: $scope.Order.gateMode.key || 0,
                             name: $scope.Order.name || "",
                             description: $scope.Order.description,
@@ -818,6 +930,8 @@
                             receiveProvinceName: $scope.Order.receiveProvince.value || "",
                             receiveCity: $scope.Order.receiveCity.key || "",
                             receiveCityName: $scope.Order.receiveCity.value || "",
+                        receiveArea: $scope.Order.receiveArea.key || "",
+                        receiveAreaName: $scope.Order.receiveArea.value || "",
                             receiveAddress: $scope.Order.receiveAddress || "",
                             receivePhone: $scope.Order.receivePhone || "",
                             receiveZipCode: $scope.Order.receiveZipCode || "",
@@ -867,8 +981,6 @@
 
             $scope.opened = [];
             $scope.open = function($event, index) {
-                //var param = "opened" + index;
-                //console.log(param);
                 $event.preventDefault();
                 $event.stopPropagation();
                 $scope.opened[index] = true;

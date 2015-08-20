@@ -18,5 +18,9 @@ exports.basic = {
     EXPRESS_API_PORT: 8089,
     EXPRESS_API_PATH: '/cgi-bin/GInfo.dll?EmsApiTrack&ntype=+10000&',
     EXPRESS_API_METHOD: 'GET',
+    EXPRESS_TJ_API_HOST: 'lab.yi-ex.com',
+    EXPRESS_TJ_API_PORT: 81,
+    EXPRESS_TJ_API_PATH: '/track?',
+    EXPRESS_TJ_API_METHOD: 'GET',
     SYSTEM_HOST: 'http://www.brother-express.com'
 };

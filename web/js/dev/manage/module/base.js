@@ -76,24 +76,37 @@
 	function($rootScope, $config, $route, $remote, $dict, $filter, $modal) {
         $(window).bind('beforeunload',function(){return '';});
 
-        $rootScope.initJnl = function(prefix){
+        $rootScope.initJnl = function(prefix, type){
             var formatArr = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
             var nowTime = new Date();
-            /*
+            var random = "";
+            if(type == 1){
             //生成3位数字随机序列
-            var random = Math.ceil(Math.random()*999);
+                random = Math.ceil(Math.random()*999);
             if(random < 10){
                 random = "00" + random;
             }else if(random < 100 && random >= 10){
                 random = "0" + random;
-            }*/
-            var random = "";
+                }
+            }else{
             //生成4位英文随机串
             for(var i=1;i<=4;i++){
                 var currentIndex = Math.floor(Math.random() * formatArr.length);
                 random += formatArr[currentIndex];
             }
+            }
+
             return prefix  + random + nowTime.format("yyMMddhhmmss");
+        }
+
+        $rootScope.checkDate = function(date) {
+            var reg = /^(\d{4})(\d{2})(\d{2})$/;
+            var str = date;
+            var result = reg.exec(str);
+            if (!(reg.test(str)&&result[2]<=12&&result[3]<=31)){
+                return false;
+            }
+            return result[1] + "-" + result[2] + "-" + result[3];
         }
 
         $rootScope._WechatEntry = $config.wechatEntry;
@@ -137,6 +150,86 @@
                         return callback();
                     }else{
                         return citys;
+                    }
+                }
+            })
+        }
+
+        $rootScope.getAreas = function(cityId, callback){
+            var postData = {
+                cityId: cityId
+            }
+
+            $remote.post("/service/listAreas", postData, function(data) {
+                if(data){
+                    var areas = {};
+                    data.forEach(function(each){
+                        areas[each.areaId] = each.areaName;
+                    })
+                    $dict.set("Areas", areas);
+                    if(callback){
+                        return callback();
+                    }else{
+                        return areas;
+                    }
+                }
+            })
+        }
+
+        $rootScope.getProvincesName = function(callback){
+            $remote.post("/service/listProvinces", null, function(data) {
+                if(data){
+                    var provinces = {};
+                    data.forEach(function(each){
+                        provinces[each.provinceName] = each.provinceId;
+                    })
+                    $dict.set("ProvincesName", provinces);
+                    if(callback){
+                        return callback();
+                    }else{
+                        return provinces;
+                    }
+                }
+            })
+        }
+
+        $rootScope.getCitysName = function(provinceId, callback){
+            var postData = {
+                provinceId: provinceId
+            }
+
+            $remote.post("/service/listCitys", postData, function(data) {
+                if(data){
+                    var citys = {};
+                    data.forEach(function(each){
+                        citys[each.cityName] = each.cityId;
+                    })
+                    $dict.set("CitysName", citys);
+                    if(callback){
+                        return callback();
+                    }else{
+                        return citys;
+                    }
+                }
+            })
+        }
+
+        $rootScope.getAreasName = function(cityId, callback){
+            var postData = {
+                cityId: cityId
+            }
+
+            $remote.post("/service/listAreas", postData, function(data) {
+                if(data){
+                    var areas = {};
+                    data.forEach(function(each){
+                        areas[each.areaName] = each.areaId;
+                    })
+                    $dict.set("AreasName", areas);
+                    if(callback){
+                        return callback();
+                    }else{
+                        return areas;
                     }
                 }
             })
@@ -248,12 +341,27 @@
         window.$cookies = $cookies;
 
         $scope.checkForm = function(formElement){
-            if(formElement.$invalid){
-                var msg = {text:$constants.MESSAGE_FORM_INVALID};
+            console.log(formElement)
+            for(var item in formElement){
+                //var name = "" + item;
+                //console.log(typeof(formElement[item]))
+                if(typeof(formElement[item]) == "object"  && formElement[item]){
+                    var itemName = $("input[name='" + item + "']").attr("placeholder") || ""
+                    if(formElement[item].$invalid){
+                        var msg = {text:$constants.MESSAGE_FORM_INVALID + "(" + itemName + ")"};
                 $scope.showMessage(msg);
-                return false;
+                        console.log(item + ":" + formElement[item].$invalid)
+                        return false
             }
-            return true;
+                }
+            }
+            return true
+            //if(formElement.$invalid){
+            //    var msg = {text:$constants.MESSAGE_FORM_INVALID};
+            //    $scope.showMessage(msg);
+            //    return false;
+            //}
+            //return true;
         }
 
         $scope.resetMenu = function() {

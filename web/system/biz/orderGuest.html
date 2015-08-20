@@ -1,5 +1,10 @@
 <div class="container-fluid">
     <div class="row">
+        <div class="fixed-tip">
+            在购物网站下单后寄送或自行邮寄地址请填写仲良速递纽约仓库地址：<b class="text-italic text-info">15-07C College Point Blvd，College Point, New York 11356</b>
+        </div>
+    </div>
+    <div class="row">
         <ul class="reg-steps">
             <li class="reg-steps-item" ng-class="{'reg-steps-item-focus': STEP==1}">
                 <span class="label label-default padding-width-space-sm" ng-class="{'label-success': STEP==1}">1</span>
@@ -356,16 +361,22 @@
                                     </div>
                                 </div>
                                 <div class="row row-line">
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-4">
                                         <div class="input-group input-group-sm">
                                             <span class="input-group-addon"><b>收件人省份</b></span>
                                             <select class="form-control" ng-model="receiveProvince" ng-options="status.value for status in ProvinceList" ng-change="initCitys()"></select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-4">
                                         <div class="input-group input-group-sm">
                                             <span class="input-group-addon"><b>收件人城市</b></span>
                                             <select class="form-control" ng-model="receiveCity" ng-options="status.value for status in CityList"></select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-addon"><b>收件人地区</b></span>
+                                            <select class="form-control" ng-model="receiveArea" ng-options="status.value for status in AreaList"></select>
                                         </div>
                                     </div>
                                 </div>

@@ -220,6 +220,17 @@ define(["bootstrap-icheck"], function() {
                     var citys = $scope.initOptions("Citys");
                     $scope.CityList = citys[0];
                     $scope.receiveCity = $scope.CityList[citys[1]];
+                    $scope.initAreas();
+                });
+            }
+        }
+
+        $scope.initAreas = function(){
+            if($scope.receiveCity){
+                $scope.getAreas($scope.receiveCity.key, function(){
+                    var areas = $scope.initOptions("Areas");
+                    $scope.AreaList = areas[0];
+                    $scope.receiveArea = $scope.AreaList[areas[1]];
                 });
             }
         }
@@ -399,6 +410,8 @@ define(["bootstrap-icheck"], function() {
                         receiveProvinceName: $scope.receiveProvince.value || "",
                         receiveCity: $scope.receiveCity.key || "",
                         receiveCityName: $scope.receiveCity.value || "",
+                        receiveArea: $scope.receiveArea.key || "",
+                        receiveAreaName: $scope.receiveArea.value || "",
                         receiveAddress: $scope.receiveAddress || "",
                         receivePhone: $scope.receivePhone || "",
                         receiveZipCode: $scope.receiveZipCode || "",

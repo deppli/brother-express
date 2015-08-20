@@ -290,12 +290,19 @@
                         <tr ng-show="pathError">
                             <td colspan="5"><b class="text-danger" ng-bind="pathError"></b></td>
                         </tr>
-                        <tr ng-repeat="path in Order.orderPaths">
+                        <tr ng-repeat="path in Order.orderPaths" ng-hide="Order.gateApi == 1">
                             <td>-</td>
                             <td>{{path.date}}</td>
                             <td>{{path.place}}</td>
                             <td>转运</td>
                             <td>{{path.details}}</td>
+                        </tr>
+                        <tr ng-repeat="path in Order.orderTJPaths" ng-show="Order.gateApi == 1">
+                            <td>-</td>
+                            <td>{{path.date}}</td>
+                            <td>-</td>
+                            <td>转运</td>
+                            <td>{{path.content}}</td>
                         </tr>
                     </table>
                 </div>

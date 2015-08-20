@@ -98,7 +98,7 @@ var OrderSchema = new Schema({
     idBatch: {type: String},    //批量编号
     idGate: {type: String},     //清关编号
     gateMode: {type: String, default: 0},   //清关模式  0:行邮，1:包税
-    gateApi: {type: String, default: 0},    //清关公司编号，后续扩展对接不同清关公司Api接口
+    gateApi: {type: String, default: 0},    //清关公司编号，后续扩展对接不同清关公司Api接口,0-深圳,1-天津
     type: {type: String, default: 0},   //0-基本订单，1-批量导入订单，2-会员创建订单，3-游客订单
     payStatus: {type: String, default: 0},   //0-未支付,1-已支付,2-已审核
     status: {type: String, default: 0}, //状态:0-订单生成，1-订单入仓，2-订单出货，3-国际物流，4-抵港提货，5-清关中, 9-完成
@@ -121,20 +121,22 @@ var OrderSchema = new Schema({
     worldTransId: {type: String},       //国际物流单号
     chinaTransId: {type: String},       //国内物流商
     chinaTransName: {type: String},     //国内物流单号
-    sendName: {type: String},           //寄件人名称
-    sendAddress: {type: String},        //寄件人地址
-    sendPhone: {type: String},          //寄件人联系方式
+    sendName: {type: String, default: "仲良速递"},           //寄件人名称
+    sendAddress: {type: String, default: "1507 College Point Blvd"},        //寄件人地址
+    sendPhone: {type: String, default: "7183530343"},          //寄件人联系方式
     receiveName: {type: String},        //收件人名称
     receiveProvince: {type: String},    //收件省份
     receiveProvinceName: {type: String},//收件省份名称
     receiveCity: {type: String},        //收件城市
     receiveCityName: {type: String},    //收件城市名称
+    receiveArea: {type: String},        //收件地区
+    receiveAreaName: {type: String},    //收件地区名称
     receiveAddress: {type: String},     //收件地址
     receivePhone: {type: String},       //收件电话
     receiveZipCode: {type: String},     //收件邮编
     payerName: {type: String},          //付款人姓名
     payerPhone: {type: String},         //付款人电话
-    payerIdType: {type: String},        //付款人证件类型
+    payerIdType: {type: String, default: "身份证"},        //付款人证件类型
     payerIdNo: {type: String},          //付款人证件号码
     payerAddress: {type: String},       //付款人地址
     payerZipCode: {type: String},       //付款人邮编
@@ -159,10 +161,10 @@ var OrderSchema = new Schema({
         }
     ],
     manager: {type: String},            //责任人
-    transportAmount: {type: Number},    //运费
-    taxAmount: {type: Number},          //税费
-    safeAmount: {type: Number},         //保价费用
-    otherAmount: {type: Number},        //其他费用
+    transportAmount: {type: Number, default: 0},    //运费
+    taxAmount: {type: Number, default: 0},          //税费
+    safeAmount: {type: Number, default: 0},         //保价费用
+    otherAmount: {type: Number, default: 0},        //其他费用
     currency: {type: String, default: 'CNY'},   //默认人民币
     isFixed: {type: String, default: '0'},            //加固标志 0-否,1-是
     isFast: {type: String, default: '0'},             //加急标志 0-否,1-是
@@ -193,6 +195,25 @@ var NewsSchema = new Schema({
     status: {type: String, default:0}   //状态 - 0:正常
 });
 
+var ProvincesSchema = new Schema({
+    seq: {type: String},
+    provinceId: {type: String, unique:true},
+    provinceName: {type: String}
+});
+var CitysSchema = new Schema({
+    seq: {type: String},
+    cityId: {type: String, unique:true},
+    cityName: {type: String},
+    provinceId: {type: String},
+    zipCode: {type: String}
+});
+var AreasSchema = new Schema({
+    seq: {type: String},
+    areaId: {type: String, unique:true},
+    areaName: {type: String},
+    cityId: {type: String}
+});
+
 exports.Params = db.mongoConn.model('Params', ParamsSchema, 'Params');
 exports.Province = db.mongoConn.model('Province', ProvinceSchema, 'Province');
 exports.City = db.mongoConn.model('City', CitySchema, 'City');
@@ -204,3 +225,6 @@ exports.Product = db.mongoConn.model('Product', ProductSchema, 'Product');
 exports.Order = db.mongoConn.model('Order', OrderSchema, 'Order');
 exports.News = db.mongoConn.model('News', NewsSchema, 'News');
 exports.Menu = db.mongoConn.model('Menu', MenuSchema, 'Menu');
+exports.Provinces = db.mongoConn.model('Provinces', ProvincesSchema, 'Provinces');
+exports.Citys = db.mongoConn.model('Citys', CitysSchema, 'Citys');
+exports.Areas = db.mongoConn.model('Areas', AreasSchema, 'Areas');

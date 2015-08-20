@@ -204,6 +204,27 @@
             })
         }
 
+        $rootScope.getAreas = function(cityId, callback){
+            var postData = {
+                cityId: cityId
+            }
+
+            $remote.post("/service/listAreas", postData, function(data) {
+                if(data){
+                    var areas = {};
+                    data.forEach(function(each){
+                        areas[each.areaId] = each.areaName;
+                    })
+                    $dict.set("Areas", areas);
+                    if(callback){
+                        return callback();
+                    }else{
+                        return areas;
+                    }
+                }
+            })
+        }
+
         //初始化下拉框选项
         $rootScope.initOptions = function(name, defaultKey){
             var location = $dict.get(name);
@@ -325,11 +346,22 @@
                 }
 
                 $scope.pathError = null;
+                if(data.gateApi == 1){
+                    //orderData.orderId = "ETTPEJJ56531EWE0518TEST1ET";
+                    $remote.post("/service/thirdTJPath", orderData, function(data){
+                        if(data && data.list[0]){
+                            $scope.Order.orderTJPaths = data.list[0].trackdata;
+                        }
+                    }, function(){
+                        $scope.pathError = "获取第三方轨迹记录失败，请重试或联系客服"
+                    })
+                }else{
                 $remote.post("/service/thirdPath", orderData, function(data){
                     $scope.Order.orderPaths = data.trackingEventList;
                 }, function(){
                     $scope.pathError = "获取第三方轨迹记录失败，请重试或联系客服"
                 })
+                }
 
                 var modalInstance = $modal.open({
                     templateUrl: 'orderModal',

@@ -34,6 +34,7 @@ exports.add = function (req, res) {
             name: req.body.name,
             description: req.body.description,
             creater: req.body.creater,
+            gateApi: req.body.gateApi,
             gateMode: req.body.gateMode || 0,
             worldTransId:  req.body.worldTransId,
             worldTransName:  req.body.worldTransName,
@@ -51,8 +52,10 @@ exports.add = function (req, res) {
             receiveName: req.body.receiveName,
             receiveProvince: req.body.receiveProvince,
             receiveProvinceName: req.body.receiveProvinceName||"",
-            receiveCity: req.body.receiveCity,
-            receiveCityName: req.body.receiveCityName,
+            receiveCity: req.body.receiveCity||"",
+            receiveCityName: req.body.receiveCityName||"",
+            receiveArea: req.body.receiveArea||"",
+            receiveAreaName: req.body.receiveAreaName||"",
             receiveAddress: req.body.receiveAddress,
             receivePhone: req.body.receivePhone,
             receiveZipCode: req.body.receiveZipCode,
@@ -93,11 +96,17 @@ exports.add = function (req, res) {
 
 };
 
-exports.count = function (req, res) {
+var initQuery = function(req, res){
     var queryStr = {};
     var time = {};
+    if(req.body.idBatch){
+        queryStr.idBatch = req.body.idBatch;
+    }
     if(req.body.id){
         queryStr.id = req.body.id;
+    }
+    if(req.body.receiveName){
+        queryStr.receiveName = req.body.receiveName;
     }
     if(req.body.type){
         queryStr.type = req.body.type;
@@ -109,14 +118,33 @@ exports.count = function (req, res) {
         queryStr.payStatus = req.body.payStatus;
     }
     if(req.body.time){
+        if(req.body.time == -1){
+            var begin = new Date(req.body.timeBegin);
+            var end = new Date(req.body.timeEnd);
+            time = {"$and":[{"createTime":{"$gt": begin}},{"createTime":{"$lt": end}}]};
+        }else{
         var now = new Date();
         var begin = new Date();
         begin.setDate(begin.getDate()  - req.body.time);
         time = {"$and":[{"createTime":{"$gt": begin}},{"createTime":{"$lt": now}}]};
     }
+        queryStr._time = time;
+    }
+    if(req.body.gateMode){
+        queryStr.gateMode = req.body.gateMode;
+    }
+    if(req.body.gateApi){
+        queryStr.gateApi = req.body.gateApi;
+    }
+    return queryStr;
+}
 
-    orderModel.find(time).find(queryStr).count(function (err, doc) {
+exports.count = function (req, res) {
+    var queryStr = initQuery(req, res);
+
+    orderModel.find(queryStr._time).find(queryStr).count(function (err, doc) {
         if (err) {
+            __logger.info(err)
             res.status(400).send(err.message);
             return;
         }
@@ -129,34 +157,9 @@ exports.list = function (req, res) {
     var pageSize = req.body.pageSize;
     var skipSize = (currentPage-1)*pageSize;
 
-    var queryStr = {};
-    var time = {};
-    if(req.body.idBatch){
-        queryStr.idBatch = req.body.idBatch;
-    }
-    if(req.body.id){
-        queryStr.id = req.body.id;
-    }
-    if(req.body.type){
-        queryStr.type = req.body.type;
-    }
-    if(req.body.payStatus){
-        queryStr.payStatus = req.body.payStatus;
-    }
-    if(req.body.status){
-        queryStr.status = req.body.status;
-    }
-    if(req.body.time){
-        var now = new Date();
-        var begin = new Date();
-        begin.setDate(begin.getDate()  - req.body.time);
-        time = {"$and":[{"createTime":{"$gt": begin}},{"createTime":{"$lt": now}}]};
-    }
-    if(req.body.gateMode){
-        queryStr.gateMode = req.body.gateMode;
-    }
+    var queryStr = initQuery(req, res);
 
-    orderModel.find(time).find(queryStr).skip(skipSize).limit(pageSize).sort({createTime: -1}).exec(function(err, doc){
+    orderModel.find(queryStr._time).find(queryStr).skip(skipSize).limit(pageSize).sort({createTime: -1}).exec(function(err, doc){
         if (err) {
             res.status(400).send(err.message);
             return;
@@ -166,31 +169,9 @@ exports.list = function (req, res) {
 };
 
 exports.batchDelete = function (req, res) {
-    var queryStr = {};
-    var time = {};
-    if(req.body.idBatch){
-        queryStr.idBatch = req.body.idBatch;
-    }
-    if(req.body.id){
-        queryStr.id = req.body.id;
-    }
-    if(req.body.type){
-        queryStr.type = req.body.type;
-    }
-    if(req.body.status){
-        queryStr.status = req.body.status;
-    }
-    if(req.body.time){
-        var now = new Date();
-        var begin = new Date();
-        begin.setDate(begin.getDate()  - req.body.time);
-        time = {"$and":[{"createTime":{"$gt": begin}},{"createTime":{"$lt": now}}]};
-    }
-    if(req.body.gateMode){
-        queryStr.gateMode = req.body.gateMode;
-    }
+    var queryStr = initQuery(req, res);
 
-    orderModel.find(time).find(queryStr).remove({}, function(err, doc){
+    orderModel.find(queryStr._time).find(queryStr).remove({}, function(err, doc){
         if (err) {
             res.status(400).send(err.message);
             return;
@@ -220,6 +201,7 @@ exports.edit = function (req, res) {
     var update = {
         idBatch: req.body.idBatch,
         idGate: req.body.idGate,
+        gateApi: req.body.gateApi,
         gateMode: req.body.gateMode,
         amount: req.body.amount,
         name: req.body.name,
@@ -244,6 +226,8 @@ exports.edit = function (req, res) {
         receiveProvinceName: req.body.receiveProvinceName||"",
         receiveCity: req.body.receiveCity||"",
         receiveCityName: req.body.receiveCityName||"",
+        receiveArea: req.body.receiveArea||"",
+        receiveAreaName: req.body.receiveAreaName||"",
         receiveAddress: req.body.receiveAddress,
         receivePhone: req.body.receivePhone,
         receiveZipCode: req.body.receiveZipCode||"",

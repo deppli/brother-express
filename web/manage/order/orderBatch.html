@@ -6,40 +6,151 @@
 <section class="content">
     <div class="box">
         <div class="box-body" >
-            <label class="label label-warning">上传文件</label>
-            <div class="sp-line"></div>
             <div class="form-group form-group-sm">
                 <div class="row-line">
-                    <label>
-                        <span>文件名：</span>
-                        <span class="label label-success" ng-repeat="file in files">{{file.name}}</span>
-                    </label>
+                    <div class="btn btn-default" ng-file-select ng-model="files" accept=".xlsx">选择文件</div>
+                    <div class="btn btn-success" ng-click="upload()" ng-show="files && ordersData && !_excelErr">上传</div>
+                    <div class="btn btn-success" ng-click="submitBatch()" ng-show="files && ordersData && !_excelErr">提交数据</div>
+                    <span class="fs12 text-danger"><i class="glyphicon glyphicon-exclamation-sign mr3"></i>仅支持*.xlsx格式,最大20M</span>
+                    <span class="pull-right">
+                        <!--<a href="/files/批量订单模板.xlsx" class="mr10 fs12" target="_blank">模板A</a>-->
+                         <a href="/files/newTemplate.xlsx" class="fs12" target="_blank">批量导入模板</a>
+                    </span>
                 </div>
-                <div>
-                     <label>上传进度：</label>
-                     <progressbar class="progress-striped active" value="ProgressBar.dynamic" type="danger"><i>{{ProgressBar.dynamic}} %</i></progressbar>
-                </div>
-                <span class="fsize-12 text-danger">(仅支持*.xlsx格式,最大20M)</span>
-                <div class="sp-line"></div>
-                <div class="row-line">
-                    <div class="btn btn-primary" ng-file-select ng-model="files" accept=".xlsx">选择文件</div>
-                    <div class="btn btn-success" ng-click="upload()" ng-show="files">上传</div>
-                </div>
-                <div>
-                    <!--<div id="wrapper" class="scroll-wrapper">
-                        <table class="table table-hover fsize-12">
-                            <tbody ng-repeat="item in ordersData" style="border:0;">
-                            <tr class="cursor">
-                                <td ng-repeat="excelCol in item.data track by $index" class="nowrap">
-                                    <span>{{excelCol}}</span>
-                                </td>
+                <div ng-show="files">
+                    <div>
+                        <div class="sp-line"></div>
+                        <h5><span class="fs12" ng-repeat="file in files">待上传批量文件 - <b class="text-success">{{file.name}}</b></span></h5>
+                        <progressbar class="progress-striped active" value="ProgressBar.dynamic" type="danger" ng-hide="_excelErr"><i>{{ProgressBar.dynamic}} %</i></progressbar>
+                    </div>
+                    <div class="sp-line"></div>
+                    <div class="margin-height-space-sm fs12 text-orange">省市区快速修正索引</div>
+                    <div class="row row-line">
+                        <div class="col-lg-2">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><b>省份</b></span>
+                                <select class="form-control" ng-model="receiveProvince" ng-options="status.value for status in ProvinceList" ng-change="initCitys()"></select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><b>城市</b></span>
+                                <select class="form-control" ng-model="receiveCity" ng-options="status.value for status in CityList" ng-change="initAreas()"></select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><b>地区</b></span>
+                                <select class="form-control" ng-model="receiveArea" ng-options="status.value for status in AreaList"></select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <b class="text-orange fs12">{{receiveProvince.value}} {{receiveCity.value}} {{receiveArea.value}}</b>
+                        </div>
+                    </div>
+                    <div id="wrapper" ng-show="ordersData">
+                    <div class="text-orange">
+                        <span class="excel-tab" ng-click="changeTab(0)" ng-class="{'excel-tab-selected': excelTab==0}">订单信息</span>
+                        <span class="excel-tab" ng-click="changeTab(1)" ng-class="{'excel-tab-selected': excelTab==1}">产品信息</span>
+                    </div>
+                    <div class="scroll-wrapper">
+                        <table class="table table-hover fs12" ng-show="excelTab == 0">
+                            <tr class="excel-header">
+                                <th class="nowrap">清关公司</th>
+                                <th class="nowrap">清关模式</th>
+                                <th class="nowrap">订单编号</th>
+                                <th class="nowrap">订单名称</th>
+                                <th class="nowrap">收件人</th>
+                                <th class="nowrap">收件省</th>
+                                <th class="nowrap">收件市</th>
+                                <th class="nowrap">收件区</th>
+                                <th class="nowrap">收件地址</th>
+                                <th class="nowrap">收件手机</th>
+                                <th class="nowrap">付款人</th>
+                                <th class="nowrap">付款地址</th>
+                                <th class="nowrap">付款手机</th>
+                                <th class="nowrap">付款/清关身份证</th>
+                                <th class="nowrap">商品统称</th>
+                                <th class="nowrap">总数量</th>
+                                <th class="nowrap">总金额</th>
+                                <th class="nowrap">总重量</th>
+                                <th class="nowrap">备注</th>
                             </tr>
-                            </tbody>
+                            <tr class="cursor" ng-repeat="item in ordersData" style="border:0;">
+                                <td class="nowrap">{{item.gateApi.value|dict:"GateApi"}}
+                                    <i ng-show="item.gateApi.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.gateApi.error}}"></i></td>
+                                <td class="nowrap">{{item.gateMode.value|dict:"GateMode"}}
+                                    <i ng-show="item.gateMode.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.gateMode.error}}"></i></td>
+                                <td class="nowrap">{{item.id.value}}
+                                    <i ng-show="item.id.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.id.error}}"></i></td>
+                                <td class="nowrap">{{item.name.value}}
+                                    <i ng-show="item.name.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.name.error}}"></i></td>
+                                <td class="nowrap">{{item.receiveName.value}}
+                                    <i ng-show="item.receiveName.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.receiveName.error}}"></i></td>
+                                <td class="nowrap">{{item.receiveProvinceName.value}}
+                                    <i ng-show="item.receiveProvinceName.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.receiveProvinceName.error}}"></i></td>
+                                <td class="nowrap">{{item.receiveCityName.value}}
+                                    <i ng-show="item.receiveCityName.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.receiveCityName.error}}"></i></td>
+                                <td class="nowrap">{{item.receiveAreaName.value}}
+                                    <i ng-show="item.receiveAreaName.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.receiveAreaName.error}}"></i></td>
+                                <td class="nowrap">{{item.receiveAddress.value}}
+                                    <i ng-show="item.receiveAddress.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.receiveAddress.error}}"></i></td>
+                                <td class="nowrap">{{item.receivePhone.value}}
+                                    <i ng-show="item.receivePhone.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.receivePhone.error}}"></i></td>
+                                <td class="nowrap">{{item.payerName.value}}
+                                    <i ng-show="item.payerName.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.payerName.error}}"></i></td>
+                                <td class="nowrap">{{item.payerAddress.value}}
+                                    <i ng-show="item.payerAddress.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.payerAddress.error}}"></i></td>
+                                <td class="nowrap">{{item.payerPhone.value}}
+                                    <i ng-show="item.payerPhone.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.payerPhone.error}}"></i></td>
+                                <td class="nowrap">{{item.payerIdNo.value}}
+                                    <i ng-show="item.payerIdNo.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.payerIdNo.error}}"></i></td>
+                                <td class="nowrap">{{item.productName.value}}
+                                    <i ng-show="item.productName.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.productName.error}}"></i></td>
+                                <td class="nowrap">{{item.productNum.value}}
+                                    <i ng-show="item.productNum.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.productNum.error}}"></i></td>
+                                <td class="nowrap">{{item.productAmount.value}}
+                                    <i ng-show="item.productAmount.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.productAmount.error}}"></i></td>
+                                <td class="nowrap">{{item.productWeight.value}}
+                                    <i ng-show="item.productWeight.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.productWeight.error}}"></i></td>
+                                <td class="nowrap">{{item.description.value}}</td>
+                            </tr>
+                        </table>
+                        <table class="table table-hover fs12" ng-show="excelTab == 1">
+                            <tr class="excel-header">
+                                <th class="nowrap">订单编号</th>
+                                <th class="nowrap">内件名称</th>
+                                <th class="nowrap">品牌</th>
+                                <th class="nowrap">数量</th>
+                                <th class="nowrap">单位</th>
+                                <th class="nowrap">单价(元)</th>
+                                <th class="nowrap">总价(元)</th>
+                                <th class="nowrap">重量(千克)</th>
+                                <th class="nowrap">备注</th>
+                            </tr>
+                            <tr class="cursor" ng-repeat="item in productsData" style="border:0;">
+                                <td class="nowrap">{{item.id.value}}
+                                    <i ng-show="item.id.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.id.error}}"></i></td>
+                                <td class="nowrap">{{item.pName.value}}
+                                    <i ng-show="item.pName.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.pName.error}}"></i></td>
+                                <td class="nowrap">{{item.pBrand.value}}
+                                    <i ng-show="item.pBrand.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.pBrand.error}}"></i></td>
+                                <td class="nowrap">{{item.pNum.value}}
+                                    <i ng-show="item.pNum.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.pNum.error}}"></i></td>
+                                <td class="nowrap">{{item.pUnit.value}}
+                                    <i ng-show="item.pUnit.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.pUnit.error}}"></i></td>
+                                <td class="nowrap">{{item.pAmount.value}}
+                                    <i ng-show="item.pAmount.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.pAmount.error}}"></i></td>
+                                <td class="nowrap">{{item.pTotalAmount.value}}
+                                    <i ng-show="item.pTotalAmount.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.pTotalAmount.error}}"></i></td>
+                                <td class="nowrap">{{item.pWeight.value}}
+                                    <i ng-show="item.pWeight.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.pWeight.error}}"></i></td>
+                                <td class="nowrap">{{item.pRemark.value}}</td>
+                            </tr>
                         </table>
                     </div>
-                    <div>
-                        <div class="btn btn-success btn-block" ng-click="commitBatch()" ng-show="isUploaded">导入</div>
-                    </div>-->
+                    <div ng-show="_excelErr" class="text-orange fs12 row-line"><i class="glyphicon glyphicon-exclamation-sign mr3"></i>{{_excelErr}}</div>
+                </div>
                 </div>
             </div>
         </div>

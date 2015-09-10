@@ -213,6 +213,20 @@ var AreasSchema = new Schema({
     areaName: {type: String},
     cityId: {type: String}
 });
+var MsgsSchema = new Schema({
+    id: {type: String},
+    title: {type: String},
+    from: {type: String},
+    to: {type: String},
+    details: [
+        {
+            time: {type: Date, default: Date.now()},
+            from: {type: String},
+            to: {type: String},
+            content: {type: String}
+        }
+    ]
+})
 
 exports.Params = db.mongoConn.model('Params', ParamsSchema, 'Params');
 exports.Province = db.mongoConn.model('Province', ProvinceSchema, 'Province');
@@ -225,6 +239,8 @@ exports.Product = db.mongoConn.model('Product', ProductSchema, 'Product');
 exports.Order = db.mongoConn.model('Order', OrderSchema, 'Order');
 exports.News = db.mongoConn.model('News', NewsSchema, 'News');
 exports.Menu = db.mongoConn.model('Menu', MenuSchema, 'Menu');
+
 exports.Provinces = db.mongoConn.model('Provinces', ProvincesSchema, 'Provinces');
 exports.Citys = db.mongoConn.model('Citys', CitysSchema, 'Citys');
 exports.Areas = db.mongoConn.model('Areas', AreasSchema, 'Areas');
+exports.Msgs = db.mongoConn.model('Msgs', MsgsSchema, 'Msgs');

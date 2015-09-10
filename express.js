@@ -151,6 +151,8 @@ app.post("/service/fullPath", service.fullPath);
 app.post("/service/queryPayStatus", service.queryPayStatus);
 app.post("/service/forgetPassword", service.forgetPassword);
 app.post("/service/resetPassword", service.resetPassword);
+app.post("/service/sendWebMail", service.sendWebMail);
+app.post("/service/listWebMail", service.listWebMail);
 
 var userBiz = require("./routes/biz/userBiz");
 var customerBiz = require("./routes/biz/customerBiz");

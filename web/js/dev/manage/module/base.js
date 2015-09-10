@@ -338,7 +338,6 @@
     function ($scope, $rootScope, $cookies, $location, $remote, $config, $modal, $constants, $dict) {
         $rootScope.backInfo = JSON.parse($cookies.backInfo || "{}");
         $rootScope.menuList = JSON.parse($cookies.menuList || "{}");
-        window.$cookies = $cookies;
 
         $scope.checkForm = function(formElement){
             console.log(formElement)

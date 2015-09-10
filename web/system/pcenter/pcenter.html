@@ -1,12 +1,45 @@
 <div class="container-fluid">
-    <div class="row bg-pcenter">
-        <div class="head-pcenter">
-            <img height="20" src="themes/default/img/item_pcenter.png" />
-            <img height="25" class="pull-right" src="themes/default/img/logo_white.png" />
+    <div class="wrapper" style="min-height: 529px;">
+        <aside class="left-side">
+            <section class="sidebar">
+                <!-- Sidebar user panel -->
+                <div class="user-panel">
+                    <div class="pull-left image">
+                        <img src="themes/default/img/user.png" class="element-circle" alt="用户头像">
         </div>
-        <tabset class="fs12 tab-pcenter">
-            <tab heading="基本信息" select="tabSelect(0)" active="true">
-                <div class="reg-panel">
+                    <div class="pull-left info">
+                        <p class="text-nowrap">你好, <span ng-bind="webInfo.name"></span></p>
+                        <p class="fs12">欢迎光临会员中心</p>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <!-- sidebar menu -->
+                <ul class="sidebar-menu">
+                    <li ng-repeat="item in menuList | filter: _search" ng-class="{'active': item.active}">
+                        <a ng-click="selectMenu(item)" ng-hide="menuShow(item.subMenu)||!item.checked">
+                            <span ng-bind="item.name"></span>
+                        </a>
+                        <a ng-click="selectMenu(item)" ng-show="menuShow(item.subMenu) && item.checked">
+                            <span ng-bind="item.name"></span>
+                            <small class="pull-right sub-tip glyphicon glyphicon-chevron-down"></small>
+                        </a>
+                        <ul class="treeview-menu" ng-show="item.open">
+                            <li ng-repeat="subItem in item.subMenu" ng-class="{'active': subItem.active}">
+                                <a ng-click="selectMenu(subItem)" ng-show="subItem.checked">
+                                    <span class="glyphicon glyphicon-link padding-width-space-sm"></span>
+                                    <span ng-bind="subItem.name"></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+            <!-- /.sidebar -->
+        </aside>
+        <aside class="right-side">
+            <div class="row">
+                <!-- 基本信息 -->
+                <div class="reg-panel" ng-show="_pageLink == 'cusBasic'">
                     <div>
                         <form name="customerInfo" class="my-form" novalidate>
                             <div class="col-sm-12 bg-net">
@@ -143,9 +176,9 @@
                         </form>
                     </div>
                 </div>
-            </tab>
-            <tab heading="订单信息" select="tabSelect(1)">
-                <div class="reg-panel bg-net">
+
+                <!-- 订单信息 -->
+                <div class="reg-panel bg-net" ng-show="_pageLink == 'cusOrder'">
                     <div class="col-sm-12 bg-net">
                         <div class="webBox no-border">
                             <div class="box-heading">
@@ -180,9 +213,9 @@
                         </div>
                     </div>
                 </div>
-            </tab>
-            <tab heading="账户充值" select="tabSelect(2)">
-                <div class="reg-panel">
+
+                <!-- 账户充值 -->
+                <div class="reg-panel" ng-show="_pageLink == 'cusPay'">
                     <div ng-show="balanceOrder.showMode == 0">
                         <div class="col-sm-12 bg-net" >
                             <div class="webBox">
@@ -263,7 +296,42 @@
                         </div>
                     </div>
                 </div>
-            </tab>
-        </tabset>
+            </div>
+
+            <!-- 消息中心 -->
+            <div ng-show="_pageLink == 'cusMsg'">
+                <table class="table table-hover bg-white fs12">
+                    <tr>
+                        <th class="info" style="width:20%;">消息编号</th>
+                        <th class="info" style="width:40%;">标题</th>
+                        <th class="info" style="width:20%;">发送方</th>
+                        <th class="info" style="width:20%;">接收方</th>
+                    </tr>
+                    <tbody ng-repeat="item in MsgsList" style="border:0">
+                    <tr ng-click="selectMsg(item, $index)" class="cursor">
+                        <td>{{item.id}}</td>
+                        <td>{{item.title}}</td>
+                        <td>{{item.from}}</td>
+                        <td>{{item.to}}</td>
+                    </tr>
+                    <tr ng-if="selectedMsg && $index == selectedMsg.index" class="bg-warning">
+                        <td colspan="4">
+                            <div ng-repeat="element in item.details">
+                                <p class="mr10"><b class="text-skyblue">{{element.from}}</b><span class="text-gray">
+                                ({{element.time|date:"yyyy年MM月dd日 hh:mm:ss"}})</span> : {{element.content}}
+                                </p>
+                            </div>
+                            <div>
+                                <input type="text" name="reply" ng-model="item.reply" class="form-control">
+                                <div class="margin-height-space-sm">
+                                    <button type="button" class="pull-right btn btn-sm btn-success" ng-click="reply($index)">回复</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </aside>
     </div>
 </div>

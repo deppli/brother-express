@@ -354,10 +354,12 @@ a:hover{
 .left-side {
     position: absolute;
     background-color:#293038;
+    left:0;
     width: 200px;
     height: 595px;
     top: 70px;
     overflow-y: scroll;
+    z-index: 100000;
 }
 .loading{
     margin-top:280px;

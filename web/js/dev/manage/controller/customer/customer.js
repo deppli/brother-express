@@ -103,8 +103,93 @@
                 });
             }
 
+            $scope.detailMsgs = function(){
+                var modalMsg = $modal.open({
+                    templateUrl: 'msgs',
+                    controller: 'MsgsCtrl',
+                    size: "lg",
+                    scope: $scope
+                });
+            }
+
             $scope.listCustomer();
         }]
+    ],
+        ["MsgsCtrl", ["$scope", "$remote", "$modal", "$modalInstance",
+            function($scope, $remote, $modal, $modalInstance) {
+                $scope.selectedMsg = null;
+
+                $scope.selectMsg = function(item, index){
+                    if($scope.selectedMsg){
+                        if($scope.selectedMsg.index == index){
+                            $scope.selectedMsg = null;
+                        }else{
+                            $scope.selectedMsg = item;
+                            $scope.selectedMsg.index = index;
+                        }
+                    }else{
+                        $scope.selectedMsg = item;
+                        $scope.selectedMsg.index = index;
+                    }
+                }
+
+                $scope.reply = function(index){
+                    var msg = $scope.MsgsList[index]
+                    var reply = msg.reply
+                    if(reply){
+                        var element = {
+                            from: "系统管理员",
+                            to: $scope.selectedCustomer.loginId,
+                            time: Date.now(),
+                            content: reply
+                        }
+                        var postData = {
+                            id: msg.id,
+                            details: element
+                        }
+                        $remote.post("/service/sendWebMail", postData, function(data){
+                            msg.details.push(element)
+                        });
+                    }
+                }
+
+                $scope.listMsg = function(){
+                    var postData = {
+                        from: "系统管理员",
+                        to: $scope.selectedCustomer.loginId
+                    }
+
+                    $remote.post("/service/listWebMail", postData, function(data){
+                        $scope.MsgsList = data;
+                    });
+                }
+
+                $scope.openMsg = function(){
+                    var modalSend = $modal.open({
+                        templateUrl: 'msgSend',
+                        controller: 'MsgsCtrl',
+                        size: "sm",
+                        scope: $scope
+                    });
+                }
+
+                $scope.sendMsg = function(){
+                    var postData = {
+                        id: $scope.initJnl(""),
+                        from: "系统管理员",
+                        to: $scope.selectedCustomer.loginId,
+                        title: $scope.title,
+                        details: {from: "系统管理员",to: $scope.selectedCustomer.loginId, content: $scope.content}
+                    }
+
+                    $remote.post("/service/sendWebMail", postData, function(data){
+                        $scope.$parent.listMsg();
+                        $modalInstance.close()
+                    });
+                }
+                $scope.listMsg();
+            }
+        ]
     ],
         ["NewCustomerCtrl", ["$scope", "$rootScope", "$remote", "$modalInstance", "$scopeData", "$config", "$upload", "$constants",
             function($scope, $rootScope, $remote, $modalInstance, $scopeData, $config, $upload, $constants) {

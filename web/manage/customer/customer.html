@@ -10,7 +10,7 @@
                 <div class="input-group-addon"><span class="glyphicon glyphicon-search"></span></div>
                 <input type="text" ng-model="_search" class="form-control"/>
             </div>
-            <table class="table table-hover fsize-12">
+            <table class="table table-hover fs12">
                 <tr>
                     <th class="info" style="width:25%;">用户名</th>
                     <th class="info" style="width:20%;">昵称</th>
@@ -34,6 +34,7 @@
                         <button class="btn btn-warning btn-sm" ng-click="lockCustomer()">冻结</button>
                         <button class="btn btn-success btn-sm" ng-click="unlockCustomer()">解冻</button>
                         <button class="btn btn-danger btn-sm" ng-click="deleteCustomer()">删除</button>
+                        <button class="btn btn-primary btn-sm" ng-click="detailMsgs()">消息</button>
                     </td>
                 </tr>
                 </tbody>
@@ -290,6 +291,56 @@
                         <button class="btn btn-sm btn-success" ng-click="editCustomer()">保存</button>
                     </div>
                 </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/ng-template" id="msgs">
+        <table class="table table-hover fs12">
+            <tr>
+                <th class="info" style="width:20%;">消息编号</th>
+                <th class="info" style="width:40%;">标题</th>
+                <th class="info" style="width:20%;">发送方</th>
+                <th class="info" style="width:20%;">接收方</th>
+            </tr>
+            <tbody ng-repeat="item in MsgsList" style="border:0">
+                <tr ng-click="selectMsg(item, $index)" class="cursor">
+                    <td>{{item.id}}</td>
+                    <td>{{item.title}}</td>
+                    <td>{{item.from}}</td>
+                    <td>{{item.to}}</td>
+                </tr>
+                <tr ng-if="selectedMsg && $index == selectedMsg.index" class="bg-warning">
+                    <td colspan="4">
+                        <div ng-repeat="element in item.details">
+                            <p class="mr10"><b class="text-skyblue">{{element.from}}</b><span class="text-gray">
+                                ({{element.time|date:"yyyy年MM月dd日 hh:mm:ss"}})</span> : {{element.content}}
+                            </p>
+                        </div>
+                        <div>
+                            <input type="text" name="reply" ng-model="item.reply" class="form-control">
+                            <div class="margin-height-space-sm">
+                                <button type="button" class="pull-right btn btn-sm btn-success" ng-click="reply($index)">回复</button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row row-line text-center">
+            <div class="col-lg-4 col-lg-offset-4">
+                <button type="button" class="btn btn-primary btn-block" ng-click="openMsg()">新消息</button>
+            </div>
+        </div>
+    </script>
+    <script type="text/ng-template" id="msgSend">
+        <div class="bg-skyblue" style="height: 10px;"></div>
+        <div class="modal-body">
+            <input type="text" class="form-control fs12" name="title" ng-model="title" placeholder="标题"/>
+            <h4></h4>
+            <textarea rows="3" type="text" class="form-control fs12" name="content" ng-model="content" placeholder="内容"/>
+            <div class="login-btn">
+                <button type="button" class="btn btn-success btn-block bg-skyblue" ng-click="sendMsg()">发送</button>
             </div>
         </div>
     </script>

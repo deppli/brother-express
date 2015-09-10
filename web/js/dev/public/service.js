@@ -118,6 +118,7 @@ define(["angular", "config"], function(angular) {
 					$rootScope.backInfo = {};
 					$cookies.webInfo = "";
 					$rootScope.webInfo = {};
+					$location.path("#/")
                     var msg = {text:data};
                     $rootScope.showMessage(msg)
 				}else if(typeof errorCallback != "function"){

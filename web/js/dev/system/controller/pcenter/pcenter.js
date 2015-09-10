@@ -1,8 +1,89 @@
 define(["cryptojs-sha256"], function(crypto) {
 	return [["PCenterCtrl", ["$scope", "$rootScope", "$remote", "$modal", "$upload", "$constants", "$config", "$location",
 	function($scope, $rootScope, $remote, $modal, $upload, $constants, $config, $location) {
-		window.$scope = $scope;
 
+		$scope.resetMenu = function() {
+			$scope.menuList.forEach(function(each) {
+				if($scope.menuShow(each.subMenu)){
+					each.subMenu.forEach(function(each){
+						each.active = false;
+					});
+				}
+				each.active = false;
+			});
+		};
+
+		$scope.menuShow = function(submenu){
+			if(submenu && submenu.length > 0){
+				return true;
+			}
+			return false;
+		}
+
+		$scope.selectMenu = function(item) {
+			if($scope.menuShow(item.subMenu)){
+				if(item.open){
+					item.open = false;
+				}else{
+					item.open = true;
+				}
+			}else{
+				$scope.resetMenu();
+				item.active = true;
+				$scope.pageSelect(item.link)
+			}
+		};
+
+		$scope.menuList = [{
+			"id": "A000",
+			"name": "基本管理",
+			"description": "",
+			"role": "0",
+			"level": "0",
+			"subMenu": [{
+				"id": "A001",
+				"name": "客户信息",
+				"description": "",
+				"link": "cusBasic",
+				"role": "0",
+				"level": "1",
+				"subMenu": [],
+				"checked": "checked"
+			}, {
+				"id": "A002",
+				"name": "订单管理",
+				"description": "",
+				"link": "cusOrder",
+				"role": "0",
+				"level": "1",
+				"subMenu": [],
+				"checked": "checked"
+			}, {
+				"id": "A003",
+				"name": "账户充值",
+				"description": "",
+				"link": "cusPay",
+				"role": "0",
+				"level": "1",
+				"subMenu": [],
+				"checked": "checked"
+			}, {
+				"id": "A004",
+				"name": "消息中心",
+				"description": "",
+				"link": "cusMsg",
+				"role": "0",
+				"level": "1",
+				"subMenu": [],
+				"checked": "checked"
+			}
+			],
+			"checked": "checked"
+		}]
+
+		$scope.pageSelect = function(pageLink){
+			$scope._pageLink = pageLink
+			if(pageLink == 'cusBasic'){
 		$scope.$watch("idImgA", function(){
 			var file = $scope.idImgA;
 			if(file){
@@ -58,14 +139,25 @@ define(["cryptojs-sha256"], function(crypto) {
 			})
 		}
 
-		$scope.queryCustomer();
+				$scope.goPay = function(item){
+					$rootScope._cacheOrder = item;
+					$scope._pageLink = "cusPay"
+				}
 
-		$scope.tabSelect = function(tabIndex){
-			if(tabIndex == 0){
 				$scope.queryCustomer();
-			}else if(tabIndex == 1){
+			}else if(pageLink == 'cusOrder'){
+				$scope.listOrder = function(){
+					$remote.post("/customerBiz/listOrder", null, function(data){
+						$scope.orders = data;
+					})
+				}
+
+				$scope.detailOrder = function(item){
+					$rootScope.OrderId = item.id;
+					$scope.queryOrder();
+				}
 				$scope.listOrder();
-			}else if(tabIndex == 2){
+			}else if(pageLink == 'cusPay'){
 				$scope.balanceOrder = {}
 				$scope.balanceOrder.showMode = 0	//展示模式，默认0-展示充值页面，1-充值成功
 				$scope.balanceOrder.payId = $scope.initJnl("A");
@@ -91,7 +183,6 @@ define(["cryptojs-sha256"], function(crypto) {
 
 
 				$scope.goBalancePay = function(){
-					debugger
 					if($scope.balanceOrder.payAmt && $scope.balanceOrder.payAmt > 0){
 						jQuery("#acctPay").submit();
 						var msg = {type:$constants.MESSAGE_DIALOG_TYPE_CONF, text:$constants.MESSAGE_PAY_SUCCESS, confCallback:function(){
@@ -104,27 +195,58 @@ define(["cryptojs-sha256"], function(crypto) {
 						console.log("金额输入错误")
 					}
 				}
+			}else if(pageLink == 'cusMsg'){
+				$scope.selectedMsg = null;
+
+				$scope.selectMsg = function(item, index){
+					if($scope.selectedMsg){
+						if($scope.selectedMsg.index == index){
+							$scope.selectedMsg = null;
+						}else{
+							$scope.selectedMsg = item;
+							$scope.selectedMsg.index = index;
+						}
+					}else{
+						$scope.selectedMsg = item;
+						$scope.selectedMsg.index = index;
 			}
 		}
 
-		$scope.tabCheck = function(tabIndex){
-			$scope.$$childHead.tabs[tabIndex].active = true
+				$scope.reply = function(index){
+					var msg = $scope.MsgsList[index]
+					var reply = msg.reply
+					if(reply){
+						var element = {
+							from: $scope.webInfo.loginId,
+							to: "系统管理员",
+							time: Date.now(),
+							content: reply
+						}
+						var postData = {
+							id: msg.id,
+							details: element
+						}
+						$remote.post("/service/sendWebMail", postData, function(data){
+							msg.details.push(element)
+						});
+					}
 		}
 
-		$scope.listOrder = function(){
-			$remote.post("/customerBiz/listOrder", null, function(data){
-				$scope.orders = data;
-			})
+				$scope.listMsg = function(){
+					var postData = {
+						from: "系统管理员",
+						to: $scope.webInfo.loginId
 		}
 
-		$scope.detailOrder = function(item){
-			$rootScope.OrderId = item.id;
-			$scope.queryOrder();
+					$remote.post("/service/listWebMail", postData, function(data){
+						$scope.MsgsList = data;
+					});
 		}
 
-		$scope.goPay = function(item){
-			$rootScope._cacheOrder = item;
-			$location.path('orderCustomer')
+				$scope.listMsg()
 		}
+		}
+
+		$scope.pageSelect('cusBasic')
 	}]]];
 });

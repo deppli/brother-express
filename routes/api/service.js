@@ -7,6 +7,7 @@
     customerModel = model.Customer,
     paramsModel = model.Params,
     orderModel = model.Order,
+    msgModel = model.Msgs,
     async = require('async'),
     qs = require('querystring'),
     formidable = require('formidable'),
@@ -736,3 +737,54 @@ exports.queryPayStatus = function (req, res) {
         return res.json({payStatus: doc.payStatus});
     });
 };
+
+
+//发送站内信
+exports.sendWebMail = function (req, res) {
+
+    then(function (cont) {
+        msgModel.findOne({id: req.body.id}).exec(function(err, doc) {
+            cont(err, doc)
+        })
+    }).then(function(cont, doc){
+        if (!doc) {
+            var newMsg = new msgModel({
+                id: req.body.id,
+                title: req.body.title,
+                from: req.body.from,
+                to: req.body.to,
+                details: [req.body.details]
+            })
+            newMsg.save(function(err, doc){
+                cont(err, doc);
+            })
+        }else{
+            msgModel.update({id: doc.id}, {'$addToSet': {details: req.body.details}}, function (err, doc) {
+                cont(err, doc);
+            })
+        }
+    }).then(function(cont, doc) {
+        res.json("success");
+    }).fail(function (cont, error) {
+        res.status(400).send(error.message);
+    });
+
+}
+
+//查询站内信
+exports.listWebMail = function (req, res) {
+    var query = {
+        from : req.body.from,
+        to: req.body.to
+    }
+
+    __logger.info(query)
+
+    msgModel.find(query).exec(function(err, doc){
+        if(err){
+            res.status(400).send()
+            return
+        }
+        res.json(doc)
+    })
+}

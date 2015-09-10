@@ -61,7 +61,6 @@
                     postData.time = $scope.Query.time.key
                 }
                 }
-
                 return postData;
             }
 

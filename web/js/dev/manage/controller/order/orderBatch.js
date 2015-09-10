@@ -1,10 +1,12 @@
-define(["thenjs", "xlsx"], function(then, xlsx) {
+define(["xlsx"], function(xlsx) {
     return [["OrderBatchCtrl", ["$scope", "$rootScope", "$remote", "$modal", "$scopeData", "$config", "$constants", "$upload", "$dict",
         function($scope, $rootScope, $remote, $modal, $scopeData, $config, $constants, $upload, $dict) {
 
             $scope.getProvincesName();
             $scope.getCitysName();
             $scope.getAreasName();
+
+            console.log(xlsx)
 
             var orderTemplate = {
                 _rowBegin: 2,

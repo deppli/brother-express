@@ -98,24 +98,25 @@ exports.add = function (req, res) {
 
 var initQuery = function(req, res){
     var queryStr = {};
+    queryStr._condition = {}
     var time = {};
     if(req.body.idBatch){
-        queryStr.idBatch = req.body.idBatch;
+        queryStr._condition.idBatch = req.body.idBatch;
     }
     if(req.body.id){
-        queryStr.id = req.body.id;
+        queryStr._condition.id = req.body.id;
     }
     if(req.body.receiveName){
-        queryStr.receiveName = req.body.receiveName;
+        queryStr._condition.receiveName = req.body.receiveName;
     }
     if(req.body.type){
-        queryStr.type = req.body.type;
+        queryStr._condition.type = req.body.type;
     }
     if(req.body.status){
-        queryStr.status = req.body.status;
+        queryStr._condition.status = req.body.status;
     }
     if(req.body.payStatus){
-        queryStr.payStatus = req.body.payStatus;
+        queryStr._condition.payStatus = req.body.payStatus;
     }
     if(req.body.time){
         if(req.body.time == -1){
@@ -131,10 +132,10 @@ var initQuery = function(req, res){
         queryStr._time = time;
     }
     if(req.body.gateMode){
-        queryStr.gateMode = req.body.gateMode;
+        queryStr._condition.gateMode = req.body.gateMode;
     }
     if(req.body.gateApi){
-        queryStr.gateApi = req.body.gateApi;
+        queryStr._condition.gateApi = req.body.gateApi;
     }
     return queryStr;
 }
@@ -142,7 +143,7 @@ var initQuery = function(req, res){
 exports.count = function (req, res) {
     var queryStr = initQuery(req, res);
 
-    orderModel.find(queryStr._time).find(queryStr).count(function (err, doc) {
+    orderModel.find(queryStr._time).find(queryStr._condition).count(function (err, doc) {
         if (err) {
             __logger.info(err)
             res.status(400).send(err.message);
@@ -159,7 +160,7 @@ exports.list = function (req, res) {
 
     var queryStr = initQuery(req, res);
 
-    orderModel.find(queryStr._time).find(queryStr).skip(skipSize).limit(pageSize).sort({createTime: -1}).exec(function(err, doc){
+    orderModel.find(queryStr._time).find(queryStr._condition).skip(skipSize).limit(pageSize).sort({createTime: -1}).exec(function(err, doc){
         if (err) {
             res.status(400).send(err.message);
             return;
@@ -171,7 +172,7 @@ exports.list = function (req, res) {
 exports.batchDelete = function (req, res) {
     var queryStr = initQuery(req, res);
 
-    orderModel.find(queryStr._time).find(queryStr).remove({}, function(err, doc){
+    orderModel.find(queryStr._time).find(queryStr._condition).remove({}, function(err, doc){
         if (err) {
             res.status(400).send(err.message);
             return;

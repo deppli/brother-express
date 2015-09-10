@@ -359,7 +359,7 @@ a:hover{
     height: 595px;
     top: 70px;
     overflow-y: scroll;
-    z-index: 100000;
+    z-index: 500;
 }
 .loading{
     margin-top:280px;

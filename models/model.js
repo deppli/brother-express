@@ -147,7 +147,10 @@ var OrderSchema = new Schema({
     products: [
         {
             pId: {type: String},        //产品ID，后续关联产品对象
-            pType: {type: String},
+            pType: {
+                key:{type: String},
+                value:{type: String}
+            },
             pName: {type: String},
             pBrand: {type: String},
             pNum: {type: Number},

@@ -71,7 +71,7 @@
             "cryptojs-core": "lib/crypto/build/components/core-min",
             "cryptojs-hmac": "lib/crypto/build/components/hmac-min",
             "cryptojs-sha256": "lib/crypto/build/components/sha256-min",
-            xlsx: "lib/xlsx/dist/xlsx.core.min",
+            "xlsx": "lib/xlsx/dist/xlsx.core.min",
             "excel-builder": "lib/excel-builder/dist/excel-builder.compiled.min",
             "swfobject": "lib/downloadify/js/swfobject",
             "downloadify": "lib/downloadify/js/downloadify.min",
@@ -108,11 +108,12 @@
         waitSeconds: 0
     });
 
-    require(["angular", "base"], function(angular, base) {
+    require(["angular", "base", "xlsx"], function(angular, base, xlsx) {
         /*if (navigator.userAgent.toLowerCase().indexOf('chrome') < 0) {
             document.write("请使用webkit内核浏览器登录");
             return;
         }*/
+        window.xlsx = xlsx
         angular.bootstrap(document, ["ngView"]);
     });
 

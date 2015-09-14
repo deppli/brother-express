@@ -1,12 +1,10 @@
-define(["xlsx"], function(xlsx) {
+define([], function() {
     return [["OrderBatchCtrl", ["$scope", "$rootScope", "$remote", "$modal", "$scopeData", "$config", "$constants", "$upload", "$dict",
         function($scope, $rootScope, $remote, $modal, $scopeData, $config, $constants, $upload, $dict) {
 
             $scope.getProvincesName();
             $scope.getCitysName();
             $scope.getAreasName();
-
-            console.log(xlsx)
 
             var orderTemplate = {
                 _rowBegin: 2,
@@ -36,15 +34,15 @@ define(["xlsx"], function(xlsx) {
             var productTemplate = {
                 _rowBegin: 2,
                 header:[
-                    {id: "A", name: "id", style:"id"},
-                    {id: "B", name: "pName", style:"empty"},
-                    {id: "C", name: "pBrand", style:"empty"},
-                    {id: "D", name: "pNum", style:"number"},
-                    {id: "E", name: "pUnit", style:"empty"},
-                    {id: "F", name: "pAmount", style:"number"},
-                    {id: "G", name: "pTotalAmount", style:"number"},
-                    {id: "H", name: "pWeight", style:"number"},
-                    {id: "I", name: "pRemark"}
+                    {id: "A", cn:"订单编号", name: "id", style:"id"},
+                    {id: "B", cn:"产品名称", name: "pName", style:"empty"},
+                    {id: "C", cn:"产品品牌", name: "pBrand", style:"empty"},
+                    {id: "D", cn:"产品数量", name: "pNum", style:"number"},
+                    {id: "E", cn:"产品单位", name: "pUnit", style:"empty"},
+                    {id: "F", cn:"产品单价", name: "pAmount", style:"number"},
+                    {id: "G", cn:"产品总价", name: "pTotalAmount", style:"number"},
+                    {id: "H", cn:"产品重量", name: "pWeight", style:"number"},
+                    {id: "I", cn:"备注", name: "pRemark"}
                 ]
             }
 
@@ -161,7 +159,7 @@ define(["xlsx"], function(xlsx) {
                     var name = f.name;
                     reader.onload = function(e) {
                         var data = e.target.result;
-                        var workbook = xlsx.read(data, {type: 'binary'});
+                        var workbook = window.xlsx.read(data, {type: 'binary'});
 
                         var reg = /^([a-zA-Z]*)(\d*)$/;
 
@@ -208,7 +206,7 @@ define(["xlsx"], function(xlsx) {
                                     }
                                     if(index == 0 && header.id == "A"){
                                         value = $dict.get("GateApiName")[value];
-                                    }else if(index == 1 && header.id == "B"){
+                                    }else if(index == 0 && header.id == "B"){
                                         value = $dict.get("GateModeName")[value];
                                     }
                                     if(header.style && header.style == "id"){
@@ -309,6 +307,8 @@ define(["xlsx"], function(xlsx) {
                     console.log(postData)
                     $remote.post("/orderBatch/batchImport", postData, function(data){
                         console.log(data);
+                        var msg = {text:$constants.MESSAGE_FILE_EXCEL_COMMIT_SUCCESS};
+                        $scope.showMessage(msg);
                     });
                 }
             }

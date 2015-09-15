@@ -275,7 +275,8 @@ exports.thirdTJPath = function(req, res) {
 
     var data = {
         no: req.body.orderId,   //610291500140161
-        cc: "zhongliang"
+        //cc: "zhongliang"
+        cc:"ZHONGLIANG"
     };
 
     var content = qs.stringify(data);

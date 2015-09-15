@@ -349,7 +349,7 @@
                 if(data.gateApi == 1){
                     //orderData.orderId = "ETTPEJJ56531EWE0518TEST1ET";
                     $remote.post("/service/thirdTJPath", orderData, function(data){
-                        if(data && data.list[0]){
+                        if(data && data.list && data.list[0]){
                             $scope.Order.orderTJPaths = data.list[0].trackdata;
                         }
                     }, function(){

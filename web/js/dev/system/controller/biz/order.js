@@ -302,7 +302,7 @@ define(["bootstrap-icheck"], function() {
                                 $scope.payerIdNo = data.idNo;
                                 $scope.payerAddress = data.address;
                                 $scope.idAUrl = data.idNoImgA;
-                                //$scope.idBUrl = data.idNoImgB;
+                                $scope.idBUrl = data.idNoImgB;
                             })
                             //$scope.payerName = $rootScope.webInfo.name;
                             //$scope.payerPhone = $rootScope.webInfo.phone;

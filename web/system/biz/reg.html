@@ -139,14 +139,14 @@
                         <div class="col-lg-3">
                             <div class="img-add cursor" ng-file-select ng-model="idImgA" accept=".jpg">
                                 <div ng-hide="idAUrl">+ 身份证正面</div>
-                                <img ng-src="{{idAUrl}}" ng-show="idAUrl"/>
+                                <img ng-src="{{idAUrl}}{{timestampA}}" ng-show="idAUrl"/>
                             </div>
                             <progressbar class="progress-striped active" value="ProgressA.dynamic" type="success"><i>{{ProgressA.dynamic}} %</i></progressbar>
                         </div>
                         <div class="col-lg-3">
                             <div class="img-add cursor" ng-file-select ng-model="idImgB" accept=".jpg">
                                 <div ng-hide="idBUrl">+ 身份证反面</div>
-                                <img ng-src="{{idBUrl}}" ng-show="idBUrl"/>
+                                <img ng-src="{{idBUrl}}{{timestampB}}" ng-show="idBUrl"/>
                             </div>
                             <progressbar class="progress-striped active" value="ProgressB.dynamic" type="success"><i>{{ProgressB.dynamic}} %</i></progressbar>
                         </div>

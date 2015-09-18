@@ -64,12 +64,16 @@ define(["cryptojs-sha256","thenjs"], function(crypto, then) {
                     }).progress(function (evt) {
                         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                         $scope.ProgressA.dynamic = progressPercentage;
+                        console.log("正在上传：" + progressPercentage)
                     }).success(function (data, status, headers, config) {
                         $scope.ProgressA.dynamic = 100;
                         $scope.idAUrl = $config.idCardPath + $scope.loginId + $scope.idNo + '_A.jpg'
+                        $scope.timestampA = "?" + Date.now()
+                        console.log("成功：" + $scope.idAUrl)
                     });
                 }
             }
+            $scope.idImgA = null
         });
 
         $scope.$watch("idImgB", function(){
@@ -90,9 +94,11 @@ define(["cryptojs-sha256","thenjs"], function(crypto, then) {
                     }).success(function (data, status, headers, config) {
                         $scope.ProgressB.dynamic = 100;
                         $scope.idBUrl = $config.idCardPath + $scope.loginId + $scope.idNo + '_B.jpg'
+                        $scope.timestampB = "?" + Date.now()
                     });
                 }
             }
+            $scope.idImgB = null
         });
 
         $scope.nextStep = function(step){

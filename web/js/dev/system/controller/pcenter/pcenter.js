@@ -141,7 +141,7 @@ define(["cryptojs-sha256"], function(crypto) {
 
 				$scope.goPay = function(item){
 					$rootScope._cacheOrder = item;
-					$scope._pageLink = "cusPay"
+					$location.path('orderCustomer')
 				}
 
 				$scope.queryCustomer();

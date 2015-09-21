@@ -22,7 +22,7 @@ define([], function() {
                     {id: "K", cn:"付款人名称", name: "payerName"},
                     {id: "L", cn:"付款人地址", name: "payerAddress"},
                     {id: "M", cn:"付款人电话", name: "payerPhone"},
-                    {id: "N", cn:"付款人身份证", name: "payerIdNo", style:"idno"},
+                    {id: "N", cn:"付款人身份证", name: "payerIdNo", style:"empty"},
                     {id: "O", cn:"商品统称", name: "productName", style:"empty"},
                     {id: "P", cn:"总数量", name: "productNum", style:"number"},
                     {id: "Q", cn:"总价值", name: "productAmount", style:"number"},

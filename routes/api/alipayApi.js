@@ -4,10 +4,10 @@ var model = require('../../models/model'),
 	customerModel = model.Customer;
 
 alipay.on('verify_fail', function(){
-		__logger.info('emit verify_fail')
+		__logger.info("用户(" + req.session.customer.loginId + "),订单号:" + params.order_no + "支付宝在线支付交易失败");
 	})
 	.on('create_direct_pay_by_user_trade_finished', function(req, params){
-		__logger.info("alipay finished");
+		__logger.info("用户(" + req.session.customer.loginId + "),订单号:" + params.order_no + "成功发起支付宝在线支付");
 	})
 	.on('create_direct_pay_by_user_trade_success', function(req, params){
 		//trade_no //支付宝交易号
@@ -29,6 +29,9 @@ alipay.on('verify_fail', function(){
 			})
 		}else{
 			var amount = params.amount;
+			if(!req.session.orders){
+				req.session.orders = {}
+			}
 			if(req.session.orders[orderId]){
 				__logger.info("用户(" + req.session.customer.loginId + "),订单号:" + orderId + "重复提交充值异常");
 				return;
@@ -76,6 +79,9 @@ exports.create_direct_pay_by_user = function(req, res){
 		body: req.body.alipayDesc,
 		show_url:req.body.alipayItem
 	 };
+
+	__logger.info("用户(" + req.session.customer.loginId + ")开始使用支付宝在线支付,订单号:" + req.body.alipayId
+	+ ",订单金额:" + req.body.alipayAmount);
 
 	alipay.create_direct_pay_by_user(data, res);
 }

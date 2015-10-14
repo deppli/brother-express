@@ -51,7 +51,9 @@
             MESSAGE_PRODUCT_DETAIL_OVER_WEIGHT:"单笔订单货品总重量不能超过3千克",
             MESSAGE_PRODUCT_DETAIL_OVER_AMOUNT:"单笔订单若货品数量大于1件，总价值不能超过1000元",
             MESSAGE_DATE_FORMAT_ERROR:"查询日期格式不正确",
-            MESSAGE_PRINT_BATCH_LIMITED:"一次性批量打印面单超过系统上限(200条),请指定查询条件批量打印"
+            MESSAGE_PRINT_BATCH_LIMITED:"一次性批量打印面单超过系统上限(200条),请指定查询条件批量打印",
+            MAX_EXPORTS_ROWS:200,
+            OVER_MAX_EXPORTS_ROWS:"单次导出数据量超过200条,请缩小范围分次导出"
         };
     }])
 	.factory("$dict", [function() {

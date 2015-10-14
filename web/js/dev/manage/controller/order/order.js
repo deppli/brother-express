@@ -365,6 +365,13 @@
                 }
                     postData.gateMode = 0         //行邮
                     postData.gateApi = 0
+
+                    $remote.post("/order/count", postData, function(count) {
+                        if(count > $constants.MAX_EXPORTS_ROWS){
+                            var msg = {text:$constants.OVER_MAX_EXPORTS_ROWS};
+                            $scope.showMessage(msg);
+                            return
+                        }else{
                 //遍历后端返回数据，解析原有[{key1:value1,key2:value2}]形式为[value,value]
                 $remote.post("/order/list", postData, function(orders){
                     orders.forEach(function(order){
@@ -411,6 +418,9 @@
                     var file = $constants.NAME_EXPORT_ORDER_EXCEL_TYPEA_NAME;
                     $scope.download(data, file);
                 })
+                        }
+                    })
+
                 $modalInstance.close();
             }
 
@@ -448,6 +458,13 @@
                     }
                     postData.gateMode = 1         //包税
                     postData.gateApi = 0
+
+                    $remote.post("/order/count", postData, function(count) {
+                        if (count > $constants.MAX_EXPORTS_ROWS) {
+                            var msg = {text: $constants.OVER_MAX_EXPORTS_ROWS};
+                            $scope.showMessage(msg);
+                            return
+                        } else {
                 //遍历后端返回数据，解析原有[{key1:value1,key2:value2}]形式为[value,value]
                 $remote.post("/order/list", postData, function(orders) {
                     orders.forEach(function(order){
@@ -488,6 +505,8 @@
                     var file = $constants.NAME_EXPORT_ORDER_EXCEL_TYPEB_NAME;
                     $scope.download(data, file);
                 });
+                        }
+                    })
 
                 $modalInstance.close();
             }
@@ -546,6 +565,13 @@
                 }
                 //postData.gateMode = 0         //行邮
                 postData.gateApi = 1
+
+                $remote.post("/order/count", postData, function(count) {
+                    if (count > $constants.MAX_EXPORTS_ROWS) {
+                        var msg = {text: $constants.OVER_MAX_EXPORTS_ROWS};
+                        $scope.showMessage(msg);
+                        return
+                    } else {
                 //遍历后端返回数据，解析原有[{key1:value1,key2:value2}]形式为[value,value]
                 $remote.post("/order/list", postData, function(items){
                     items.forEach(function(order){
@@ -597,6 +623,9 @@
                     var file = $constants.NAME_EXPORT_ORDER_EXCEL_TJ_NAME;
                     $scope.download(data, file);
                 })
+                    }
+                })
+
                 $modalInstance.close();
             }
 

@@ -140,6 +140,7 @@ exports.upload = function (req, res) {
             }else if(type==2){  //若为批量订单上传
                 newPath = config.basic.UPLOAD_PATH + fileName + ".xlsx";
             }
+            if(files.file && files.file.path){
             fs.rename(files.file.path, newPath, function(err){
                 if(!err){
                     files.file.path = newPath;
@@ -150,6 +151,10 @@ exports.upload = function (req, res) {
                     res.status(400).send(err.message);
                 }
             });
+            }else{
+                __logger.error("文件上传失败:" + err);
+                res.status(400).send(err.message);
+            }
         }
     });
 }

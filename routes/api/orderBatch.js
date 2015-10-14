@@ -178,7 +178,6 @@ exports.batchImport = function (req, res) {
     }).eachSeries(orders, function (cont, each, index) {
         each.creater = creater;
         each.idBatch = idBatch;
-        __logger.info(each);
         new orderModel(each).save(function(err, doc){
             cont(err, doc);
         })

@@ -4,10 +4,18 @@ var model = require('../../models/model'),
 	customerModel = model.Customer;
 
 alipay.on('verify_fail', function(){
+		if(req.session.customer){
 		__logger.info("用户(" + req.session.customer.loginId + "),订单号:" + params.order_no + "支付宝在线支付交易失败");
+		}else{
+			__logger.info("游客订单号:" + params.order_no + "支付宝在线支付交易失败");
+		}
 	})
 	.on('create_direct_pay_by_user_trade_finished', function(req, params){
+		if(req.session.customer){
 		__logger.info("用户(" + req.session.customer.loginId + "),订单号:" + params.order_no + "成功发起支付宝在线支付");
+		}else{
+			__logger.info("游客订单号:" + params.order_no + "成功发起支付宝在线支付");
+		}
 	})
 	.on('create_direct_pay_by_user_trade_success', function(req, params){
 		//trade_no //支付宝交易号

@@ -698,7 +698,8 @@
                 $scope.GateModeList = gateMode[0];
                 $scope.gateMode = $scope.GateModeList[0];
 
-            $scope.GateApiList = $scope.initOptions("GateApi");
+            var gateApi = $scope.initOptions("GateApi");
+            $scope.GateApiList = gateApi[0]
             $scope.gateApi = $scope.GateApiList[0];
 
                 $scope.getProvinces(function(){

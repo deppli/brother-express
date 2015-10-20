@@ -3,8 +3,8 @@
     .factory("$constants", [function() {
         return {
             NAME_COMPANY_NAME: "仲良速递",
-            NAME_COMPANY_ADDRESS: "(718)690-5565",
-            NAME_COMPANY_TELPHONE: "15-07C College Point Blvd，College Point, New York 11356",
+            NAME_COMPANY_ADDRESS: "15-07C College Point Blvd，College Point, New York 11356",
+            NAME_COMPANY_TELPHONE: "(718)690-5565",
             NAME_EXPORT_ORDER_EXCEL_TYPEA_NAME: "深圳行邮.xlsx",
             NAME_EXPORT_ORDER_EXCEL_TYPEB_NAME: "深圳包税.xlsx",
             NAME_EXPORT_ORDER_EXCEL_TJ_NAME: "天津宜信.xlsx",

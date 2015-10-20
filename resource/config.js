@@ -12,13 +12,13 @@ var Alipay = require('alipay').Alipay;
 exports.alipay = new Alipay(config);
 
 exports.basic = {
-    UPLOAD_PATH: '/home/zhanghuan/servers/brother-express/upload/',
-    UPLOAD_IDNO_PATH: '/home/zhanghuan/servers/brother-express/web/upload/idno/',
+    UPLOAD_PATH: '/home/zhanghuan/servers/brother/release/upload/',
+    UPLOAD_IDNO_PATH: '/home/zhanghuan/servers/brother/release/web/upload/idno/',
     EXPRESS_API_HOST: 'track.kuaidi.hk',
     EXPRESS_API_PORT: 8089,
     EXPRESS_API_PATH: '/cgi-bin/GInfo.dll?EmsApiTrack&ntype=+10000&',
     EXPRESS_API_METHOD: 'GET',
-    EXPRESS_TJ_API_HOST: 'api.yi-ex.com/',
+    EXPRESS_TJ_API_HOST: 'api.yi-ex.com',
     EXPRESS_TJ_API_PORT: 80,
     EXPRESS_TJ_API_PATH: '/track?',
     EXPRESS_TJ_API_METHOD: 'GET',

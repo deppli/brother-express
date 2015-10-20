@@ -1,5 +1,5 @@
 ﻿define(["angular", "cryptojs-sha256", "angular-route", "angular-bootstrap", "config", "dict", "common",
-        "angular-cookies", "service", "component", "angular-dragdrop", "angular-file-upload", "angular-qrcode"], function(angular, crypto) {
+        "angular-cookies", "service", "component", "angular-dragdrop", "angular-file-upload", "angular-qrcode", 'xlsx'], function(angular, crypto) {
 	return angular.module('ngView', ["ngRoute", "ngConfig", "ngDict", "ngCommon", "ngCookies", "ngService", "ngComponent", "ui.bootstrap", "ngDragDrop", "angularFileUpload", "monospaced.qrcode"])
 
 	.config(

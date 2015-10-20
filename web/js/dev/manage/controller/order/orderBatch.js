@@ -27,7 +27,9 @@ define([], function() {
                     {id: "P", cn:"总数量", name: "productNum", style:"number"},
                     {id: "Q", cn:"总价值", name: "productAmount", style:"number"},
                     {id: "R", cn:"总重量", name: "productWeight", style:"number"},
-                    {id: "S", cn:"备注", name: "description"}
+                    {id: "S", cn:"备注", name: "description"},
+                    {id: "T", cn:"国内物流商", name: "chinaTransName"},
+                    {id: "U", cn:"国内物流单", name: "chinaTransId"},
                 ]
             }
 

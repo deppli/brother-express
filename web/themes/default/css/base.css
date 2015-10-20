@@ -226,7 +226,7 @@ a:hover{
     font-size:10px;
 }
 .fs12{
-    font-size:12px;
+    font-size:12px !important;
 }
 .fs14{
     font-size:14px;

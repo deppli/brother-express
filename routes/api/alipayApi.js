@@ -80,8 +80,13 @@ exports.create_direct_pay_by_user = function(req, res){
 		show_url:req.body.alipayItem
 	 };
 
+	if(req.session.customer){
 	__logger.info("用户(" + req.session.customer.loginId + ")开始使用支付宝在线支付,订单号:" + req.body.alipayId
 	+ ",订单金额:" + req.body.alipayAmount);
+	}else{
+		__logger.info("游客开始使用支付宝在线支付,订单号:" + req.body.alipayId
+		+ ",订单金额:" + req.body.alipayAmount);
+	}
 
 	alipay.create_direct_pay_by_user(data, res);
 }

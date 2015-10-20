@@ -75,6 +75,8 @@
                                 <th class="nowrap">总金额</th>
                                 <th class="nowrap">总重量</th>
                                 <th class="nowrap">备注</th>
+                                <th class="nowrap">国内物流商</th>
+                                <th class="nowrap">国内物流单</th>
                             </tr>
                             <tr class="cursor" ng-repeat="item in ordersData" style="border:0;">
                                 <td class="nowrap">{{item.gateApi.value|dict:"GateApi"}}
@@ -114,6 +116,8 @@
                                 <td class="nowrap">{{item.productWeight.value}}
                                     <i ng-show="item.productWeight.error" class="text-orange glyphicon glyphicon-exclamation-sign" tooltip="{{item.productWeight.error}}"></i></td>
                                 <td class="nowrap">{{item.description.value}}</td>
+                                <td class="nowrap">{{item.chinaTransName.value}}</td>
+                                <td class="nowrap">{{item.chinaTransId.value}}</td>
                             </tr>
                         </table>
                         <table class="table table-hover fs12" ng-show="excelTab == 1">

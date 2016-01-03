@@ -116,6 +116,7 @@ app.post("/order/delete", hooks.role(),  order.delete);
 app.post("/order/batchDelete", hooks.role(),  order.batchDelete);
 app.post("/order/count", hooks.role(),  order.count);
 app.post("/order/pathUpdate", hooks.role(),  order.pathUpdate);
+app.post("/order/countOrder", hooks.role(),  order.countOrder);
 
 app.post("/orderBatch/processExcel", hooks.role(), orderBatch.processExcel);
 app.post("/orderBatch/commitExcel", hooks.role(), orderBatch.commitExcel);

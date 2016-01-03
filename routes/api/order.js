@@ -169,8 +169,26 @@ exports.list = function (req, res) {
     });
 };
 
+exports.countOrder = function (req, res) {
+    var queryStr = initQuery(req, res);
+
+    orderModel.count(queryStr._condition, function(err, doc){
+        if (err) {
+            res.status(400).send(err.message);
+            return;
+        }
+        res.json(doc);
+    });
+};
+
 exports.batchDelete = function (req, res) {
     var queryStr = initQuery(req, res);
+
+    if(req.session.user){
+        __logger.info(req.session.user + "开始批量删除订单");
+    }else{
+        __logger.info("未知用户开始批量删除订单");
+    }
 
     orderModel.find(queryStr._time).find(queryStr._condition).remove({}, function(err, doc){
         if (err) {

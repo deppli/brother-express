@@ -127,13 +127,15 @@
                     return
                 }
 
-                var msg = {type:$constants.MESSAGE_DIALOG_TYPE_CONF, text:$constants.MESSAGE_CONF_DEL_ORDER, confCallback:function(){
+                $remote.post("/order/countOrder", postData, function(data){
+                    var msg = {type:$constants.MESSAGE_DIALOG_TYPE_CONF, text:$constants.MESSAGE_CONF_DEL_ORDER + "【预计将删除数据" + data + "条】", confCallback:function(){
                     $remote.post("/order/batchDelete", postData, function(data){
                         $scope.listOrder(true);
                         $scope.selectedOrder = null;
                     })
                 }};
                 $scope.showMessage(msg);
+                })
 
             }
 
